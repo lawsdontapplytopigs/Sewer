@@ -1,36 +1,23 @@
 module Home.View.Desktop exposing (view)
 
-import Dict
 import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
 import Element.Font as EFont
-import Html
-import Html.Attributes
-import Html.Events exposing (on)
 import Home.Msg as Msg
 import Home.View.Navbar
+
+import Html
+import Html.Attributes
 
 
 import Json.Decode as JD
 
 import OBJ.Types exposing (Mesh(..), ObjFile)
 
-import Math.Matrix4 as M4 exposing (Mat4)
-import Math.Vector3 exposing (Vec3, vec3)
-import Math.Vector2 as Vec2 exposing (Vec2, vec2)
-
 import Home.Palette as Palette
 
-import WebGL as GL
-import WebGL.Settings.DepthTest as DepthTest
-import WebGL.Texture exposing (Error(..), Texture)
-import WebGL.Settings exposing (cullFace, front)
 import Window
-
-import Home.Shaders as Shaders
-
-import Html
 
 import Icons
 
@@ -266,114 +253,3 @@ heightBlock height =
         [ E.height <| E.maximum height E.fill
         ]
         <| E.text ""
-    
-wannabe3d = 
-    E.el
-        [ E.width <| E.px 300
-        , E.height <| E.px 300
-        , EBackground.color <| E.rgb255 50 70 120
-        ]
-        <| E.text ""
-
-
-----------------
--- helper code
-----------------
-
--- threedee: Model -> Html.Html Msg
-threedee model =
-    E.html
-        <| Html.div
-            []
-            [ case ( model.mesh, model.texture ) of
-                ( Ok m, Ok texture ) ->
-                    GL.toHtmlWith [ GL.antialias, GL.depth 1 ]
-                        [ onZoom
-                        , Html.Attributes.width 300
-                        , Html.Attributes.height 300
-                        , Html.Attributes.style "position" "absolute"
-                        ]
-                        (Dict.values m
-                            |> List.concatMap Dict.values
-                            |> List.map (renderModel model texture )
-                        )
-
-                ( Err m, _ ) ->
-                    Html.div [] [ Html.text <| "ERROR with mesh: " ++ m ]
-
-                _ ->
-                    Html.div [] [ Html.text <| "Non-mesh error." ]
-            ]
-
--- renderModel : Model -> Texture -> Texture -> Mesh -> GL.Entity
-renderModel model texture mesh =
-    let
-        camera =
-            getCamera model
-
-        modelM =
-            M4.makeTranslate (vec3 0 0 0) -- TODO!!!!! flip model if necessary
-
-        theta =
-            2 * model.time
-
-        lightPos =
-            vec3 (0.5 * cos theta) (1 + 0.5 * sin theta) 0.5
-
-        uniforms =
-            { camera = camera
-            , mvMat = M4.mul camera.view modelM
-            , modelViewProjectionMatrix = M4.mul camera.viewProjection modelM
-            , modelMatrix = modelM
-            , viewPosition = camera.position
-            , texture = texture
-            , lightPosition = lightPos
-            }
-    in
-    case mesh of
-        WithoutTexture { vertices, indices } ->
-            renderCullFace Shaders.simpleVert Shaders.simpleFrag (GL.indexedTriangles vertices indices) uniforms
-
-        WithTexture { vertices, indices } ->
-            renderCullFace Shaders.simpleVert Shaders.simpleFrag (GL.indexedTriangles vertices indices) uniforms
-
-        WithTextureAndTangent { vertices, indices } ->
-            renderCullFace Shaders.simpleVert Shaders.simpleFrag (GL.indexedTriangles vertices indices) uniforms
-
-
-
--- getCamera : Model -> CameraInfo
-getCamera { mouseDelta, zoom, windowSize } =
-    let
-        ( mx, my ) =
-            ( Vec2.getX mouseDelta, Vec2.getY mouseDelta )
-
-        aspect =
-            toFloat windowSize.width / toFloat windowSize.height
-
-        proj =
-            M4.makePerspective 45 aspect 0.01 10000
-
-        position =
-            vec3 (zoom * sin -mx * sin my) (-zoom * cos my + 1) (zoom * cos -mx * sin my)
-
-        view_ =
-            M4.makeLookAt position (vec3 0 1 0) (vec3 0 1 0)
-    in
-    { projection = proj, view = view_, viewProjection = M4.mul proj view_, position = position }
-
-
-renderCullFace : GL.Shader a u v -> GL.Shader {} u v -> GL.Mesh a -> u -> GL.Entity
-renderCullFace =
-    GL.entityWith [ DepthTest.default, cullFace front ]
-
-
-models : List String
-models =
-    [ "./matthew.obj"
-    ]
-
-onZoom : Html.Attribute Msg.Msg
-onZoom =
-    on "wheel" (JD.map Msg.Zoom (JD.field "deltaY" JD.float))
-
