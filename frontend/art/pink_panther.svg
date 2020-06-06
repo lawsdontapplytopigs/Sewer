@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="pink_panther.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 84.666665 50.270835"
+   height="190"
+   width="320">
+  <defs
+     id="defs2">
+    <filter
+       x="-0.090000000000000011"
+       id="filter1705"
+       style="color-interpolation-filters:sRGB;"
+       inkscape:menu-tooltip="Horizontal rippling of edges"
+       inkscape:menu="Distort"
+       inkscape:label="Ripple">
+      <feTurbulence
+         type="turbulence"
+         seed="428"
+         result="result93"
+         id="feTurbulence1699"
+         baseFrequency="0.75316865199867489 0.3146903641232332"
+         numOctaves="5" />
+      <feDisplacementMap
+         result="result94"
+         yChannelSelector="A"
+         xChannelSelector="R"
+         scale="0"
+         id="feDisplacementMap34" />
+      <feConvolveMatrix
+         result="result96"
+         preserveAlpha="true"
+         edgeMode="wrap"
+         targetX="2"
+         targetY="1"
+         divisor="449.13844058388156"
+         bias="3.7886749751984112"
+         id="feConvolveMatrix36"
+         kernelMatrix="0.6 0 1 1 1 0 0 1 "
+         order="2 4" />
+      <feColorMatrix
+         type="matrix"
+         id="feColorMatrix1701"
+         result="result91"
+         values="3 0 0 0 0 0 0 1 1 0 0 0 0.3 1 0 0 0 0 0.3 0.45 " />
+      <feComponentTransfer
+         result="result95"
+         id="feComponentTransfer38">
+        <feFuncR
+           offset="2.2800564236111125"
+           exponent="2.674414958428899"
+           amplitude="0.66552062428325687"
+           intercept="1.302770543981481"
+           slope="1.7880226417824083"
+           type="linear"
+           id="feFuncR40" />
+        <feFuncG
+           amplitude="4.559279135607798"
+           exponent="5.3056192660550465"
+           intercept="-3.9229736328125"
+           slope="-6.8417742693865744"
+           tableValues="0.1"
+           type="identity"
+           id="feFuncG42" />
+        <feFuncB
+           offset="2.2303421585648149"
+           amplitude="4.715251397649082"
+           exponent="6.9894369982798166"
+           intercept="-0.09639033564814703"
+           slope="1.3383698640046298"
+           type="gamma"
+           id="feFuncB44" />
+        <feFuncA
+           intercept="1.9953342013888893"
+           slope="-3.2866663049768521"
+           offset="0.35493525752314881"
+           amplitude="2.466803594466743"
+           exponent="0"
+           type="linear"
+           id="feFuncA46" />
+      </feComponentTransfer>
+    </filter>
+    <filter
+       inkscape:menu-tooltip="Horizontal rippling of edges"
+       inkscape:menu="Distort"
+       inkscape:label="Ripple"
+       id="filter1727"
+       style="color-interpolation-filters:sRGB;">
+      <feTurbulence
+         result="fbSourceGraphic"
+         seed="130"
+         type="fractalNoise"
+         numOctaves="6"
+         baseFrequency="0.025000000000000001 0"
+         id="feTurbulence1741" />
+      <feColorMatrix
+         in="fbSourceGraphic"
+         id="feColorMatrix827"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         result="fbSourceGraphicAlpha" />
+      <feTurbulence
+         in="fbSourceGraphic"
+         baseFrequency="0.002 0.107"
+         numOctaves="1"
+         id="feTurbulence829" />
+      <feColorMatrix
+         result="result91"
+         values="2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0.5"
+         id="feColorMatrix831" />
+      <feDisplacementMap
+         in="fbSourceGraphic"
+         scale="14.3"
+         xChannelSelector="R"
+         yChannelSelector="A"
+         id="feDisplacementMap833"
+         in2="result91" />
+      <feColorMatrix
+         type="matrix"
+         values="1 0 0 2 0 0 2 0 0 0 0 1 1 0 0 0 0 0 1 0 "
+         id="feColorMatrix835" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     inkscape:document-rotation="0"
+     inkscape:window-maximized="1"
+     inkscape:window-y="43"
+     inkscape:window-x="0"
+     inkscape:window-height="1035"
+     inkscape:window-width="2558"
+     units="px"
+     showgrid="false"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="mm"
+     inkscape:cy="96.93056"
+     inkscape:cx="126.08083"
+     inkscape:zoom="2.8"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base">
+    <inkscape:grid
+       id="grid30"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 3"
+     id="layer2"
+     inkscape:groupmode="layer">
+    <rect
+       y="0"
+       x="0"
+       height="50.270832"
+       width="84.666664"
+       id="rect28"
+       style="fill:#000009;stroke-width:0.262316" />
+  </g>
+  <g
+     style="display:inline"
+     transform="translate(0,-246.72915)"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <flowRoot
+       transform="scale(0.26458333)"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot815"
+       xml:space="preserve"><flowRegion
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"
+         id="flowRegion817"><rect
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"
+           y="319.66254"
+           x="175.71428"
+           height="357.14285"
+           width="604.28571"
+           id="rect819" /></flowRegion><flowPara
+         id="flowPara821" /></flowRoot>
+    <text
+       id="text825"
+       y="276.71899"
+       x="4.64642"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter1705)"
+       xml:space="preserve"><tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:'Gilroy-SemiBold Bold';stroke-width:0.264583;fill:#ffffff;"
+         y="276.71899"
+         x="4.64642"
+         id="tspan823"
+         sodipodi:role="line">Sewerslvt</tspan></text>
+  </g>
+  <g
+     style="display:none"
+     inkscape:label="Layer 2"
+     id="layer3"
+     inkscape:groupmode="layer">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter1727)"
+       x="2.628865"
+       y="30.278168"
+       id="text832"><tspan
+         sodipodi:role="line"
+         id="tspan830"
+         x="2.628865"
+         y="30.278168"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:'Gilroy-SemiBold Bold';stroke-width:0.264583">Sewerslvt</tspan></text>
+  </g>
+</svg>

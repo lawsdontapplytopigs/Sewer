@@ -1,0 +1,1127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="what_the_fuck_am_i_doing.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 507.99998 529.16669"
+   height="2000"
+   width="1920">
+  <defs
+     id="defs2">
+    <filter
+       id="filter125"
+       style="color-interpolation-filters:sRGB;"
+       x="-0.2"
+       width="1.4"
+       y="-0.2"
+       height="1.4"
+       inkscape:menu-tooltip="Paint objects with a transparent turbulence which wraps around color edges"
+       inkscape:menu="Distort"
+       inkscape:label="Swirl">
+      <feGaussianBlur
+         id="feGaussianBlur107"
+         result="result10"
+         stdDeviation="0.01" />
+      <feBlend
+         id="feBlend109"
+         result="fbSourceGraphic"
+         in="result10"
+         mode="multiply"
+         in2="result10" />
+      <feGaussianBlur
+         id="feGaussianBlur111"
+         in="fbSourceGraphic"
+         result="result8"
+         stdDeviation="3" />
+      <feTurbulence
+         id="feTurbulence113"
+         baseFrequency="0 0.14398340568471707"
+         numOctaves="1"
+         type="fractalNoise"
+         result="result7"
+         seed="310" />
+      <feComposite
+         id="feComposite115"
+         in="result8"
+         operator="in"
+         result="result6"
+         in2="result8" />
+      <feDisplacementMap
+         id="feDisplacementMap117"
+         result="result4"
+         scale="0"
+         yChannelSelector="G"
+         xChannelSelector="R"
+         in="result7"
+         in2="result6" />
+      <feComposite
+         k4="10"
+         k2="10"
+         id="feComposite119"
+         k3="10"
+         k1="10"
+         in="result6"
+         operator="arithmetic"
+         result="result2"
+         in2="result4" />
+      <feComposite
+         id="feComposite121"
+         operator="in"
+         in="fbSourceGraphic"
+         result="fbSourceGraphic"
+         in2="result2" />
+      <feDisplacementMap
+         in2="result4"
+         id="feDisplacementMap123"
+         xChannelSelector="R"
+         scale="10.725823149259183"
+         yChannelSelector="G" />
+    </filter>
+    <filter
+       id="filter426-2"
+       inkscape:label="Roughen2"
+       style="color-interpolation-filters:sRGB;">
+      <feTurbulence
+         id="feTurbulence422-9"
+         result="turbulence"
+         baseFrequency="0.53962327715611358 0.080060534081604809"
+         seed="568"
+         numOctaves="1"
+         type="fractalNoise" />
+      <feColorMatrix
+         id="feColorMatrix428-1"
+         values="0 0 0 3 0 0 0 0 1 0 0 0 0 3 0 0 1 0 1 0 "
+         result="fbSourceGraphicAlpha" />
+      <feDisplacementMap
+         result="fbSourceGraphic"
+         id="feDisplacementMap424-2"
+         xChannelSelector="R"
+         yChannelSelector="R"
+         scale="14.798103244148168"
+         in="fbSourceGraphicAlpha"
+         in2="fbSourceGraphicAlpha" />
+      <feTurbulence
+         in="fbSourceGraphic"
+         result="turbulence"
+         baseFrequency="0.047868353831195413 0.16953194297557314"
+         seed="657"
+         numOctaves="1"
+         type="fractalNoise"
+         id="feTurbulence430-7" />
+      <feDisplacementMap
+         xChannelSelector="R"
+         yChannelSelector="B"
+         scale="100"
+         in="fbSourceGraphic"
+         id="feDisplacementMap432-0"
+         in2="turbulence" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Roughen"
+       id="filter1298-9">
+      <feTurbulence
+         type="fractalNoise"
+         numOctaves="1"
+         seed="1"
+         baseFrequency="0.103281 9.51339"
+         result="turbulence"
+         id="feTurbulence1288-3" />
+      <feDisplacementMap
+         in="SourceGraphic"
+         in2="turbulence"
+         scale="2.2670538850532949"
+         yChannelSelector="G"
+         xChannelSelector="R"
+         id="feDisplacementMap1290-6"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0 "
+         id="feColorMatrix1292-0" />
+      <feTurbulence
+         id="feTurbulence1294-6"
+         type="fractalNoise"
+         numOctaves="2"
+         seed="169"
+         baseFrequency="0.00062964379370629366 0.059066153572989513"
+         result="turbulence"
+         in="fbSourceGraphic" />
+      <feDisplacementMap
+         result="result1"
+         in2="turbulence"
+         id="feDisplacementMap1296-2"
+         in="fbSourceGraphic"
+         scale="5.2074185945574936"
+         yChannelSelector="G"
+         xChannelSelector="R" />
+      <feComposite
+         in2="result1"
+         operator="lighter"
+         id="feComposite1334-6" />
+    </filter>
+    <filter
+       id="filter125-1"
+       style="color-interpolation-filters:sRGB;"
+       x="-0.2"
+       width="1.4"
+       y="-0.2"
+       height="1.4"
+       inkscape:menu-tooltip="Paint objects with a transparent turbulence which wraps around color edges"
+       inkscape:menu="Distort"
+       inkscape:label="Swirl">
+      <feGaussianBlur
+         id="feGaussianBlur107-8"
+         result="result10"
+         stdDeviation="0.01" />
+      <feBlend
+         id="feBlend109-7"
+         result="fbSourceGraphic"
+         in="result10"
+         mode="multiply"
+         in2="result10" />
+      <feGaussianBlur
+         id="feGaussianBlur111-9"
+         in="fbSourceGraphic"
+         result="result8"
+         stdDeviation="3" />
+      <feTurbulence
+         id="feTurbulence113-2"
+         baseFrequency="0.0054509669174382719 0.10515614666005291"
+         numOctaves="1"
+         type="fractalNoise"
+         result="result7"
+         seed="282" />
+      <feComposite
+         id="feComposite115-0"
+         in="result8"
+         operator="in"
+         result="result6"
+         in2="result8" />
+      <feDisplacementMap
+         id="feDisplacementMap117-2"
+         result="result4"
+         scale="2.4367531711024721"
+         yChannelSelector="G"
+         xChannelSelector="R"
+         in="result7"
+         in2="result6" />
+      <feComposite
+         k4="10"
+         k2="10"
+         id="feComposite119-3"
+         k3="10"
+         k1="10"
+         in="result6"
+         operator="arithmetic"
+         result="result2"
+         in2="result4" />
+      <feComposite
+         id="feComposite121-7"
+         operator="in"
+         in="fbSourceGraphic"
+         result="fbSourceGraphic"
+         in2="result2" />
+      <feDisplacementMap
+         id="feDisplacementMap123-5"
+         xChannelSelector="R"
+         scale="22.058553254585327"
+         yChannelSelector="G"
+         in2="result4" />
+    </filter>
+    <filter
+       id="filter426-4"
+       inkscape:label="Roughen2"
+       style="color-interpolation-filters:sRGB;">
+      <feTurbulence
+         id="feTurbulence422-5"
+         result="turbulence"
+         baseFrequency="0.37091251023471616 0.57291755509688869"
+         seed="0"
+         numOctaves="1"
+         type="fractalNoise" />
+      <feDisplacementMap
+         result="result1"
+         xChannelSelector="B"
+         yChannelSelector="B"
+         scale="24.4647994464889"
+         id="feDisplacementMap432-03"
+         in2="turbulence" />
+      <feColorMatrix
+         id="feColorMatrix428-6"
+         values="0 0 0 1 0.2 0 0 0 3 1 0 0 0 2 1.2 0 1 0 1 1 "
+         result="fbSourceGraphicAlpha" />
+      <feDisplacementMap
+         result="fbSourceGraphic"
+         id="feDisplacementMap424-1"
+         xChannelSelector="G"
+         yChannelSelector="R"
+         scale="0"
+         in="fbSourceGraphicAlpha"
+         in2="fbSourceGraphicAlpha" />
+      <feTurbulence
+         in="fbSourceGraphic"
+         result="turbulence"
+         baseFrequency="0.053239980639328603 0.73441764465065507"
+         seed="547"
+         numOctaves="1"
+         type="fractalNoise"
+         id="feTurbulence430-0" />
+      <feDisplacementMap
+         in2="turbulence"
+         in="fbSourceGraphic"
+         xChannelSelector="A"
+         scale="57.5496482112693"
+         id="feDisplacementMap972-6" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       inkscape:label="Roughen"
+       id="filter1298-3">
+      <feTurbulence
+         type="fractalNoise"
+         numOctaves="1"
+         seed="1"
+         baseFrequency="0.26195969227620086 0.85951519428902834"
+         result="turbulence"
+         id="feTurbulence1288-2" />
+      <feDisplacementMap
+         in="SourceGraphic"
+         in2="turbulence"
+         scale="14.431232467121138"
+         yChannelSelector="G"
+         xChannelSelector="R"
+         id="feDisplacementMap1290-0"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="1 0 0 2 0 0 0 1 1 0 0 0 0 1 0 0 0 0 1 0 "
+         id="feColorMatrix1292-6" />
+      <feTurbulence
+         id="feTurbulence1294-1"
+         type="fractalNoise"
+         numOctaves="2"
+         seed="169"
+         baseFrequency="0.29541228848253276 0.53530177487036024"
+         result="turbulence"
+         in="fbSourceGraphic" />
+      <feDisplacementMap
+         result="result1"
+         in2="turbulence"
+         id="feDisplacementMap1296-5"
+         in="fbSourceGraphic"
+         scale="78.376351728402511"
+         yChannelSelector="G"
+         xChannelSelector="R" />
+      <feComposite
+         in2="result1"
+         operator="destination-over"
+         id="feComposite1334-5" />
+    </filter>
+    <filter
+       id="filter125-4"
+       style="color-interpolation-filters:sRGB;"
+       x="-0.2"
+       width="1.4"
+       y="-0.2"
+       height="1.4"
+       inkscape:menu-tooltip="Paint objects with a transparent turbulence which wraps around color edges"
+       inkscape:menu="Distort"
+       inkscape:label="Swirl">
+      <feGaussianBlur
+         id="feGaussianBlur107-7"
+         result="result10"
+         stdDeviation="0.01" />
+      <feBlend
+         id="feBlend109-6"
+         result="fbSourceGraphic"
+         in="result10"
+         mode="multiply"
+         in2="result10" />
+      <feGaussianBlur
+         id="feGaussianBlur111-5"
+         in="fbSourceGraphic"
+         result="result8"
+         stdDeviation="3" />
+      <feTurbulence
+         id="feTurbulence113-6"
+         baseFrequency="0 0.14398340568471707"
+         numOctaves="1"
+         type="fractalNoise"
+         result="result7"
+         seed="310" />
+      <feComposite
+         id="feComposite115-9"
+         in="result8"
+         operator="in"
+         result="result6"
+         in2="result8" />
+      <feDisplacementMap
+         id="feDisplacementMap117-3"
+         result="result4"
+         scale="0"
+         yChannelSelector="G"
+         xChannelSelector="R"
+         in="result7"
+         in2="result6" />
+      <feComposite
+         k4="10"
+         k2="10"
+         id="feComposite119-7"
+         k3="10"
+         k1="10"
+         in="result6"
+         operator="arithmetic"
+         result="result2"
+         in2="result4" />
+      <feComposite
+         id="feComposite121-4"
+         operator="in"
+         in="fbSourceGraphic"
+         result="fbSourceGraphic"
+         in2="result2" />
+      <feDisplacementMap
+         in2="result4"
+         id="feDisplacementMap123-52"
+         xChannelSelector="R"
+         scale="10.725823149259183"
+         yChannelSelector="G" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB"
+       inkscape:label="Roughen2"
+       id="filter426-0">
+      <feTurbulence
+         type="fractalNoise"
+         numOctaves="1"
+         seed="293"
+         baseFrequency="0.37479637179312225 0"
+         result="turbulence"
+         id="feTurbulence422-6" />
+      <feDisplacementMap
+         id="feDisplacementMap432-8"
+         scale="44.863761990226834"
+         yChannelSelector="B"
+         xChannelSelector="B"
+         result="result1"
+         in2="turbulence" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         values="0 0 0 1 1 0 0 1 1 0 0 0 0 1 0.6 0 1 0 1 1 "
+         id="feColorMatrix428-9" />
+      <feDisplacementMap
+         in2="fbSourceGraphicAlpha"
+         scale="15.295221630670849"
+         yChannelSelector="R"
+         xChannelSelector="G"
+         id="feDisplacementMap424-26"
+         result="fbSourceGraphic" />
+      <feTurbulence
+         id="feTurbulence430-6"
+         type="fractalNoise"
+         numOctaves="10"
+         seed="584"
+         baseFrequency="0.080129831638919208 1"
+         result="turbulence" />
+      <feDisplacementMap
+         yChannelSelector="A"
+         id="feDisplacementMap972-4"
+         scale="3.1944481102195943"
+         xChannelSelector="A"
+         in="fbSourceGraphic"
+         in2="turbulence" />
+    </filter>
+    <filter
+       id="filter1298-95"
+       inkscape:label="Roughen"
+       style="color-interpolation-filters:sRGB">
+      <feTurbulence
+         id="feTurbulence1288-0"
+         result="turbulence"
+         baseFrequency="0.103281 9.51339"
+         seed="1"
+         numOctaves="1"
+         type="fractalNoise" />
+      <feDisplacementMap
+         result="fbSourceGraphic"
+         id="feDisplacementMap1290-4"
+         xChannelSelector="R"
+         yChannelSelector="G"
+         scale="2.2670539"
+         in2="turbulence"
+         in="SourceGraphic" />
+      <feColorMatrix
+         id="feColorMatrix1292-8"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0 "
+         in="fbSourceGraphic"
+         result="fbSourceGraphicAlpha" />
+      <feTurbulence
+         result="turbulence"
+         baseFrequency="0.00062964379370629366 0.059066153572989513"
+         seed="169"
+         numOctaves="2"
+         type="fractalNoise"
+         id="feTurbulence1294-7" />
+      <feDisplacementMap
+         xChannelSelector="R"
+         yChannelSelector="G"
+         scale="5.2074186"
+         in="fbSourceGraphic"
+         id="feDisplacementMap1296-1"
+         in2="turbulence"
+         result="result1" />
+      <feComposite
+         id="feComposite1334-7"
+         operator="lighter"
+         in2="result1" />
+    </filter>
+    <filter
+       inkscape:label="Swirl"
+       inkscape:menu="Distort"
+       inkscape:menu-tooltip="Paint objects with a transparent turbulence which wraps around color edges"
+       height="1.4"
+       y="-0.2"
+       width="1.4"
+       x="-0.2"
+       style="color-interpolation-filters:sRGB"
+       id="filter125-2">
+      <feGaussianBlur
+         stdDeviation="0.01"
+         result="result10"
+         id="feGaussianBlur107-72" />
+      <feBlend
+         in2="result10"
+         mode="multiply"
+         in="result10"
+         result="fbSourceGraphic"
+         id="feBlend109-2" />
+      <feGaussianBlur
+         stdDeviation="3"
+         result="result8"
+         in="fbSourceGraphic"
+         id="feGaussianBlur111-6" />
+      <feTurbulence
+         seed="310"
+         result="result7"
+         type="fractalNoise"
+         numOctaves="1"
+         baseFrequency="0 0.14398340568471707"
+         id="feTurbulence113-1" />
+      <feComposite
+         in2="result8"
+         result="result6"
+         operator="in"
+         in="result8"
+         id="feComposite115-06" />
+      <feDisplacementMap
+         in2="result6"
+         in="result7"
+         xChannelSelector="R"
+         yChannelSelector="G"
+         scale="0"
+         result="result4"
+         id="feDisplacementMap117-1" />
+      <feComposite
+         in2="result4"
+         result="result2"
+         operator="arithmetic"
+         in="result6"
+         k1="10"
+         k3="10"
+         id="feComposite119-5"
+         k2="10"
+         k4="10" />
+      <feComposite
+         in2="result2"
+         result="fbSourceGraphic"
+         in="fbSourceGraphic"
+         operator="in"
+         id="feComposite121-9" />
+      <feDisplacementMap
+         yChannelSelector="G"
+         scale="10.725823"
+         xChannelSelector="R"
+         id="feDisplacementMap123-4"
+         in2="result4" />
+    </filter>
+    <filter
+       inkscape:label="Ripple"
+       inkscape:menu="Distort"
+       inkscape:menu-tooltip="Horizontal rippling of edges"
+       style="color-interpolation-filters:sRGB;"
+       id="filter1705"
+       x="-0.090000000000000011">
+      <feTurbulence
+         numOctaves="1"
+         baseFrequency="0.002 0.107"
+         id="feTurbulence1699" />
+      <feColorMatrix
+         values="3 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0.5 "
+         result="result91"
+         id="feColorMatrix1701"
+         type="matrix" />
+      <feDisplacementMap
+         yChannelSelector="A"
+         xChannelSelector="R"
+         scale="0.59999999999999998"
+         in="SourceGraphic"
+         id="feDisplacementMap1703"
+         in2="result91" />
+    </filter>
+    <filter
+       style="color-interpolation-filters:sRGB;"
+       id="filter1727"
+       inkscape:label="Ripple"
+       inkscape:menu="Distort"
+       inkscape:menu-tooltip="Horizontal rippling of edges">
+      <feTurbulence
+         id="feTurbulence1741"
+         baseFrequency="0.001 0.153"
+         numOctaves="8"
+         type="fractalNoise"
+         seed="422"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         result="fbSourceGraphicAlpha"
+         values="0 0 0 -1 0 0 0 0 -1 0 0 0 0 -1 0 0 0 0 1 0"
+         id="feColorMatrix827"
+         in="fbSourceGraphic" />
+      <feTurbulence
+         id="feTurbulence829"
+         numOctaves="1"
+         baseFrequency="0.002 0.107"
+         in="fbSourceGraphic" />
+      <feColorMatrix
+         id="feColorMatrix831"
+         values="2 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0.5"
+         result="result91" />
+      <feDisplacementMap
+         in2="result91"
+         id="feDisplacementMap833"
+         yChannelSelector="A"
+         xChannelSelector="R"
+         scale="14.3"
+         in="fbSourceGraphic" />
+      <feColorMatrix
+         id="feColorMatrix835"
+         values="1 0 0 2 0 0 2 0 0 0 0 1 1 0 0 0 0 0 1 0 "
+         type="matrix" />
+    </filter>
+    <filter
+       height="1.3"
+       width="1.3"
+       y="-0.15"
+       x="-0.15"
+       inkscape:menu-tooltip="Van Gogh painting effect for bitmaps"
+       inkscape:menu="Distort"
+       inkscape:label="Pixel Smear"
+       style="color-interpolation-filters:sRGB;"
+       id="filter861">
+      <feTurbulence
+         type="fractalNoise"
+         numOctaves="9"
+         baseFrequency="0.68363159712745636 1"
+         seed="706"
+         id="feTurbulence843"
+         radius="0.40000000000000002" />
+      <feColorMatrix
+         result="result5"
+         values="1 0 0 0 0 0 1 0 0 0 0 0 1 0.4 1 0 0 0 1 0 "
+         id="feColorMatrix845" />
+      <feComposite
+         in="SourceGraphic"
+         operator="destination-over"
+         in2="result5"
+         id="feComposite847"
+         radius="0.10000000000000001"
+         k3="7.1399999999999997" />
+      <feMorphology
+         operator="erode"
+         radius="0.10816125860373615"
+         result="result3"
+         id="feMorphology849"
+         scale="10.1" />
+      <feTurbulence
+         numOctaves="4.2570066730219258"
+         baseFrequency="0 0.046548235364355893"
+         type="fractalNoise"
+         seed="7"
+         id="feTurbulence851"
+         stdDeviation="0.29999999999999999"
+         radius="0"
+         scale="43.100000000000001" />
+      <feGaussianBlur
+         stdDeviation="0.01 0.01"
+         result="result91"
+         id="feGaussianBlur853"
+         scale="8.3000000000000007"
+         k2="-0.14000000000000001" />
+      <feDisplacementMap
+         in="result3"
+         xChannelSelector="G"
+         yChannelSelector="G"
+         scale="12.392755004766444"
+         result="result4"
+         in2="result91"
+         id="feDisplacementMap855"
+         numOctaves="4"
+         k4="-4.1299999999999999"
+         stdDeviation="70.799380530973451 2.8599999999999999"
+         baseFrequency="0.27300000000000002 0.22800000000000001" />
+      <feComposite
+         in="result4"
+         k3="7.1401334604385127"
+         k1="10"
+         result="result2"
+         operator="arithmetic"
+         in2="result4"
+         id="feComposite857"
+         k2="4.2237279940302148"
+         k4="-0.60057197330791112"
+         scale="12.4"
+         stdDeviation="18.199999999999999" />
+      <feBlend
+         in2="result2"
+         mode="multiply"
+         in="result2"
+         id="feBlend859"
+         k4="-0.59999999999999998" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="43"
+     inkscape:window-x="0"
+     inkscape:window-height="1035"
+     inkscape:window-width="2558"
+     units="px"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer3"
+     inkscape:document-units="px"
+     inkscape:cy="1044.3994"
+     inkscape:cx="841.60305"
+     inkscape:zoom="0.24748737"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     style="display:inline"
+     inkscape:label="Layer 4"
+     id="layer6"
+     inkscape:groupmode="layer">
+    <rect
+       y="-22.183147"
+       x="-48.560322"
+       height="580.11871"
+       width="611.68817"
+       id="rect4389"
+       style="fill:#451b89;fill-opacity:1;stroke-width:0.264583;filter:url(#filter1298-3)" />
+    <g
+       transform="matrix(10.210021,0,0,42.034625,-174.28898,-725.10652)"
+       id="g6683">
+      <g
+         id="layer3-6"
+         inkscape:label="Layer 2"
+         style="display:none">
+        <text
+           id="text832"
+           y="276.71899"
+           x="4.64642"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter1727)"
+           xml:space="preserve"
+           transform="translate(0,-246.72915)"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:'Gilroy-SemiBold Bold';stroke-width:0.264583"
+             y="276.71899"
+             x="4.64642"
+             id="tspan830"
+             sodipodi:role="line">Sewerslvt</tspan></text>
+      </g>
+      <g
+         inkscape:label="Layer 1"
+         id="layer1-31"
+         transform="translate(0,-246.72915)"
+         style="display:none">
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot815-7"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+           transform="scale(0.26458333)"><flowRegion
+             id="flowRegion817-59"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"><rect
+               id="rect819-6"
+               width="604.28571"
+               height="357.14285"
+               x="175.71428"
+               y="319.66254"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium" /></flowRegion><flowPara
+             id="flowPara821-2" /></flowRoot>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter1705)"
+           x="4.64642"
+           y="276.71899"
+           id="text825-17"><tspan
+             sodipodi:role="line"
+             id="tspan823-8"
+             x="4.64642"
+             y="276.71899"
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-Medium;-inkscape-font-specification:'Gilroy-Medium Bold';stroke-width:0.264583">Sewerslvt</tspan></text>
+      </g>
+      <g
+         id="layer2"
+         inkscape:label="Layer 3"
+         style="display:inline">
+        <text
+           id="text886"
+           y="276.71899"
+           x="4.64642"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#000009;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter861)"
+           xml:space="preserve"
+           transform="translate(0,-246.72915)"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-Medium;-inkscape-font-specification:'Gilroy-Medium Bold';fill:#000009;fill-opacity:1;stroke-width:0.264583"
+             y="276.71899"
+             x="4.64642"
+             id="tspan884"
+             sodipodi:role="line">Sewerslvt</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g
+     style="display:inline"
+     inkscape:label="Layer 5"
+     id="layer7"
+     inkscape:groupmode="layer">
+    <g
+       transform="matrix(1.3227415,0,0,1,-59.175648,2.9412994)"
+       id="g4980">
+      <g
+         id="layer3-9"
+         inkscape:label="Layer 3"
+         style="display:none">
+        <rect
+           transform="translate(0,-246.72915)"
+           style="display:inline;fill:#020202;fill-opacity:1;stroke-width:0.264583"
+           id="rect1260"
+           width="84.666664"
+           height="50.270832"
+           x="0"
+           y="246.72916" />
+      </g>
+      <g
+         id="layer2-1"
+         inkscape:label="Layer 2"
+         style="display:inline">
+        <text
+           transform="matrix(6.3170526,0,0,37.568363,-7.6349831,-9906.6453)"
+           id="text192-7"
+           y="276.71899"
+           x="4.64642"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter426-0)"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:Gilroy-SemiBold;fill:#ffffff;fill-opacity:1;stroke-width:0.264583"
+             y="276.71899"
+             x="4.64642"
+             id="tspan190-7"
+             sodipodi:role="line">Sewerslvt</tspan></text>
+      </g>
+      <g
+         inkscape:label="Layer 1"
+         id="layer1-1"
+         transform="translate(0,-246.72915)"
+         style="display:none">
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot815-1"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+           transform="scale(0.26458333)"><flowRegion
+             id="flowRegion817-5"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"><rect
+               id="rect819-9"
+               width="604.28571"
+               height="357.14285"
+               x="175.71428"
+               y="319.66254"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium" /></flowRegion><flowPara
+             id="flowPara821-7" /></flowRoot>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter125-2)"
+           x="4.64642"
+           y="276.71899"
+           id="text825-7"><tspan
+             sodipodi:role="line"
+             id="tspan823-6"
+             x="4.64642"
+             y="276.71899"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:Gilroy-SemiBold;fill:#000000;fill-opacity:1;stroke-width:0.264583">Sewerslvt</tspan></text>
+      </g>
+      <g
+         style="display:none"
+         id="g1044-7"
+         inkscape:label="Layer 1 copy"
+         transform="translate(0,-246.72915)">
+        <flowRoot
+           transform="scale(0.26458333)"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+           id="flowRoot1038-3"
+           xml:space="preserve"><flowRegion
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"
+             id="flowRegion1034-6"><rect
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"
+               y="319.66254"
+               x="175.71428"
+               height="357.14285"
+               width="604.28571"
+               id="rect1032-5" /></flowRegion><flowPara
+             id="flowPara1036-6" /></flowRoot>
+        <text
+           id="text1042-3"
+           y="277.41721"
+           x="6.0777621"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter125-2)"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:Gilroy-SemiBold;fill:#ffffff;fill-opacity:1;stroke-width:0.264583"
+             y="277.41721"
+             x="6.0777621"
+             id="tspan1040-9"
+             sodipodi:role="line">Sewerslvt</tspan></text>
+      </g>
+      <g
+         id="layer4-4"
+         inkscape:label="Layer 4"
+         style="display:none">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#f753dc;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter1298-95)"
+           x="4.64642"
+           y="276.71899"
+           id="text1284-8"
+           transform="translate(0,-246.72915)"><tspan
+             sodipodi:role="line"
+             id="tspan1282-1"
+             x="4.64642"
+             y="276.71899"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;fill:#ffffff;fill-opacity:1;stroke-width:0.264583">Sewerslvt</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g
+     style="display:none"
+     inkscape:label="Layer 3"
+     id="layer5"
+     inkscape:groupmode="layer">
+    <g
+       transform="translate(234.47603,247.58594)"
+       id="g4386">
+      <g
+         transform="matrix(4.7051158,0,0,9.1502086,-177.48861,-232.20553)"
+         style="display:inline"
+         inkscape:label="Layer 2"
+         id="layer2-4">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter426-4)"
+           x="4.64642"
+           y="276.71899"
+           id="text192-4"
+           transform="matrix(1.3152781,0,0,4.0696716,-13.210018,-1074.9028)"><tspan
+             sodipodi:role="line"
+             id="tspan190-3"
+             x="4.64642"
+             y="276.71899"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:Gilroy-SemiBold;fill:#ffffff;fill-opacity:1;stroke-width:0.264583">Sewerslvt</tspan></text>
+      </g>
+      <g
+         style="display:none"
+         inkscape:label="Layer 4"
+         id="layer4-3">
+        <text
+           transform="translate(0,-246.72915)"
+           id="text1284-1"
+           y="276.71899"
+           x="4.64642"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#f753dc;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter1298-3)"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;fill:#ffffff;fill-opacity:1;stroke-width:0.264583"
+             y="276.71899"
+             x="4.64642"
+             id="tspan1282-4"
+             sodipodi:role="line">Sewerslvt</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g
+     style="display:inline"
+     inkscape:label="Layer 2"
+     id="layer3"
+     inkscape:groupmode="layer">
+    <g
+       transform="translate(8.6455111,222.34158)"
+       id="g3281">
+      <g
+         style="display:none"
+         transform="translate(0,-246.72915)"
+         id="layer1-8"
+         inkscape:label="Layer 1">
+        <flowRoot
+           transform="scale(0.26458333)"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+           id="flowRoot815-9"
+           xml:space="preserve"><flowRegion
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"
+             id="flowRegion817-7"><rect
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"
+               y="319.66254"
+               x="175.71428"
+               height="357.14285"
+               width="604.28571"
+               id="rect819-3" /></flowRegion><flowPara
+             id="flowPara821-6" /></flowRoot>
+        <text
+           id="text825-1"
+           y="276.71899"
+           x="4.64642"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter125-1)"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:Gilroy-SemiBold;fill:#ffffff;fill-opacity:1;stroke-width:0.264583"
+             y="276.71899"
+             x="4.64642"
+             id="tspan823-2"
+             sodipodi:role="line">Sewerslvt</tspan></text>
+      </g>
+      <g
+         transform="matrix(8.2300923,0,0,8.9329894,-39.535147,-190.02454)"
+         style="display:inline"
+         inkscape:label="Layer 2"
+         id="layer2-9">
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter426-2)"
+           x="4.64642"
+           y="276.71899"
+           id="text192-3"
+           transform="matrix(1.3152781,0,0,4.0696716,-13.210018,-1074.9028)"><tspan
+             sodipodi:role="line"
+             id="tspan190"
+             x="4.64642"
+             y="276.71899"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:Gilroy-SemiBold;fill:#ffffff;fill-opacity:1;stroke-width:0.264583">Sewerslvt</tspan></text>
+      </g>
+    </g>
+  </g>
+  <g
+     style="display:inline"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <g
+       transform="translate(-66.130467,-148.45198)"
+       id="g3117">
+      <g
+         style="display:inline"
+         transform="matrix(3.9245213,0,0,3.9245213,150.20052,-805.02542)"
+         id="layer1-3"
+         inkscape:label="Layer 1">
+        <flowRoot
+           transform="scale(0.26458333)"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+           id="flowRoot815"
+           xml:space="preserve"><flowRegion
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"
+             id="flowRegion817"><rect
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"
+               y="319.66254"
+               x="175.71428"
+               height="357.14285"
+               width="604.28571"
+               id="rect819" /></flowRegion><flowPara
+             id="flowPara821" /></flowRoot>
+        <text
+           id="text825"
+           y="276.71899"
+           x="4.64642"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter125)"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:Gilroy-SemiBold;fill:#000000;fill-opacity:1;stroke-width:0.264583"
+             y="276.71899"
+             x="4.64642"
+             id="tspan823"
+             sodipodi:role="line">Sewerslvt</tspan></text>
+      </g>
+      <g
+         transform="matrix(3.9245213,0,0,3.9245213,150.20052,-805.02542)"
+         inkscape:label="Layer 1 copy"
+         id="g1044"
+         style="display:inline">
+        <flowRoot
+           xml:space="preserve"
+           id="flowRoot1038"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:1.25;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+           transform="scale(0.26458333)"><flowRegion
+             id="flowRegion1034"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium"><rect
+               id="rect1032"
+               width="604.28571"
+               height="357.14285"
+               x="175.71428"
+               y="319.66254"
+               style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium" /></flowRegion><flowPara
+             id="flowPara1036" /></flowRoot>
+        <text
+           xml:space="preserve"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.264583;filter:url(#filter125)"
+           x="6.0777621"
+           y="277.41721"
+           id="text1042"><tspan
+             sodipodi:role="line"
+             id="tspan1040"
+             x="6.0777621"
+             y="277.41721"
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-SemiBold;-inkscape-font-specification:Gilroy-SemiBold;fill:#ffffff;fill-opacity:1;stroke-width:0.264583">Sewerslvt</tspan></text>
+      </g>
+      <g
+         style="display:none"
+         inkscape:label="Layer 4"
+         id="layer4">
+        <text
+           transform="translate(0,-246.72915)"
+           id="text1284"
+           y="276.71899"
+           x="4.64642"
+           style="font-style:normal;font-weight:normal;font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;display:inline;fill:#f753dc;fill-opacity:1;stroke:none;stroke-width:0.264583"
+           xml:space="preserve"><tspan
+             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16.9333px;font-family:Gilroy-Medium;-inkscape-font-specification:Gilroy-Medium;fill:#ffffff;fill-opacity:1;stroke-width:0.264583"
+             y="276.71899"
+             x="4.64642"
+             id="tspan1282"
+             sodipodi:role="line">Sewerslvt</tspan></text>
+      </g>
+    </g>
+  </g>
+</svg>

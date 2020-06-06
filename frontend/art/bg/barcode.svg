@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="barcode.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 507.99999 285.75001"
+   height="1080"
+   width="1920">
+  <defs
+     id="defs2">
+    <filter
+       id="filter899"
+       style="color-interpolation-filters:sRGB;"
+       inkscape:menu-tooltip="A volcanic texture, a little like leather"
+       inkscape:menu="Materials"
+       inkscape:label="Cracked Lava">
+      <feGaussianBlur
+         id="feGaussianBlur867"
+         stdDeviation="0.01"
+         in="SourceGraphic"
+         result="result0" />
+      <feTurbulence
+         id="feTurbulence869"
+         result="result1"
+         numOctaves="1"
+         seed="145"
+         baseFrequency="0.1936046939098697 0" />
+      <feDisplacementMap
+         id="feDisplacementMap871"
+         yChannelSelector="G"
+         in="result1"
+         in2="result1"
+         scale="0"
+         xChannelSelector="R"
+         result="result5" />
+      <feComposite
+         id="feComposite873"
+         in="result0"
+         in2="result5"
+         operator="in"
+         result="result2" />
+      <feComposite
+         id="feComposite879"
+         result="result91"
+         operator="arithmetic"
+         in="result4"
+         in2="result2"
+         k2="-0.5"
+         k3="1"
+         k1="2.5" />
+      <feBlend
+         id="feBlend881"
+         in2="result91"
+         mode="screen"
+         result="fbSourceGraphic" />
+      <feColorMatrix
+         id="feColorMatrix883"
+         result="fbSourceGraphicAlpha"
+         in="fbSourceGraphic"
+         values="1 0 0 -1 0 1 0 1 -1 0 1 0 0 -1 0 -2 -0.5 0 5 -2" />
+      <feGaussianBlur
+         id="feGaussianBlur885"
+         result="result0"
+         in="fbSourceGraphicAlpha"
+         stdDeviation="0.01" />
+      <feOffset
+         id="feOffset887"
+         result="result3"
+         in="result0"
+         dy="2"
+         dx="2" />
+      <feSpecularLighting
+         id="feSpecularLighting891"
+         specularExponent="15"
+         specularConstant="0.8"
+         surfaceScale="4"
+         lighting-color="rgb(255,255,255)"
+         result="result1"
+         in="result0">
+        <fePointLight
+           id="fePointLight889"
+           z="20000"
+           y="-10000"
+           x="-5000" />
+      </feSpecularLighting>
+      <feComposite
+         id="feComposite893"
+         operator="in"
+         result="result2"
+         in="result1"
+         in2="fbSourceGraphicAlpha" />
+      <feComposite
+         id="feComposite895"
+         in2="result2"
+         k3="2"
+         k2="2"
+         operator="arithmetic"
+         result="result4"
+         in="fbSourceGraphic" />
+      <feBlend
+         id="feBlend897"
+         in2="result4"
+         mode="darken" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-maximized="1"
+     inkscape:window-y="43"
+     inkscape:window-x="0"
+     inkscape:window-height="1035"
+     inkscape:window-width="2558"
+     units="px"
+     showgrid="true"
+     inkscape:document-rotation="0"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="px"
+     inkscape:cy="561.25984"
+     inkscape:cx="1229.7568"
+     inkscape:zoom="0.35"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base">
+    <inkscape:grid
+       id="grid10"
+       type="xygrid" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     style="display:inline"
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       y="0"
+       x="0"
+       height="285.75"
+       width="508"
+       id="rect12"
+       style="fill:#000009;fill-opacity:1;stroke-width:0.402504;filter:url(#filter899)" />
+  </g>
+  <g
+     inkscape:label="Layer 2"
+     id="layer2"
+     inkscape:groupmode="layer" />
+</svg>
