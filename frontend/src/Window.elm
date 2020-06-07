@@ -107,6 +107,25 @@ makeMainBorder content_ =
         ]
         <| content_
 
+makeTaskListProgram h icon name =
+    E.row
+        [ E.width <| E.px 120
+        , E.height E.fill
+        ]
+        [ E.el 
+            [ E.height E.fill
+            , E.width <| E.px h
+            ]
+            <| case icon of
+                Maybe ic ->
+                    icon
+                Nothing ->
+                    Icons.defaultProgramIcon
+                E.html Icons.
+        , makeToolItem name
+        ]
+
+
     -- E.el
     --     [ E.padding 1
     --     , EBackground.color <| E.rgb255 200 200 200

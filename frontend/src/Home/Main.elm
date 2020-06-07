@@ -35,8 +35,6 @@ initCmd : Cmd Msg.Msg
 initCmd =
     Cmd.none
 
-
-
 -- UPDATE
 
 update : Msg.Msg -> Model -> ( Model, Cmd Msg.Msg )

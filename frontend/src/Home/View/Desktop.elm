@@ -10,12 +10,7 @@ import Home.View.Navbar
 import Html
 import Html.Attributes
 
-
-import Json.Decode as JD
-
-import OBJ.Types exposing (Mesh(..), ObjFile)
-
-import Home.Palette as Palette
+import Palette as Palette
 
 import Window
 
@@ -26,6 +21,8 @@ view title model =
     , body = 
         [ E.layout
             [ E.inFront (Home.View.Navbar.makeNavbar model)
+            , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+            , E.height E.fill
             ]
             <| mainDocumentColumn model
         ]
@@ -40,6 +37,7 @@ mainDocumentColumn model =
     in
     E.column
         [ E.width E.fill
+        -- , E.height E.fill
         -- , EBackground.color <| E.rgb255 10 20 36
         , EBackground.color <| E.rgb255 255 255 255
         -- , EFont.family
@@ -54,8 +52,8 @@ mainDocumentColumn model =
         , E.htmlAttribute <| Html.Attributes.style "background-image" ("url(" ++ postPic4 ++ ")")
         , E.htmlAttribute <| Html.Attributes.style "background-size" "cover"
         ]
-        [ block0 model
-        , block1 model
+        -- [ block0 model
+        [ block1 model
         , heightBlock 200
         ]
 
@@ -118,7 +116,7 @@ block1 model =
                     -- , E.htmlAttribute <| Html.Attributes.style 
                     , EFont.size 16
                     , EFont.family
-                        [ EFont.typeface Palette.font1
+                        [ EFont.typeface Palette.font0
                         ]
                     -- , EFont.color <| E.rgb255 230 80 170
                     -- , EFont.color <| E.rgb255 255 255 255
@@ -133,7 +131,7 @@ block1 model =
                             [ EFont.size 14
                             , EFont.light
                             , EFont.family
-                                [ EFont.typeface "Roboto"
+                                [ EFont.typeface Palette.font0
                                 ]
                             -- , EFont.color <| E.rgb255 230 80 170
                             , EFont.color <| E.rgb255 32 20 26
@@ -193,7 +191,9 @@ block1 model =
         albums = 
             E.column
                 [ E.centerX
-                    , EBackground.color <| E.rgb255  240 190 10
+                -- , EBackground.color <| E.rgb255  240 190 10
+                -- TODO: take this out. It wouldn't be needed if the code were written properly
+                , E.paddingEach { top = 60, right = 0, bottom = 0, left = 0 }                 
                 ]
                 [ E.row
                     [ E.spacing widthSpacing
@@ -229,7 +229,7 @@ block1 model =
                 [ EFont.size 60
                 , EFont.color <| E.rgb255 230 30 10
                 , EFont.family
-                    [ EFont.typeface "undefined"
+                    [ EFont.typeface Palette.font1
                     ]
                 , E.centerY
                 , E.height <| E.px 240

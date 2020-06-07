@@ -22,7 +22,6 @@ makeNavbar model =
                 ]
                 <| E.el
                     [ E.alignRight
-                    , E.paddingEach { top = 0, right = 40, bottom = 0, left = 0 }
                     ]
                     <| Window.makeHighElementBorder
                         <| Window.makeMainBorder
@@ -34,8 +33,8 @@ makeNavbar model =
                                 ]
     in
     E.el
-        [ E.width E.fill
-        , E.height <| E.px 80
+        [ E.alignBottom
+        , E.width E.fill
         , EBackground.color <| E.rgb255 80 80 80
         ]
         <| actualNavbar

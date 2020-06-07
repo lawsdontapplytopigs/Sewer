@@ -1,5 +1,4 @@
 module Palette exposing (..)
 
-
-font0 = "Roboto"
+font0 = "Droid Sans"
 font1 = "undefined"
