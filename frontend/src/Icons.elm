@@ -1,4 +1,4 @@
-module Icons exposing (xIcon)
+module Icons exposing (..)
 import Svg exposing
   ( Svg, Attribute, text, node, map
   , svg, foreignObject
@@ -55,4 +55,12 @@ import Html exposing (Html)
 --             ] 
 --         ]
 
-xIcon = svg [ id "svg8", version "1.1", viewBox "0 0 8.4666664 8.466667", height "32", width "32" ] [ defs [ id "defs2" ] [], metadata [ id "metadata5" ] [], g [ style "display:none", id "layer1" ] [ Svg.path [ id "rect12", style "fill:#e6e6e6;stroke-width:2", d "M 0,0 V 32 H 32 V 0 Z", transform "scale(0.26458333)" ] [] ], g [ id "layer2", style "display:inline" ] [ Svg.path [ id "path878", style "fill:#1e141a;fill-opacity:1;stroke-width:2.50312", d "M 2.6923693,1.5393509 1.9307186,2.3010016 6.0466694,6.4169525 6.8083201,5.6553018 Z" ] [], Svg.path [ d "M 1.9307186,5.6553018 2.6923693,6.4169525 6.8083202,2.3010017 6.0466695,1.539351 Z", style "fill:#1e141a;fill-opacity:1;stroke-width:2.50312", id "path880" ] [] ] ]
+xIcon = 
+    let
+        scale = "0.8"
+    in
+        svg 
+            [ transform <| "scale(" ++ scale ++ ")"
+            , id "svg8", version "1.1", viewBox "0 0 8.4666664 8.466667", height "32", width "32" ] [ defs [ id "defs2" ] [], metadata [ id "metadata5" ] [], g [ style "display:none", id "layer1" ] [ Svg.path [ id "rect12", style "fill:#e6e6e6;stroke-width:2", d "M 0,0 V 32 H 32 V 0 Z", transform "scale(0.26458333)" ] [] ], g [ id "layer2", style "display:inline" ] [ Svg.path [ id "path878", style "fill:#1e141a;fill-opacity:1;stroke-width:2.50312", d "M 2.6923693,1.5393509 1.9307186,2.3010016 6.0466694,6.4169525 6.8083201,5.6553018 Z" ] [], Svg.path [ d "M 1.9307186,5.6553018 2.6923693,6.4169525 6.8083202,2.3010017 6.0466695,1.539351 Z", style "fill:#1e141a;fill-opacity:1;stroke-width:2.50312", id "path880" ] [] ] ]
+
+defaultProgramIcon = svg [ id "svg8", version "1.1", viewBox "0 0 8.4666664 8.466667", height "32", width "32" ] [ defs [ id "defs2" ] [], metadata [ id "metadata5" ] [], g [ style "display:none", id "layer1" ] [ Svg.path [ id "rect12", style "fill:#e6e6e6;stroke-width:2", d "M 0,0 V 32 H 32 V 0 Z", transform "scale(0.26458333)" ] [] ], g [ id "layer2", style "display:inline" ] [ Svg.path [ id "path878", style "fill:#1e141a;fill-opacity:1;stroke-width:2.50312", d "M 2.6923693,1.5393509 1.9307186,2.3010016 6.0466694,6.4169525 6.8083201,5.6553018 Z" ] [], Svg.path [ d "M 1.9307186,5.6553018 2.6923693,6.4169525 6.8083202,2.3010017 6.0466695,1.539351 Z", style "fill:#1e141a;fill-opacity:1;stroke-width:2.50312", id "path880" ] [] ] ]

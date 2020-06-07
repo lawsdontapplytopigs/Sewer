@@ -1,4 +1,4 @@
-module Window exposing
+module Windoze exposing
     (..)
 
 import Element as E
@@ -13,11 +13,12 @@ makeTitleBar buttons title =
     let
         mainPink = E.rgb255 255 180 210
         lightPink = E.rgb255 255 255 255
+        darkPink = E.rgb255 200 100 140
     in
     E.row
         [ E.height <| E.px 32
         , E.width E.fill
-        , EBackground.color mainPink
+        , EBackground.color darkPink
         ]
         [ E.el 
             [ E.alignLeft
@@ -34,13 +35,14 @@ makeTitleBar buttons title =
             [ E.alignRight
             , E.height E.fill
             , E.paddingEach { top = 0, right = 0, bottom = 0, left = 200 }
-            , EBackground.gradient 
-                { angle = 3.14 / 2
-                , steps = 
-                    [ mainPink
-                    , lightPink
-                    ]
-                }
+            , EBackground.color darkPink
+            -- , EBackground.gradient 
+            --     { angle = 3.14 / 2
+            --     , steps = 
+            --         [ mainPink
+            --         , lightPink
+            --         ]
+            --     }
             ]
             buttons
         ]
@@ -74,35 +76,61 @@ makeToolBar toolsList =
             ]
             toolsList
 
-makeHighElementBorder content_ =
+level1RaisedElementBorder content_ =
     E.el
-        [ EBorder.widthEach { top = 0, right = 2, bottom = 2, left = 0 }
-        , EBorder.color <| E.rgb255 30 20 26
+        [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.color Palette.gray1
         ]
         <| E.el
             [ E.width E.fill
             , E.height E.fill
-            , EBorder.widthEach { top = 2, right = 0, bottom = 0, left = 2 }
-            , EBorder.color <| E.rgb255 255 255 255
+            , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+            , EBorder.color <| E.rgb255 255 255 255 --TODO: make pink
             ]
             <| content_
 
-makeLowElementBorder content_ =
+level2RaisedElementBorder content_ =
+        E.el
+            [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+            , EBorder.color Palette.gray0
+            ]
+            <| E.el
+                [ E.width E.fill
+                , E.height E.fill
+                , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+                , EBorder.color Palette.gray4
+                ]
+                <| level1RaisedElementBorder content_
+
+level1DepressedElementBorder content_ =
     E.el
-        [ EBorder.widthEach { top = 2, right = 0, bottom = 0, left = 2 }
-        , EBorder.color <| E.rgb255 30 20 26
+        [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.color Palette.gray4
         ]
         <| E.el
             [ E.width E.fill
             , E.height E.fill
-            , EBorder.widthEach { top = 0, right = 2, bottom = 2, left = 0 }
-            , EBorder.color <| E.rgb255 255 220 240
+            , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+            , EBorder.color Palette.gray0
             ]
             <| content_
+
+level2DepressedElementBorder content_ =
+        E.el
+            [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+            , EBorder.color Palette.white
+            ]
+            <| E.el
+                [ E.width E.fill
+                , E.height E.fill
+                , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+                , EBorder.color <| Palette.gray1
+                ]
+                <| level1DepressedElementBorder content_
 
 makeMainBorder content_ =
     E.el
-        [ EBorder.width 4
+        [ EBorder.width 2
         , EBorder.color <| E.rgb255 255 170 210
         ]
         <| content_
@@ -116,12 +144,12 @@ makeTaskListProgram h icon name =
             [ E.height E.fill
             , E.width <| E.px h
             ]
-            <| case icon of
-                Maybe ic ->
-                    icon
-                Nothing ->
-                    Icons.defaultProgramIcon
-                E.html Icons.
+            <| E.html 
+                <| case icon of
+                    Just ic ->
+                        ic
+                    Nothing ->
+                        Icons.defaultProgramIcon
         , makeToolItem name
         ]
 
@@ -159,30 +187,32 @@ makeButton icon =
     --                 , EBorder.color <| E.rgb255 40 40 40
     --                 ]
         
-        makeHighElementBorder
+        level2RaisedElementBorder
             <| E.el
-                [ E.height <| E.px 26
+                [ E.height <| E.px 22
+                , E.width <| E.px 26
+                , EBackground.color <| E.rgb255 255 190 210
                 , E.centerX
                 , E.centerY
-                , EBackground.color <| E.rgb255 255 190 210
                 ]
-                <| E.html icon
+                -- <| E.el 
+                --     [
+                --     ] 
+                    <| E.html icon
 
 makeWindow { title, buttons, toolsList } content =
     let
         toolBar = makeToolBar toolsList
         titleBar = makeTitleBar buttons title
     in
-        makeHighElementBorder
+        level2RaisedElementBorder
             <| makeMainBorder 
                 <| E.column
                     [
                     ]
                     [ titleBar
                     , toolBar
-                    , makeLowElementBorder content
+                    , level2DepressedElementBorder content
                     ]
-
-
 
 

@@ -12,7 +12,7 @@ import Html.Attributes
 
 import Palette as Palette
 
-import Window
+import Windoze
 
 import Icons
 
@@ -33,7 +33,7 @@ mainDocumentColumn model =
         postPic = "./bg.png"
         postPic2 = "./bg2.png"
         postPic3 = "./bg3.jpg"
-        postPic4 = "./bg4.jpg"
+        postPic4 = "./windoze.jpg"
     in
     E.column
         [ E.width E.fill
@@ -50,42 +50,42 @@ mainDocumentColumn model =
         -- , E.htmlAttribute <| Html.Attributes.style "width" ((String.fromInt maxWidth) ++ "px")
         -- , E.htmlAttribute Html.Attributes.style "height" ((String.fromInt imageHeight) ++ "px")
         , E.htmlAttribute <| Html.Attributes.style "background-image" ("url(" ++ postPic4 ++ ")")
-        , E.htmlAttribute <| Html.Attributes.style "background-size" "cover"
+        -- , E.htmlAttribute <| Html.Attributes.style "background-size" "cover"
         ]
         -- [ block0 model
         [ block1 model
         , heightBlock 200
         ]
 
-block0 model =
-    let
-        maxWidth = 800
-        billboard = "./billboard.png"
-        logo = "./logo.png"
-    in
-    E.column
-        [ E.height <| E.px 640
-        , E.width E.fill
-        -- , EBackground.color <| E.rgb255 80 80 80
-        , E.centerX
-        , E.htmlAttribute <| Html.Attributes.style "background-image" ("url(" ++ billboard ++ ")")
-        , E.htmlAttribute <| Html.Attributes.style "background-size" "cover"
-        ]
-        [ E.el 
-            [ E.width <| E.maximum maxWidth E.fill
-            -- , E.height <| E.px 800 
-            , E.centerX
-            , E.centerY
-            ]
-            <| E.image 
-                [ E.width <| E.px 420
-                , E.centerX
-                , E.centerY
-                ]
-                { src = logo
-                , description = ""
-                }
-        ]
+-- block0 model =
+--     let
+--         maxWidth = 800
+--         billboard = "./windoze.jpg"
+--         logo = "./logo.png"
+--     in
+--     E.column
+--         [ E.height <| E.px 640
+--         , E.width E.fill
+--         -- , EBackground.color <| E.rgb255 80 80 80
+--         , E.centerX
+--         , E.htmlAttribute <| Html.Attributes.style "background-image" ("url(" ++ billboard ++ ")")
+--         , E.htmlAttribute <| Html.Attributes.style "background-size" "cover"
+--         ]
+--         [ E.el 
+--             [ E.width <| E.maximum maxWidth E.fill
+--             -- , E.height <| E.px 800 
+--             , E.centerX
+--             , E.centerY
+--             ]
+--             <| E.image 
+--                 [ E.width <| E.px 420
+--                 , E.centerX
+--                 , E.centerY
+--                 ]
+--                 { src = logo
+--                 , description = ""
+--                 }
+--         ]
 
 block1 model =
     let
@@ -236,13 +236,13 @@ block1 model =
                 , E.paddingEach { top = 120, right = 0, bottom = 0, left = 0 }
                 ]
                 <| E.text "My music :)"
-            , Window.makeWindow 
+            , Windoze.makeWindow
                 { title = "Untitled - Notepad"
-                , buttons = [ Window.makeButton Icons.xIcon ]
+                , buttons = [ Windoze.makeButton Icons.xIcon ]
                 , toolsList = 
-                    [ Window.makeToolItem "File" 
-                    , Window.makeToolItem "Edit"
-                    , Window.makeToolItem "Help"
+                    [ Windoze.makeToolItem "File" 
+                    , Windoze.makeToolItem "Edit"
+                    , Windoze.makeToolItem "Help"
                     ]
                 }
                 wholeContent

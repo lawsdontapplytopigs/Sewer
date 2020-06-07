@@ -6,26 +6,26 @@ import Element.Background as EBackground
 import Element.Border as EBorder
 import Element.Font as EFont
 
-import Window
+import Windoze
 
 makeNavbar model =
     let
         makeTallItem text =
-            Window.makeHighElementBorder (Window.makeToolItem text)
+            Windoze.level2RaisedElementBorder (Windoze.makeToolItem text)
 
         actualNavbar =
             E.el
                 [ E.centerY
                 , E.centerX
-                , E.width <| E.maximum 1920 E.fill
+                , E.width E.fill
                 , EBackground.color <| E.rgb255 200 200 200
                 ]
                 <| E.el
-                    [ E.alignRight
+                    [ E.alignLeft
                     ]
-                    <| Window.makeHighElementBorder
-                        <| Window.makeMainBorder
-                            <| Window.makeToolBar
+                    <| Windoze.level2RaisedElementBorder
+                        <| Windoze.makeMainBorder
+                            <| Windoze.makeToolBar
                                 [ makeTallItem "Home"
                                 , makeTallItem "Library"
                                 , makeTallItem "Contact"
