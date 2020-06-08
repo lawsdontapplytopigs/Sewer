@@ -80,6 +80,7 @@ level1RaisedElementBorder content_ =
     E.el
         [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
         , EBorder.color Palette.gray1
+        , E.width E.fill
         ]
         <| E.el
             [ E.width E.fill
@@ -93,6 +94,7 @@ level2RaisedElementBorder content_ =
         E.el
             [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
             , EBorder.color Palette.gray0
+            , E.width E.fill
             ]
             <| E.el
                 [ E.width E.fill
@@ -131,6 +133,8 @@ level2DepressedElementBorder content_ =
 makeMainBorder content_ =
     E.el
         [ EBorder.width 2
+        , E.width E.fill
+        , E.height E.fill
         , EBorder.color <| E.rgb255 255 170 210
         ]
         <| content_
