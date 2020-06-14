@@ -22,8 +22,14 @@ main = Browser.document
 -- MODEL
 type alias Model =
     { time : Float
+    , programs : 
     }
 
+type Client =
+    { title : String
+    , 
+    }
+    
 
 initModel : Model
 initModel =
@@ -42,6 +48,9 @@ update msg model =
     case msg of
         Msg.Tick dt ->
             ( { model | time = model.time + dt / 1000 }, Cmd.none )
+        Msg.OpenFileExplorer ->
+            (
+                {
 
 
 subscriptions : Model -> Sub Msg.Msg

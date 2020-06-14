@@ -21,8 +21,8 @@ view title model =
     , body = 
         [ E.layout
             [ E.inFront (Home.View.Navbar.makeNavbar model)
-            , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
-            , E.height E.fill
+            -- , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+            -- , E.height E.fill
             ]
             <| mainDocumentColumn model
         ]
@@ -34,12 +34,12 @@ mainDocumentColumn model =
         postPic2 = "./bg2.png"
         postPic3 = "./bg3.jpg"
         postPic4 = "./windoze.jpg"
+        defaultColor = "#00787f"
     in
-    E.column
+    E.el
         [ E.width E.fill
-        -- , E.height E.fill
-        -- , EBackground.color <| E.rgb255 10 20 36
-        , EBackground.color <| E.rgb255 255 255 255
+        , E.height E.fill
+        -- , EBackground.color <| E.rgb255 255 255 255
         -- , EFont.family
         --     -- [ EFont.typeface Palette.font1
         --     [ EFont.typeface Palette.font0
@@ -49,43 +49,71 @@ mainDocumentColumn model =
         
         -- , E.htmlAttribute <| Html.Attributes.style "width" ((String.fromInt maxWidth) ++ "px")
         -- , E.htmlAttribute Html.Attributes.style "height" ((String.fromInt imageHeight) ++ "px")
-        , E.htmlAttribute <| Html.Attributes.style "background-image" ("url(" ++ postPic4 ++ ")")
+        -- , E.htmlAttribute <| Html.Attributes.style "background-image" ("url(" ++ postPic4 ++ ")")
+        , EBackground.color <| E.rgb255 0 120 127
         -- , E.htmlAttribute <| Html.Attributes.style "background-size" "cover"
         ]
-        -- [ block0 model
-        [ block1 model
-        , heightBlock 200
-        ]
+        <| desktop model
 
--- block0 model =
---     let
---         maxWidth = 800
---         billboard = "./windoze.jpg"
---         logo = "./logo.png"
---     in
---     E.column
---         [ E.height <| E.px 640
---         , E.width E.fill
---         -- , EBackground.color <| E.rgb255 80 80 80
---         , E.centerX
---         , E.htmlAttribute <| Html.Attributes.style "background-image" ("url(" ++ billboard ++ ")")
---         , E.htmlAttribute <| Html.Attributes.style "background-size" "cover"
---         ]
---         [ E.el 
---             [ E.width <| E.maximum maxWidth E.fill
---             -- , E.height <| E.px 800 
---             , E.centerX
---             , E.centerY
---             ]
---             <| E.image 
---                 [ E.width <| E.px 420
---                 , E.centerX
---                 , E.centerY
---                 ]
---                 { src = logo
---                 , description = ""
---                 }
---         ]
+makeLauncher icon title =
+    let
+        desktopItemWidth = 96
+        desktopItemHeight = 96
+        iconSize = 32
+    in
+    E.el
+        [ E.height <| E.px desktopItemHeight
+        , E.width <| E.px desktopItemWidth
+        -- , EBackground.color <| E.rgb255  80 80 80
+        ]
+        <| E.column
+            [ E.spacing 5
+            -- , EBackground.color <| E.rgb255 20 20 20
+            , E.centerX
+            , E.centerY
+            ]
+            [ E.el
+                [ E.width <| E.px iconSize
+                , E.height <| E.px iconSize
+                , E.centerX
+                , E.alignTop
+                -- , EBackground.color <| E.rgb255 150 150 150
+                ]
+                <| E.image
+                    [ E.width E.fill
+                    , E.height E.fill
+                    ]
+                    { src = icon
+                    , description = "my COMP"
+                    }
+            , E.el
+                [ E.centerX
+                , E.alignTop
+                , EFont.family
+                    [ EFont.typeface Palette.font0
+                    ]
+                , EFont.size Palette.fontSize0
+                -- , EFont.size Palette.fontSize0
+                , EFont.color <| Palette.white
+                , EFont.center
+                ]
+                <| E.paragraph
+                    [ E.spacing 0
+                    ]
+                    [ E.text title
+                    ]
+            ]
+
+desktop model =
+    let
+        item1 = makeLauncher "./icons/0.ico" "My Computer"
+    in
+        E.column
+            [ E.alignLeft
+            , E.inFront <| block1 model
+            ]
+            [ item1
+            ]
 
 block1 model =
     let
@@ -114,7 +142,7 @@ block1 model =
                 , E.paragraph
                     [ E.width <| E.px imgSize
                     -- , E.htmlAttribute <| Html.Attributes.style 
-                    , EFont.size 16
+                    , EFont.size Palette.fontSize0
                     , EFont.family
                         [ EFont.typeface Palette.font0
                         ]
@@ -128,7 +156,7 @@ block1 model =
                 , case maybeAuthor of
                     Just str ->
                         E.el
-                            [ EFont.size 14
+                            [ EFont.size Palette.fontSize0
                             , EFont.light
                             , EFont.family
                                 [ EFont.typeface Palette.font0
@@ -208,13 +236,13 @@ block1 model =
         wholeContent =
             E.el
                 [ E.width <| E.px ((imageSize * 4) + 300)
-                , E.height <| E.px ((imageSize * 4))
+                , E.height <| E.px ((imageSize * 3) + 100)
                 , E.centerX
                 ]
                 <| E.el
                     [ E.width E.fill
                     , E.height E.fill
-                    , EBackground.color <| E.rgb255  255 200 220
+                    , EBackground.color <| E.rgb255  255 225 238
                     ]
                     albums
                     -- <| E.column
@@ -222,34 +250,41 @@ block1 model =
                     --     ]
                     --     albums
     in
-        E.column
-            [ E.centerX
-            ]
-            [ E.el
-                [ EFont.size 60
-                , EFont.color <| E.rgb255 230 30 10
-                , EFont.family
-                    [ EFont.typeface Palette.font1
-                    ]
-                , E.centerY
-                , E.height <| E.px 240
-                , E.paddingEach { top = 120, right = 0, bottom = 0, left = 0 }
+        -- E.column
+        --     [ E.centerX
+        --     , EBackground.color <| E.rgb255 255 10 10
+        --     , E.htmlAttribute <| Html.Attributes.style "left" "800px"
+        --     ]
+        --     [ E.el
+        --         [ EFont.size 60
+        --         -- , EFont.color <| E.rgb255 230 30 10
+        --         , EFont.family
+        --             [ EFont.typeface Palette.font1
+        --             ]
+        --         , E.centerY
+        --         , E.height <| E.px 240
+        --         , E.paddingEach { top = 120, right = 0, bottom = 0, left = 0 }
+        --         ]
+        --         <| E.text "My music :)"
+            -- ]
+            
+            E.el
+                [ E.htmlAttribute <| Html.Attributes.style "left" "400px"
+                , E.htmlAttribute <| Html.Attributes.style "top" "70px"
                 ]
-                <| E.text "My music :)"
-            , Windoze.makeWindow
-                { title = "Untitled - Notepad"
-                , buttons = [ Windoze.makeButton Icons.xIcon ]
-                , toolsList = 
-                    [ Windoze.makeToolItem "File" 
-                    , Windoze.makeToolItem "Edit"
-                    , Windoze.makeToolItem "Help"
-                    ]
-                }
-                wholeContent
-            ]
+                <| Windoze.makeWindow
+                    { title = "Untitled - Notepad"
+                    , buttons = [ Windoze.makeButton Icons.xIcon ]
+                    , toolsList = 
+                        [ Windoze.makeToolItem "File" 
+                        , Windoze.makeToolItem "Edit"
+                        , Windoze.makeToolItem "Help"
+                        ]
+                    }
+                    wholeContent
 
 heightBlock height =
     E.el
-        [ E.height <| E.maximum height E.fill
+        [ E.height <| E.px height
         ]
         <| E.text ""

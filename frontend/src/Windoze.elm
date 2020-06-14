@@ -26,7 +26,7 @@ makeTitleBar buttons title =
             , EFont.color <| E.rgb255 20 20 20
             , EFont.bold
             , EFont.family
-                [ EFont.typeface "Droid Sans"
+                [ EFont.typeface Palette.font0
                 ]
             , E.paddingEach { top = 0, right = 0, bottom = 0, left = 5 }
             ]
@@ -56,7 +56,7 @@ makeToolItem text =
         [ EFont.family
             [ EFont.typeface Palette.font0
             ]
-        , EFont.size 16
+        , EFont.size Palette.fontSize0
         , E.padding 5
         ]
         [ E.el
@@ -69,7 +69,7 @@ makeToolItem text =
 makeToolBar toolsList =
     E.el
         [ E.width E.fill
-        , EBackground.color <| E.rgb255 255 210 230
+        -- , EBackground.color Palette.color0
         ]
         <| E.row
             [
@@ -86,7 +86,7 @@ level1RaisedElementBorder content_ =
             [ E.width E.fill
             , E.height E.fill
             , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
-            , EBorder.color <| E.rgb255 255 255 255 --TODO: make pink
+            , EBorder.color Palette.white
             ]
             <| content_
 
@@ -102,7 +102,7 @@ level2RaisedElementBorder content_ =
                 , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
                 , EBorder.color Palette.gray4
                 ]
-                <| level1RaisedElementBorder content_
+                <| content_
 
 level1DepressedElementBorder content_ =
     E.el
@@ -128,14 +128,15 @@ level2DepressedElementBorder content_ =
                 , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
                 , EBorder.color <| Palette.gray1
                 ]
-                <| level1DepressedElementBorder content_
+                <| content_
+
 
 makeMainBorder content_ =
     E.el
         [ EBorder.width 2
         , E.width E.fill
         , E.height E.fill
-        , EBorder.color <| E.rgb255 255 170 210
+        , EBorder.color Palette.color0
         ]
         <| content_
 
@@ -192,17 +193,18 @@ makeButton icon =
     --                 ]
         
         level2RaisedElementBorder
-            <| E.el
-                [ E.height <| E.px 22
-                , E.width <| E.px 26
-                , EBackground.color <| E.rgb255 255 190 210
-                , E.centerX
-                , E.centerY
-                ]
-                -- <| E.el 
-                --     [
-                --     ] 
-                    <| E.html icon
+            <| level1RaisedElementBorder
+                <| E.el
+                    [ E.height <| E.px 22
+                    , E.width <| E.px 26
+                    , EBackground.color <| E.rgb255 255 190 210
+                    , E.centerX
+                    , E.centerY
+                    ]
+                    -- <| E.el 
+                    --     [
+                    --     ] 
+                        <| E.html icon
 
 makeWindow { title, buttons, toolsList } content =
     let
@@ -210,13 +212,21 @@ makeWindow { title, buttons, toolsList } content =
         titleBar = makeTitleBar buttons title
     in
         level2RaisedElementBorder
-            <| makeMainBorder 
-                <| E.column
-                    [
-                    ]
-                    [ titleBar
-                    , toolBar
-                    , level2DepressedElementBorder content
-                    ]
+            <| level1RaisedElementBorder
+                <| makeMainBorder 
+                    <| E.column
+                        [
+                        ]
+                        [ titleBar
+                        , E.el 
+                            [ E.width E.fill
+                            , E.height E.fill 
+                            , EBackground.color Palette.color0
+                            ]
+                                <| toolBar
+                        , level2DepressedElementBorder 
+                            <| level1DepressedElementBorder 
+                                <| content
+                        ]
 
 
