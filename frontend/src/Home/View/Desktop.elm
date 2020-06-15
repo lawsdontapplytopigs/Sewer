@@ -110,12 +110,12 @@ desktop model =
     in
         E.column
             [ E.alignLeft
-            , E.inFront <| block1 model
+            , E.inFront <| fileExplorer model
             ]
             [ item1
             ]
 
-block1 model =
+fileExplorer model =
     let
         imageSize = 200
         widthSpacing = 40
@@ -171,68 +171,6 @@ block1 model =
         makeAlbumSized =
             makeAlbum imageSize
 
-        albums0 =
-            [ makeAlbumSized
-                { coverImage = "./albums/0.jpg"
-                , title = "Draining Love Story"
-                , maybeAuthor = Nothing
-                }
-            , makeAlbumSized
-                { coverImage = "./albums/1.jpg"
-                , title = "Drowning In The Sewer"
-                , maybeAuthor = Nothing
-                }
-            , makeAlbumSized
-                { coverImage = "./albums/2.jpg"
-                , title = "Starving Slvts Always Get Their Fix"
-                , maybeAuthor = Nothing
-                }
-            , makeAlbumSized
-                { coverImage = "./albums/3.jpg"
-                , title = "Sewer//Slvt - EP"
-                , maybeAuthor = Nothing
-                }
-            ]
-        albums1 =
-            [ makeAlbumSized
-                { coverImage = "./albums/4.jpg"
-                , title = "Selected Sewer Works (2017-19)"
-                , maybeAuthor = Nothing
-                }
-            , makeAlbumSized
-                { coverImage = "./albums/5.jpg"
-                , title = "Euphoric Filth (Cheru's Theme)"
-                , maybeAuthor = Nothing
-                }
-            , makeAlbumSized
-                { coverImage = "./albums/6.jpg"
-                , title = "Kawaii Razor Blades (feat. yandere)"
-                , maybeAuthor = Nothing
-                }
-            , makeAlbumSized
-                { coverImage = "./albums/7.jpg"
-                , title = "Mr. Kill Myself"
-                , maybeAuthor = Nothing
-                }
-            ]
-
-        albums = 
-            E.column
-                [ E.centerX
-                -- , EBackground.color <| E.rgb255  240 190 10
-                -- TODO: take this out. It wouldn't be needed if the code were written properly
-                , E.paddingEach { top = 60, right = 0, bottom = 0, left = 0 }                 
-                ]
-                [ E.row
-                    [ E.spacing widthSpacing
-                    ]
-                    albums0
-                , E.row
-                    [ E.spacing widthSpacing
-                    ]
-                    albums1
-                ]
-
         wholeContent =
             E.el
                 [ E.width <| E.px ((imageSize * 4) + 300)
@@ -244,44 +182,64 @@ block1 model =
                     , E.height E.fill
                     , EBackground.color <| E.rgb255  255 225 238
                     ]
-                    albums
+                    <| E.column
+                        [ E.centerX
+                        , EBackground.color <| E.rgb255  240 190 10
+                        -- TODO: take this out. It wouldn't be needed if the code were written properly
+                        , E.paddingEach { top = 60, right = 0, bottom = 0, left = 0 }                 
+                        ]
+                        [ E.row
+                            [ E.spacing widthSpacing
+                            ]
+                            <| List.map makeAlbumSized model.albums0
+                        , E.row
+                            [ E.spacing widthSpacing
+                            ]
+                            <| List.map makeAlbumSized model.albums1
+                        ]
+
+
+        toolsList = 
+            [ Windoze.makeToolItem "File" 
+            , Windoze.makeToolItem "Edit"
+            , Windoze.makeToolItem "Help"
+            ]
+
+        toolBar = Windoze.makeToolBar toolsList
+        titleBar = Windoze.makeTitleBar 
+            { mouseDownMsg = Msg.FileExplorerMouseDownOnTitleBar
+            , mouseUpMsg = Msg.FileExplorerMouseUpOnTitleBar
+            }
+            [ Windoze.makeButton Icons.xIcon ]
+            model.fileExplorerTitle
+    in
+
+        E.el
+            [ E.htmlAttribute <| Html.Attributes.style "left" "400px"
+            , E.htmlAttribute <| Html.Attributes.style "top" "70px"
+            ]
+            <| Windoze.level2RaisedElementBorder
+                <| Windoze.level1RaisedElementBorder
+                    <| Windoze.makeMainBorder 
+                        <| E.column
+                            [
+                            ]
+                            [ titleBar
+                            , E.el 
+                                [ E.width E.fill
+                                , E.height E.fill 
+                                , EBackground.color Palette.color0
+                                ]
+                                <| toolBar
+                            , Windoze.level2DepressedElementBorder 
+                                <| Windoze.level1DepressedElementBorder wholeContent
+                            ]
+
+        
                     -- <| E.column
                     --     [ E.centerX
                     --     ]
                     --     albums
-    in
-        -- E.column
-        --     [ E.centerX
-        --     , EBackground.color <| E.rgb255 255 10 10
-        --     , E.htmlAttribute <| Html.Attributes.style "left" "800px"
-        --     ]
-        --     [ E.el
-        --         [ EFont.size 60
-        --         -- , EFont.color <| E.rgb255 230 30 10
-        --         , EFont.family
-        --             [ EFont.typeface Palette.font1
-        --             ]
-        --         , E.centerY
-        --         , E.height <| E.px 240
-        --         , E.paddingEach { top = 120, right = 0, bottom = 0, left = 0 }
-        --         ]
-        --         <| E.text "My music :)"
-            -- ]
-            
-            E.el
-                [ E.htmlAttribute <| Html.Attributes.style "left" "400px"
-                , E.htmlAttribute <| Html.Attributes.style "top" "70px"
-                ]
-                <| Windoze.makeWindow
-                    { title = "Untitled - Notepad"
-                    , buttons = [ Windoze.makeButton Icons.xIcon ]
-                    , toolsList = 
-                        [ Windoze.makeToolItem "File" 
-                        , Windoze.makeToolItem "Edit"
-                        , Windoze.makeToolItem "Help"
-                        ]
-                    }
-                    wholeContent
 
 heightBlock height =
     E.el

@@ -4,12 +4,21 @@ module Windoze exposing
 import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
+import Element.Events as EEvents
 import Element.Font as EFont
+
+import Html.Events 
+
+import Json.Decoder as JDecode
 
 import Icons
 import Palette
 
-makeTitleBar buttons title =
+makeTitleBar 
+    { mouseDownMsg
+    , mouseUpMsg 
+    }
+    buttons title =
     let
         mainPink = E.rgb255 255 180 210
         lightPink = E.rgb255 255 255 255
@@ -19,12 +28,15 @@ makeTitleBar buttons title =
         [ E.height <| E.px 32
         , E.width E.fill
         , EBackground.color darkPink
+        , EEvents.onMouseDown mouseDownMsg
+        , EEvents.onMouseUp mouseUpMsg
+        , E.htmlAttribute <| Html.Events.on
         ]
         [ E.el 
             [ E.alignLeft
-            , EFont.size 17
+            , EFont.size Palette.fontSize1
             , EFont.color <| E.rgb255 20 20 20
-            , EFont.bold
+            , EFont.heavy
             , EFont.family
                 [ EFont.typeface Palette.font0
                 ]
@@ -46,6 +58,9 @@ makeTitleBar buttons title =
             ]
             buttons
         ]
+
+screenCoords : JDecode.Decoder Coords
+screenCoords 
 
 makeToolItem text =
     let
@@ -206,27 +221,29 @@ makeButton icon =
                     --     ] 
                         <| E.html icon
 
-makeWindow { title, buttons, toolsList } content =
-    let
-        toolBar = makeToolBar toolsList
-        titleBar = makeTitleBar buttons title
-    in
-        level2RaisedElementBorder
-            <| level1RaisedElementBorder
-                <| makeMainBorder 
-                    <| E.column
-                        [
-                        ]
-                        [ titleBar
-                        , E.el 
-                            [ E.width E.fill
-                            , E.height E.fill 
-                            , EBackground.color Palette.color0
-                            ]
-                                <| toolBar
-                        , level2DepressedElementBorder 
-                            <| level1DepressedElementBorder 
-                                <| content
-                        ]
+-- makeWindow 
+--     { title, buttons, toolsList } 
+--     content =
+--     let
+--         toolBar = makeToolBar toolsList
+--         titleBar = makeTitleBar buttons title
+--     in
+--         level2RaisedElementBorder
+--             <| level1RaisedElementBorder
+--                 <| makeMainBorder 
+--                     <| E.column
+--                         [
+--                         ]
+--                         [ titleBar
+--                         , E.el 
+--                             [ E.width E.fill
+--                             , E.height E.fill 
+--                             , EBackground.color Palette.color0
+--                             ]
+--                                 <| toolBar
+--                         , level2DepressedElementBorder 
+--                             <| level1DepressedElementBorder 
+--                                 <| content
+--                         ]
 
 

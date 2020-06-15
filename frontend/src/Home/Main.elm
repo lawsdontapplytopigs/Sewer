@@ -4,7 +4,7 @@ import Browser
 import Home.View.Desktop
 import Home.Msg as Msg
 
-import Home.FileExplorer.Model
+import Home.Init.FileExplorer as Init
 
 import Home.Types as Types
 
@@ -26,27 +26,47 @@ main = Browser.document
 -- MODEL
 type alias Model =
     { time : Float
-    , fileExplorerModel : Home.FileExplorer.Model.Model
+
+    -- file explorer data
+    , fileExplorerTitle : String
+    , fileExplorerMouseDownOnTitleBar : Bool
+    , fileExplorerX : Int
+    , fileExplorerY : Int
+    , fileExplorerWidth : Int
+    , fileExplorerHeight : Int
+
+    -- TODO: If I want to make this thing wrap properly based on width,
+    -- It'll have to be just 1 list, not a few separate ones
+    , albums0 : List AlbumData
+    , albums1 : List AlbumData
     }
 
--- type Client =
---     { title : String
---     }
+type alias AlbumData =
+    { coverImage : String
+    , title : String
+    , maybeAuthor : Maybe String
+    }
 
 init flags = 
-    ( 
-        { time = 0
-        , fileExplorerModel = Home.FileExplorer.Model.init
-        }
-    , Cmd.none
-    )
-        
--- initModel : Model
--- initModel =
+    let
+        model =
+            { time = 0
 
+            -- file explorer data
+            , fileExplorerTitle = "File Explorer - C://MyDocuments/Albums"
+            , fileExplorerMouseDownOnTitleBar = False
+            , fileExplorerX = 500
+            , fileExplorerY = 200
+            , fileExplorerWidth = 500
+            , fileExplorerHeight = 300
+            , albums0 = Init.albums0
+            , albums1 = Init.albums1
+            }
+        cmds =
+            Cmd.none
+    in
+        ( model, cmds )
 
--- initCmd : Cmd Msg.Msg
--- initCmd =
 
 -- UPDATE
 
@@ -63,9 +83,20 @@ update msg model =
                     ( model, Cmd.none )
                 Types.CuteInfoCard ->
                     ( model, Cmd.none )
-        Msg.UpdateFileExplorer ->
-            ( model, Cmd.none )
-
+        Msg.FileExplorerMouseDownOnTitleBar ->
+            ( 
+                { model 
+                    | fileExplorerMouseDownOnTitleBar = Debug.log "titlebar" True
+                }
+            , Cmd.none 
+            )
+        Msg.FileExplorerMouseUpOnTitleBar ->
+            ( 
+                { model 
+                    | fileExplorerMouseDownOnTitleBar = Debug.log "titleBar" False
+                }
+            , Cmd.none 
+            )
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
     Sub.none

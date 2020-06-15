@@ -9,6 +9,7 @@ font0 = "W95FA"
 font1 = "undefined"
 
 fontSize0 = 14
+fontSize1 = 16
 
 gray0 = E.rgb255 30 20 26
 gray1 = E.rgb255 150 70 120

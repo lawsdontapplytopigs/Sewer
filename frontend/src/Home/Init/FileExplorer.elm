@@ -1,22 +1,4 @@
-module Home.FileExplorer.Model exposing ( .. )
-
-type alias Model =
-    { albums : List (List AlbumData)
-    }
-
-init = 
-    { albums =
-        [ albums0
-        , albums1
-        ]
-    }
-
-type alias AlbumData =
-    { coverImage : String
-    , title : String
-    , maybeAuthor : Maybe String
-    }
-
+module Home.Init.FileExplorer exposing (..)
 
 albums0 =
     [ { coverImage = "./albums/0.jpg"
