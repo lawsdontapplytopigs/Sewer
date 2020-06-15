@@ -4,7 +4,7 @@ type alias Model =
     { albums : List (List AlbumData)
     }
 
-init model = 
+init = 
     { albums =
         [ albums0
         , albums1
@@ -36,6 +36,7 @@ albums0 =
         , maybeAuthor = Nothing
         }
     ]
+
 albums1 =
     [ { coverImage = "./albums/4.jpg"
         , title = "Selected Sewer Works (2017-19)"

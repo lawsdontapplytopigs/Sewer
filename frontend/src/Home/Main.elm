@@ -4,6 +4,10 @@ import Browser
 import Home.View.Desktop
 import Home.Msg as Msg
 
+import Home.FileExplorer.Model
+
+import Home.Types as Types
+
 import Browser
 -- import Browser.Events exposing (onAnimationFrameDelta, onMouseDown, onMouseMove, onMouseUp, onResize)
 import Html
@@ -13,7 +17,7 @@ import Html
 
 main : Program () Model Msg.Msg
 main = Browser.document
-    { init = always ( initModel, initCmd )
+    { init = init
     , view = Home.View.Desktop.view "Sewerslvt"
     , update = update
     , subscriptions = subscriptions
@@ -22,24 +26,27 @@ main = Browser.document
 -- MODEL
 type alias Model =
     { time : Float
-    , programs : 
+    , fileExplorerModel : Home.FileExplorer.Model.Model
     }
 
-type Client =
-    { title : String
-    , 
-    }
-    
+-- type Client =
+--     { title : String
+--     }
 
-initModel : Model
-initModel =
-    { time = 0
-    }
+init flags = 
+    ( 
+        { time = 0
+        , fileExplorerModel = Home.FileExplorer.Model.init
+        }
+    , Cmd.none
+    )
+        
+-- initModel : Model
+-- initModel =
 
 
-initCmd : Cmd Msg.Msg
-initCmd =
-    Cmd.none
+-- initCmd : Cmd Msg.Msg
+-- initCmd =
 
 -- UPDATE
 
@@ -48,10 +55,16 @@ update msg model =
     case msg of
         Msg.Tick dt ->
             ( { model | time = model.time + dt / 1000 }, Cmd.none )
-        Msg.OpenFileExplorer ->
-            (
-                {
-
+        Msg.OpenApplication app ->
+            case app of
+                Types.FileExplorer ->
+                    ( model, Cmd.none )
+                Types.ShittyEmailProgram ->
+                    ( model, Cmd.none )
+                Types.CuteInfoCard ->
+                    ( model, Cmd.none )
+        Msg.UpdateFileExplorer ->
+            ( model, Cmd.none )
 
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
