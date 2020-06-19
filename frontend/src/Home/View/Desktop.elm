@@ -117,7 +117,7 @@ desktop model =
 
 fileExplorer model =
     let
-        imageSize = 200
+        imageSize = 100
         widthSpacing = 40
         heightSpacing = 40
 
@@ -173,7 +173,7 @@ fileExplorer model =
 
         wholeContent =
             E.el
-                [ E.width <| E.px ((imageSize * 4) + 300)
+                [ E.width <| E.px ((imageSize * 4) + 200)
                 , E.height <| E.px ((imageSize * 3) + 100)
                 , E.centerX
                 ]
@@ -215,7 +215,7 @@ fileExplorer model =
     in
 
         E.el
-            [ E.htmlAttribute <| Html.Attributes.style "left" "400px"
+            [ E.htmlAttribute <| Html.Attributes.style "left" "200px"
             , E.htmlAttribute <| Html.Attributes.style "top" "70px"
             ]
             <| Windoze.level2RaisedElementBorder

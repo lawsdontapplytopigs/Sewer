@@ -10,3 +10,9 @@ type Msg
 
     | FileExplorerMouseDownOnTitleBar
     | FileExplorerMouseUpOnTitleBar
+    | GotAbsoluteMouseCoords Coords
+
+type alias Coords =
+    { x : Int
+    , y : Int
+    }

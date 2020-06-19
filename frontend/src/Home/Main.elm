@@ -26,6 +26,8 @@ main = Browser.document
 -- MODEL
 type alias Model =
     { time : Float
+    , absoluteX : Int
+    , absoluteY : Int
 
     -- file explorer data
     , fileExplorerTitle : String
@@ -51,6 +53,8 @@ init flags =
     let
         model =
             { time = 0
+            , absoluteX = 0
+            , absoluteY = 0
 
             -- file explorer data
             , fileExplorerTitle = "File Explorer - C://MyDocuments/Albums"
@@ -86,16 +90,27 @@ update msg model =
         Msg.FileExplorerMouseDownOnTitleBar ->
             ( 
                 { model 
-                    | fileExplorerMouseDownOnTitleBar = Debug.log "titlebar" True
+                    -- | fileExplorerMouseDownOnTitleBar = Debug.log "titlebar" True
+                    | fileExplorerMouseDownOnTitleBar = True
                 }
             , Cmd.none 
             )
         Msg.FileExplorerMouseUpOnTitleBar ->
             ( 
                 { model 
-                    | fileExplorerMouseDownOnTitleBar = Debug.log "titleBar" False
+                    -- | fileExplorerMouseDownOnTitleBar = Debug.log "titleBar" False
+                    | fileExplorerMouseDownOnTitleBar = False
                 }
             , Cmd.none 
+            )
+        Msg.GotAbsoluteMouseCoords coords ->
+            (
+                { model
+                    -- | absoluteX = Debug.log "x" coords.x
+                    | absoluteX = coords.x
+                    , absoluteY = coords.y
+                }
+            , Cmd.none
             )
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =

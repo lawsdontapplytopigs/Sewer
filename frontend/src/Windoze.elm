@@ -9,16 +9,14 @@ import Element.Font as EFont
 
 import Html.Events 
 
-import Json.Decoder as JDecode
-
 import Icons
+import Json.Decode as JDecode
+
+import Home.Msg as Msg
+
 import Palette
 
-makeTitleBar 
-    { mouseDownMsg
-    , mouseUpMsg 
-    }
-    buttons title =
+makeTitleBar { mouseDownMsg , mouseUpMsg } buttons title =
     let
         mainPink = E.rgb255 255 180 210
         lightPink = E.rgb255 255 255 255
@@ -30,7 +28,7 @@ makeTitleBar
         , EBackground.color darkPink
         , EEvents.onMouseDown mouseDownMsg
         , EEvents.onMouseUp mouseUpMsg
-        , E.htmlAttribute <| Html.Events.on
+        , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.GotAbsoluteMouseCoords screenCoords)
         ]
         [ E.el 
             [ E.alignLeft
@@ -60,7 +58,15 @@ makeTitleBar
         ]
 
 screenCoords : JDecode.Decoder Coords
-screenCoords 
+screenCoords =
+    JDecode.map2 Coords
+        (JDecode.field "screenX" JDecode.int)
+        (JDecode.field "screenY" JDecode.int)
+
+type alias Coords =
+    { x : Int
+    , y : Int
+    }
 
 makeToolItem text =
     let
