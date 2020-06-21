@@ -4,7 +4,7 @@
 if [[ ! -d ./built ]]; then
     mkdir ./built
 fi
-cp ./art/windoze.jpg ./built/windoze.jpg
+# cp ./art/windoze.jpg ./built/windoze.jpg
 cp ./prebuilt/index.html ./built/index.html
 
 if [[ ! -d ./built/icons ]]; then
@@ -12,9 +12,8 @@ if [[ ! -d ./built/icons ]]; then
 fi
 cp ./art/icons/w95_16.ico ./built/icons/0.ico
 
-if [[ ! -d ./built/fonts ]]; then
-    mkdir ./built/fonts
-fi
-cp ./prebuilt/fonts/* ./built/fonts/
+cp -r ./prebuilt/fonts ./built/
 
-elm make ./src/Home/Main.elm --output=./built/app.js --optimize
+cp -r ./prebuilt/albums ./built/
+
+elm make ./src/Home/Main.elm --output=./built/app.js

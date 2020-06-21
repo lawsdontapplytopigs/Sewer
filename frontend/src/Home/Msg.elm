@@ -10,7 +10,7 @@ type Msg
 
     | FileExplorerMouseDownOnTitleBar
     | FileExplorerMouseUpOnTitleBar
-    | GotAbsoluteMouseCoords Coords
+    | MouseMoved Coords
 
 type alias Coords =
     { x : Int

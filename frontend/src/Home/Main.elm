@@ -32,6 +32,8 @@ type alias Model =
     -- file explorer data
     , fileExplorerTitle : String
     , fileExplorerMouseDownOnTitleBar : Bool
+    , fileExplorerStartX : Int
+    , fileExplorerStartY : Int
     , fileExplorerX : Int
     , fileExplorerY : Int
     , fileExplorerWidth : Int
@@ -41,6 +43,7 @@ type alias Model =
     -- It'll have to be just 1 list, not a few separate ones
     , albums0 : List AlbumData
     , albums1 : List AlbumData
+    , debug : Int
     }
 
 type alias AlbumData =
@@ -59,12 +62,15 @@ init flags =
             -- file explorer data
             , fileExplorerTitle = "File Explorer - C://MyDocuments/Albums"
             , fileExplorerMouseDownOnTitleBar = False
-            , fileExplorerX = 500
-            , fileExplorerY = 200
+            , fileExplorerStartX = 0
+            , fileExplorerStartY = 0
+            , fileExplorerX = 200
+            , fileExplorerY = 70
             , fileExplorerWidth = 500
             , fileExplorerHeight = 300
             , albums0 = Init.albums0
             , albums1 = Init.albums1
+            , debug = 0
             }
         cmds =
             Cmd.none
@@ -90,28 +96,54 @@ update msg model =
         Msg.FileExplorerMouseDownOnTitleBar ->
             ( 
                 { model 
-                    -- | fileExplorerMouseDownOnTitleBar = Debug.log "titlebar" True
-                    | fileExplorerMouseDownOnTitleBar = True
+                    | fileExplorerMouseDownOnTitleBar = Debug.log "titlebar" True
+                    , fileExplorerStartX = model.absoluteX
+                    , fileExplorerStartY = model.absoluteY
+                    -- | fileExplorerMouseDownOnTitleBar = True
                 }
             , Cmd.none 
             )
         Msg.FileExplorerMouseUpOnTitleBar ->
             ( 
                 { model 
-                    -- | fileExplorerMouseDownOnTitleBar = Debug.log "titleBar" False
-                    | fileExplorerMouseDownOnTitleBar = False
+                    | fileExplorerMouseDownOnTitleBar = Debug.log "titleBar" False
+                    -- | fileExplorerMouseDownOnTitleBar = False
                 }
             , Cmd.none 
             )
-        Msg.GotAbsoluteMouseCoords coords ->
-            (
-                { model
-                    -- | absoluteX = Debug.log "x" coords.x
-                    | absoluteX = coords.x
-                    , absoluteY = coords.y
-                }
-            , Cmd.none
-            )
+        Msg.MouseMoved coords ->
+            let
+                model_ = 
+                    { model
+                        -- | absoluteX = Debug.log "x" coords.x
+                        | absoluteX = coords.x
+                        , absoluteY = coords.y
+                        -- , debug = Debug.log "" <| model.fileExplorerX - ( model.fileExplorerStartX - coords.x)
+                        , debug = Debug.log "" model.fileExplorerStartX - coords.x
+                        -- , fileExplorerX = model.fileExplorerX - (model.fileExplorerStartX - coords.x)
+                        -- , fileExplorerY = model.fileExplorerStartY - (model.fileExplorerStartY - coords.y)
+                    }
+                cmd_ = Cmd.none
+            in
+            case model.fileExplorerMouseDownOnTitleBar of
+                False ->
+                    ( model_, Cmd.none )
+                True ->
+                    -- let
+                    --     model_ = 
+                    --         { model
+                    --             -- | absoluteX = Debug.log "x" coords.x
+                    --             | absoluteX = coords.x
+                    --             , absoluteY = coords.y
+                    --             -- , debug = Debug.log "" <| model.fileExplorerX - ( model.fileExplorerStartX - coords.x)
+                    --             , debug = Debug.log "" model.fileExplorerStartX - coords.x
+                    --             -- , fileExplorerX = model.fileExplorerX - (model.fileExplorerStartX - coords.x)
+                    --             -- , fileExplorerY = model.fileExplorerStartY - (model.fileExplorerStartY - coords.y)
+                    --         }
+                    --     cmd_ = Cmd.none
+                    -- in
+                        ( model_, cmd_ )
+
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
     Sub.none

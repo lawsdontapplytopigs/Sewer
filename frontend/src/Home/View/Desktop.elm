@@ -9,6 +9,9 @@ import Home.View.Navbar
 
 import Html
 import Html.Attributes
+import Html.Events
+
+import Json.Decode as JDecode
 
 import Palette as Palette
 
@@ -21,11 +24,24 @@ view title model =
     , body = 
         [ E.layout
             [ E.inFront (Home.View.Navbar.makeNavbar model)
+            , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.MouseMoved screenCoords)
             -- , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
             -- , E.height E.fill
             ]
             <| mainDocumentColumn model
         ]
+    }
+
+
+screenCoords : JDecode.Decoder Coords
+screenCoords =
+    JDecode.map2 Coords
+        (JDecode.field "screenX" JDecode.int)
+        (JDecode.field "screenY" JDecode.int)
+
+type alias Coords =
+    { x : Int
+    , y : Int
     }
 
 mainDocumentColumn model =
@@ -184,7 +200,7 @@ fileExplorer model =
                     ]
                     <| E.column
                         [ E.centerX
-                        , EBackground.color <| E.rgb255  240 190 10
+                        -- , EBackground.color <| E.rgb255  240 190 10
                         -- TODO: take this out. It wouldn't be needed if the code were written properly
                         , E.paddingEach { top = 60, right = 0, bottom = 0, left = 0 }                 
                         ]
@@ -215,8 +231,8 @@ fileExplorer model =
     in
 
         E.el
-            [ E.htmlAttribute <| Html.Attributes.style "left" "200px"
-            , E.htmlAttribute <| Html.Attributes.style "top" "70px"
+            [ E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt model.fileExplorerX) ++ "px")
+            , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt model.fileExplorerY) ++ "px")
             ]
             <| Windoze.level2RaisedElementBorder
                 <| Windoze.level1RaisedElementBorder
@@ -235,7 +251,6 @@ fileExplorer model =
                                 <| Windoze.level1DepressedElementBorder wholeContent
                             ]
 
-        
                     -- <| E.column
                     --     [ E.centerX
                     --     ]

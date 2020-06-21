@@ -28,7 +28,7 @@ makeTitleBar { mouseDownMsg , mouseUpMsg } buttons title =
         , EBackground.color darkPink
         , EEvents.onMouseDown mouseDownMsg
         , EEvents.onMouseUp mouseUpMsg
-        , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.GotAbsoluteMouseCoords screenCoords)
+        -- , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.MouseMoved screenCoords)
         ]
         [ E.el 
             [ E.alignLeft
