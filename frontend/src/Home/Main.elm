@@ -97,7 +97,7 @@ update msg model =
             ( 
                 { model 
                     | fileExplorerMouseDownOnTitleBar = Debug.log "titlebar" True
-                    , fileExplorerStartX = model.absoluteX
+                    , fileExplorerStartX = Debug.log "X" model.absoluteX
                     , fileExplorerStartY = model.absoluteY
                     -- | fileExplorerMouseDownOnTitleBar = True
                 }
@@ -112,36 +112,37 @@ update msg model =
             , Cmd.none 
             )
         Msg.MouseMoved coords ->
-            let
-                model_ = 
-                    { model
-                        -- | absoluteX = Debug.log "x" coords.x
-                        | absoluteX = coords.x
-                        , absoluteY = coords.y
-                        -- , debug = Debug.log "" <| model.fileExplorerX - ( model.fileExplorerStartX - coords.x)
-                        , debug = Debug.log "" model.fileExplorerStartX - coords.x
-                        -- , fileExplorerX = model.fileExplorerX - (model.fileExplorerStartX - coords.x)
-                        -- , fileExplorerY = model.fileExplorerStartY - (model.fileExplorerStartY - coords.y)
-                    }
-                cmd_ = Cmd.none
-            in
             case model.fileExplorerMouseDownOnTitleBar of
                 False ->
-                    ( model_, Cmd.none )
+                    let
+                        model_ = 
+                            { model
+                                -- | absoluteX = Debug.log "x" coords.x
+                                | absoluteX = coords.x
+                                , absoluteY = coords.y
+                                -- , debug = Debug.log "" <| model.fileExplorerX - ( model.fileExplorerStartX - coords.x)
+                                -- , debug = Debug.log "" model.fileExplorerStartX - coords.x
+                                -- , fileExplorerX = model.fileExplorerX - (model.fileExplorerStartX - coords.x)
+                                -- , fileExplorerY = model.fileExplorerStartY - (model.fileExplorerStartY - coords.y)
+                            }
+                        cmd_ = Cmd.none
+                    in
+                        ( model_, Cmd.none )
                 True ->
-                    -- let
-                    --     model_ = 
-                    --         { model
-                    --             -- | absoluteX = Debug.log "x" coords.x
-                    --             | absoluteX = coords.x
-                    --             , absoluteY = coords.y
-                    --             -- , debug = Debug.log "" <| model.fileExplorerX - ( model.fileExplorerStartX - coords.x)
-                    --             , debug = Debug.log "" model.fileExplorerStartX - coords.x
-                    --             -- , fileExplorerX = model.fileExplorerX - (model.fileExplorerStartX - coords.x)
-                    --             -- , fileExplorerY = model.fileExplorerStartY - (model.fileExplorerStartY - coords.y)
-                    --         }
-                    --     cmd_ = Cmd.none
-                    -- in
+                    let
+                        model_ = 
+                            { model
+                                | absoluteX = coords.x
+                                -- | absoluteX = Debug.log "" coords.x
+                                , absoluteY = coords.y
+                                , debug = Debug.log "BRAH" model.fileExplorerStartX - coords.x
+                                -- , debug = Debug.log "" <| model.fileExplorerX - ( model.fileExplorerStartX - coords.x)
+                                -- , debug = Debug.log "" model.fileExplorerStartX - coords.x
+                                -- , fileExplorerX = model.fileExplorerX - (model.fileExplorerStartX - coords.x)
+                                -- , fileExplorerY = model.fileExplorerStartY - (model.fileExplorerStartY - coords.y)
+                            }
+                        cmd_ = Cmd.none
+                    in
                         ( model_, cmd_ )
 
 subscriptions : Model -> Sub Msg.Msg
