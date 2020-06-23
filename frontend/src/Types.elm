@@ -1,4 +1,4 @@
-module Home.Types exposing (..)
+module Types exposing (..)
 
 
 type App

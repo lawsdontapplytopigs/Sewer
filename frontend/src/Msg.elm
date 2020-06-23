@@ -1,8 +1,8 @@
-module Home.Msg exposing 
+module Msg exposing 
     ( Msg(..)
     )
 
-import Home.Types as Types
+import Types
 
 type Msg
     = Tick Float

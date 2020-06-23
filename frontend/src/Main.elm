@@ -1,12 +1,12 @@
-module Home.Main exposing (..)
+module Main exposing (..)
 
 import Browser
-import Home.View.Desktop
-import Home.Msg as Msg
+import View.Desktop
+import Msg
 
-import Home.Init.FileExplorer as Init
+import Init.FileExplorer
 
-import Home.Types as Types
+import Types
 
 
 import Browser
@@ -19,7 +19,7 @@ import Html
 main : Program () Model Msg.Msg
 main = Browser.document
     { init = init
-    , view = Home.View.Desktop.view "Sewerslvt"
+    , view = View.Desktop.view "Sewerslvt"
     , update = update
     , subscriptions = subscriptions
     }
@@ -85,8 +85,8 @@ init flags =
             , fileExplorerStartY = 0
             , fileExplorerWidth = 500
             , fileExplorerHeight = 300
-            , albums0 = Init.albums0
-            , albums1 = Init.albums1
+            , albums0 = Init.FileExplorer.albums0
+            , albums1 = Init.FileExplorer.albums1
             , debug = 0
             }
         cmds =

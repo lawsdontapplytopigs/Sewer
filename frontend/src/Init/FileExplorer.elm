@@ -1,4 +1,4 @@
-module Home.Init.FileExplorer exposing (..)
+module Init.FileExplorer exposing (..)
 
 albums0 =
     [ { coverImage = "./albums/0.jpg"

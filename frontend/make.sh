@@ -16,4 +16,4 @@ cp -r ./prebuilt/fonts ./built/
 
 cp -r ./prebuilt/albums ./built/
 
-elm make ./src/Home/Main.elm --output=./built/app.js
+elm make ./src/Main.elm --output=./built/app.js

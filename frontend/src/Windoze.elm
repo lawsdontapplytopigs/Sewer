@@ -13,7 +13,7 @@ import Html.Attributes
 import Icons
 import Json.Decode as JDecode
 
-import Home.Msg as Msg
+import Msg
 
 import Palette
 

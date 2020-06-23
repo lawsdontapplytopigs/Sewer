@@ -1,4 +1,4 @@
-module Home.View.Navbar exposing 
+module View.Navbar exposing 
     ( makeNavbar )
 
 import Element as E
