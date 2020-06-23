@@ -8,6 +8,7 @@ import Home.Init.FileExplorer as Init
 
 import Home.Types as Types
 
+
 import Browser
 -- import Browser.Events exposing (onAnimationFrameDelta, onMouseDown, onMouseMove, onMouseUp, onResize)
 import Html
@@ -23,11 +24,14 @@ main = Browser.document
     , subscriptions = subscriptions
     }
 
--- MODEL
 type alias Model =
     { time : Float
     , absoluteX : Int
     , absoluteY : Int
+
+
+    , absoluteStartX : Int
+    , absoluteStartY : Int
 
     -- file explorer data
     , fileExplorerTitle : String
@@ -52,20 +56,33 @@ type alias AlbumData =
     , maybeAuthor : Maybe String
     }
 
+init : () -> ( Model, Cmd Msg.Msg )
 init flags = 
     let
+        fileExplorerStartX = 200
+        fileExplorerStartY = 70
+
         model =
             { time = 0
             , absoluteX = 0
             , absoluteY = 0
 
+            -- we'll use this to track how much to move the window
+            -- we set these when the mouse is pressed on the window's titlebar
+            , absoluteStartX = 0
+            , absoluteStartY = 0
+
+
+            -- , installedPrograms = 
+            -- , openPrograms = 
             -- file explorer data
             , fileExplorerTitle = "File Explorer - C://MyDocuments/Albums"
             , fileExplorerMouseDownOnTitleBar = False
-            , fileExplorerStartX = 0
-            , fileExplorerStartY = 0
+
             , fileExplorerX = 200
             , fileExplorerY = 70
+            , fileExplorerStartX = 0
+            , fileExplorerStartY = 0
             , fileExplorerWidth = 500
             , fileExplorerHeight = 300
             , albums0 = Init.albums0
@@ -77,8 +94,6 @@ init flags =
     in
         ( model, cmds )
 
-
--- UPDATE
 
 update : Msg.Msg -> Model -> ( Model, Cmd Msg.Msg )
 update msg model =
@@ -97,8 +112,10 @@ update msg model =
             ( 
                 { model 
                     | fileExplorerMouseDownOnTitleBar = Debug.log "titlebar" True
-                    , fileExplorerStartX = Debug.log "X" model.absoluteX
-                    , fileExplorerStartY = model.absoluteY
+                    , fileExplorerStartX = model.fileExplorerX
+                    , fileExplorerStartY = model.fileExplorerY
+                    , absoluteStartX = model.absoluteX
+                    , absoluteStartY = model.absoluteY
                     -- | fileExplorerMouseDownOnTitleBar = True
                 }
             , Cmd.none 
@@ -112,38 +129,41 @@ update msg model =
             , Cmd.none 
             )
         Msg.MouseMoved coords ->
-            case model.fileExplorerMouseDownOnTitleBar of
-                False ->
-                    let
-                        model_ = 
-                            { model
-                                -- | absoluteX = Debug.log "x" coords.x
-                                | absoluteX = coords.x
-                                , absoluteY = coords.y
-                                -- , debug = Debug.log "" <| model.fileExplorerX - ( model.fileExplorerStartX - coords.x)
-                                -- , debug = Debug.log "" model.fileExplorerStartX - coords.x
-                                -- , fileExplorerX = model.fileExplorerX - (model.fileExplorerStartX - coords.x)
-                                -- , fileExplorerY = model.fileExplorerStartY - (model.fileExplorerStartY - coords.y)
-                            }
-                        cmd_ = Cmd.none
-                    in
-                        ( model_, Cmd.none )
-                True ->
-                    let
-                        model_ = 
+            let
+                moveByX = model.absoluteX - model.absoluteStartX
+                moveByY = model.absoluteY - model.absoluteStartY
+
+                model_ = 
+                    case model.fileExplorerMouseDownOnTitleBar of
+                        True ->
                             { model
                                 | absoluteX = coords.x
-                                -- | absoluteX = Debug.log "" coords.x
                                 , absoluteY = coords.y
-                                , debug = Debug.log "BRAH" model.fileExplorerStartX - coords.x
-                                -- , debug = Debug.log "" <| model.fileExplorerX - ( model.fileExplorerStartX - coords.x)
-                                -- , debug = Debug.log "" model.fileExplorerStartX - coords.x
-                                -- , fileExplorerX = model.fileExplorerX - (model.fileExplorerStartX - coords.x)
-                                -- , fileExplorerY = model.fileExplorerStartY - (model.fileExplorerStartY - coords.y)
+                                , fileExplorerX = model.fileExplorerStartX + moveByX
+                                , fileExplorerY = model.fileExplorerStartY + moveByY
                             }
-                        cmd_ = Cmd.none
-                    in
-                        ( model_, cmd_ )
+                        False ->
+                            { model
+                                | absoluteX = coords.x
+                                , absoluteY = coords.y
+                            }
+                cmd_ = Cmd.none
+            in
+                ( model_, cmd_ )
+        Msg.TitleBarMouseMoved coords ->
+            let
+                model_ =
+                    case model.fileExplorerMouseDownOnTitleBar of
+                        True ->
+                            -- { model
+                                -- | fileExplorerX = model.fileExplorerX - (Debug.log "" (model.fileExplorerStartX - model.absoluteX))
+                            -- }
+                            model
+                        False ->
+                            model
+                cmd_ = Cmd.none
+            in
+                ( model_, cmd_ )
 
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =

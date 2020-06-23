@@ -8,6 +8,7 @@ import Element.Events as EEvents
 import Element.Font as EFont
 
 import Html.Events 
+import Html.Attributes
 
 import Icons
 import Json.Decode as JDecode
@@ -16,6 +17,16 @@ import Home.Msg as Msg
 
 import Palette
 
+noHighlight =
+    [ E.htmlAttribute <| Html.Attributes.style "-webkit-touch-callout" "none" -- iOS Safari
+    , E.htmlAttribute <| Html.Attributes.style "-webkit-user-select" "none" -- Safari
+    , E.htmlAttribute <| Html.Attributes.style "-khtml-user-select" "none" -- Konqueror HTML
+    , E.htmlAttribute <| Html.Attributes.style "-moz-user-select" "none" -- Old versions of Firefox
+    , E.htmlAttribute <| Html.Attributes.style "-ms-user-select" "none" -- Internet Explorer/Edge
+    , E.htmlAttribute <| Html.Attributes.style "user-select" "none" -- Non-prefixed version, currently
+                                                                        -- supported by Chrome, Edge, Opera and Firefox */
+    ]
+
 makeTitleBar { mouseDownMsg , mouseUpMsg } buttons title =
     let
         mainPink = E.rgb255 255 180 210
@@ -23,13 +34,18 @@ makeTitleBar { mouseDownMsg , mouseUpMsg } buttons title =
         darkPink = E.rgb255 200 100 140
     in
     E.row
+        (
         [ E.height <| E.px 32
         , E.width E.fill
         , EBackground.color darkPink
         , EEvents.onMouseDown mouseDownMsg
         , EEvents.onMouseUp mouseUpMsg
-        -- , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.MouseMoved screenCoords)
+        , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.TitleBarMouseMoved screenCoords)
         ]
+        -- let's make sure you can't highlight text in the titlebar
+        ++ noHighlight
+
+        )
         [ E.el 
             [ E.alignLeft
             , EFont.size Palette.fontSize1

@@ -11,6 +11,7 @@ type Msg
     | FileExplorerMouseDownOnTitleBar
     | FileExplorerMouseUpOnTitleBar
     | MouseMoved Coords
+    | TitleBarMouseMoved Coords
 
 type alias Coords =
     { x : Int

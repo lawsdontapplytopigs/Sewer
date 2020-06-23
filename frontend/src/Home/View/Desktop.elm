@@ -3,6 +3,7 @@ module Home.View.Desktop exposing (view)
 import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
+import Element.Events as EEvents
 import Element.Font as EFont
 import Home.Msg as Msg
 import Home.View.Navbar
@@ -25,8 +26,9 @@ view title model =
         [ E.layout
             [ E.inFront (Home.View.Navbar.makeNavbar model)
             , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.MouseMoved screenCoords)
-            -- , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+            , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
             -- , E.height E.fill
+            , EEvents.onMouseUp Msg.FileExplorerMouseUpOnTitleBar
             ]
             <| mainDocumentColumn model
         ]
