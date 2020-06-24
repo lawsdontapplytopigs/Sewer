@@ -236,8 +236,8 @@ fileExplorer model =
             [ E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt model.fileExplorerX) ++ "px")
             , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt model.fileExplorerY) ++ "px")
             ]
-            <| Windoze.level2RaisedElementBorder
-                <| Windoze.level1RaisedElementBorder
+            <| Windoze.type1Level2RaisedBorder
+                <| Windoze.type1Level1RaisedBorder
                     <| Windoze.makeMainBorder 
                         <| E.column
                             [
@@ -249,8 +249,8 @@ fileExplorer model =
                                 , EBackground.color Palette.color0
                                 ]
                                 <| toolBar
-                            , Windoze.level2DepressedElementBorder 
-                                <| Windoze.level1DepressedElementBorder wholeContent
+                            , Windoze.type1Level1DepressedBorder 
+                                <| Windoze.type1Level2DepressedBorder wholeContent
                             ]
 
                     -- <| E.column

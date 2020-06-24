@@ -13,8 +13,8 @@ import Windoze
 makeNavbar model =
     let
         makeTallItem text =
-            Windoze.level2RaisedElementBorder 
-                <| Windoze.level1RaisedElementBorder
+            Windoze.type2Level2RaisedBorder 
+                <| Windoze.type2Level1RaisedBorder
                     <| E.row
                         [ EFont.family
                             [ EFont.typeface Palette.font0

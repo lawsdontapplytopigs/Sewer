@@ -13,8 +13,8 @@ fontSize1 = 16
 
 gray0 = E.rgb255 30 20 26
 gray1 = E.rgb255 150 70 120
-gray3 = E.rgb255 230 190 210
-gray4 = E.rgb255 255 220 240
+gray3 = E.rgb255 220 180 205
+gray4 = E.rgb255 255 210 230
 
 white = E.rgb255 255 255 255
 

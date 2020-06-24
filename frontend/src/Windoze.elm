@@ -89,84 +89,135 @@ makeToolItem text =
         firstLetter = String.left 1 text
         rest = String.dropLeft 1 text
     in
-    E.paragraph
-        [ EFont.family
-            [ EFont.typeface Palette.font0
+    E.el
+        ( 
+        [ E.mouseOver <| 
+            [ EBackground.color (E.rgb255 255 195 230 )
             ]
-        , EFont.size Palette.fontSize0
-        , E.padding 5
+        , E.htmlAttribute <| Html.Attributes.style "cursor" "pointer"
         ]
-        [ E.el
-            [ EFont.underline
+        ++ noHighlight
+        )
+        <| E.paragraph
+            [ EFont.family
+                [ EFont.typeface Palette.font0
+                ]
+            , EFont.size Palette.fontSize0
+            , E.padding 5
             ]
-            <| E.text firstLetter
-        , E.text rest
-        ]
+            [ E.el
+                [ EFont.underline
+                ]
+                <| E.text firstLetter
+            , E.text rest
+            ]
 
 makeToolBar toolsList =
     E.el
         [ E.width E.fill
-        -- , EBackground.color Palette.color0
         ]
         <| E.row
             [
             ]
             toolsList
 
-level1RaisedElementBorder content_ =
+lighterRaisedBorder content_ =
     E.el
-        [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
-        , EBorder.color Palette.gray1
-        , E.width E.fill
-        ]
-        <| E.el
-            [ E.width E.fill
-            , E.height E.fill
-            , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
-            , EBorder.color Palette.white
-            ]
-            <| content_
-
-level2RaisedElementBorder content_ =
-        E.el
-            [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
-            , EBorder.color Palette.gray0
-            , E.width E.fill
-            ]
-            <| E.el
-                [ E.width E.fill
-                , E.height E.fill
-                , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
-                , EBorder.color Palette.gray4
-                ]
-                <| content_
-
-level1DepressedElementBorder content_ =
-    E.el
-        [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        [ E.width E.fill
+        , E.height E.fill
+        , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
         , EBorder.color Palette.gray4
         ]
-        <| E.el
-            [ E.width E.fill
-            , E.height E.fill
-            , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
-            , EBorder.color Palette.gray0
-            ]
-            <| content_
+        <| content_
+lighterDepressedBorder content_ =
+    E.el
+        [ E.width E.fill
+        , E.height E.fill
+        , EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.color Palette.gray4
+        ]
+        <| content_
 
-level2DepressedElementBorder content_ =
-        E.el
-            [ EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
-            , EBorder.color Palette.white
-            ]
-            <| E.el
-                [ E.width E.fill
-                , E.height E.fill
-                , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
-                , EBorder.color <| Palette.gray1
-                ]
-                <| content_
+darkerRaisedBorder content_ =
+    E.el
+        [ E.width E.fill
+        , E.height E.fill
+        , EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.color Palette.gray1
+        ]
+        <| content_
+darkerDepressedBorder content_ =
+    E.el
+        [ E.width E.fill
+        , E.height E.fill
+        , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+        , EBorder.color Palette.gray1
+        ]
+        <| content_
 
+lightestRaisedBorder content_ =
+    E.el
+        [ E.width E.fill
+        , E.height E.fill
+        , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+        , EBorder.color Palette.white
+        ]
+        <| content_
+lightestDepressedBorder content_ =
+    E.el
+        [ E.width E.fill
+        , E.height E.fill
+        , EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.color Palette.white
+        ]
+        <| content_
+
+darkestRaisedBorder content_ =
+    E.el
+        [ E.width E.fill
+        , E.height E.fill
+        , EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.color Palette.gray0
+        ]
+        <| content_
+darkestDepressedBorder content_ =
+    E.el
+        [ E.width E.fill
+        , E.height E.fill
+        , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+        , EBorder.color Palette.gray0
+        ]
+        <| content_
+
+
+type1Level1RaisedBorder content_ =
+    lightestRaisedBorder
+        <| darkerRaisedBorder content_
+type1Level1DepressedBorder content_ =
+    lightestDepressedBorder
+        <| darkerDepressedBorder content_
+
+type1Level2RaisedBorder content_ =
+    lighterRaisedBorder
+        <| darkestRaisedBorder content_
+type1Level2DepressedBorder content_ =
+    lighterDepressedBorder
+        <| darkestDepressedBorder content_
+
+type2Level1RaisedBorder content_ =
+    lighterRaisedBorder
+        <| darkerRaisedBorder content_
+type2Level1DepressedBorder content_ =
+    lighterDepressedBorder
+        <| darkerDepressedBorder content_
+
+type2Level2RaisedBorder content_ =
+    lightestRaisedBorder
+        <| darkestRaisedBorder content_
+
+type2Level2DepressedBorder content_ =
+    lightestDepressedBorder 
+        <| darkestDepressedBorder content_
 
 makeMainBorder content_ =
     E.el
@@ -195,20 +246,6 @@ makeTaskListProgram h icon name =
         , makeToolItem name
         ]
 
-
-    -- E.el
-    --     [ E.padding 1
-    --     , EBackground.color <| E.rgb255 200 200 200
-    --     ]
-    --     <| E.el
-    --         [ E.padding 2
-    --         , EBackground.color <| E.rgb255 180 180 180
-    --         ]
-            -- <| E.el
-            --     [ E.padding 1
-            --     , EBackground.color <| E.rgb255 200 200 200
-            --     ]
-    
 makeButton icon =
     
     -- let
@@ -229,43 +266,20 @@ makeButton icon =
     --                 , EBorder.color <| E.rgb255 40 40 40
     --                 ]
         
-        level2RaisedElementBorder
-            <| level1RaisedElementBorder
-                <| E.el
-                    [ E.height <| E.px 22
-                    , E.width <| E.px 26
-                    , EBackground.color <| E.rgb255 255 190 210
-                    , E.centerX
-                    , E.centerY
-                    ]
-                    -- <| E.el 
-                    --     [
-                    --     ] 
-                        <| E.html icon
-
--- makeWindow 
---     { title, buttons, toolsList } 
---     content =
---     let
---         toolBar = makeToolBar toolsList
---         titleBar = makeTitleBar buttons title
---     in
---         level2RaisedElementBorder
---             <| level1RaisedElementBorder
---                 <| makeMainBorder 
---                     <| E.column
---                         [
---                         ]
---                         [ titleBar
---                         , E.el 
---                             [ E.width E.fill
---                             , E.height E.fill 
---                             , EBackground.color Palette.color0
---                             ]
---                                 <| toolBar
---                         , level2DepressedElementBorder 
---                             <| level1DepressedElementBorder 
---                                 <| content
---                         ]
-
+        E.el
+            [
+            ]
+            <| type1Level2RaisedBorder
+                <| type1Level1RaisedBorder
+                    <| E.el
+                        [ E.height <| E.px 22
+                        , E.width <| E.px 26
+                        , EBackground.color <| E.rgb255 255 190 210
+                        , E.centerX
+                        , E.centerY
+                        ]
+                        -- <| E.el 
+                        --     [
+                        --     ] 
+                            <| E.html icon
 
