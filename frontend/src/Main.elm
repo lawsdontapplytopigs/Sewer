@@ -1,17 +1,16 @@
 module Main exposing (..)
 
 import Browser
+import Html
+import Init.FileExplorer
+
 import View.Desktop
 import Msg
 
-import Init.FileExplorer
+import Programs
 
-import Types
-
-
-import Browser
+import Set
 -- import Browser.Events exposing (onAnimationFrameDelta, onMouseDown, onMouseMove, onMouseUp, onResize)
-import Html
 -- import Json.Decode as JD exposing (int)
 -- import Time exposing (Posix(..), posixToMillis)
 
@@ -29,19 +28,12 @@ type alias Model =
     , absoluteX : Int
     , absoluteY : Int
 
+    , absoluteRecordX : Int
+    , absoluteRecordY : Int
 
-    , absoluteStartX : Int
-    , absoluteStartY : Int
-
-    -- file explorer data
-    , fileExplorerTitle : String
-    , fileExplorerMouseDownOnTitleBar : Bool
-    , fileExplorerStartX : Int
-    , fileExplorerStartY : Int
-    , fileExplorerX : Int
-    , fileExplorerY : Int
-    , fileExplorerWidth : Int
-    , fileExplorerHeight : Int
+    , installedPrograms : Set.Set Programs.Program
+    , openPrograms : Set.Set Programs.Program
+    , currentTitleBarHeldProgram : Maybe Programs.Program
 
     -- TODO: If I want to make this thing wrap properly based on width,
     -- It'll have to be just 1 list, not a few separate ones
@@ -59,8 +51,10 @@ type alias AlbumData =
 init : () -> ( Model, Cmd Msg.Msg )
 init flags = 
     let
-        fileExplorerStartX = 200
-        fileExplorerStartY = 70
+
+        fileExplorer = 
+            Programs.FileExplorer Init.FileExplorer.windowInformation
+
 
         model =
             { time = 0
@@ -69,26 +63,18 @@ init flags =
 
             -- we'll use this to track how much to move the window
             -- we set these when the mouse is pressed on the window's titlebar
-            , absoluteStartX = 0
-            , absoluteStartY = 0
+            , absoluteRecordX = Nothing
+            , absoluteRecordY = Nothing
 
+            , installedPrograms = Set.singleton fileExplorer
+            , openPrograms = Set.empty
+            , currentTitleBarHeldProgram = Nothing
 
-            -- , installedPrograms = 
-            -- , openPrograms = 
-            -- file explorer data
-            , fileExplorerTitle = "File Explorer - C://MyDocuments/Albums"
-            , fileExplorerMouseDownOnTitleBar = False
-
-            , fileExplorerX = 200
-            , fileExplorerY = 70
-            , fileExplorerStartX = 0
-            , fileExplorerStartY = 0
-            , fileExplorerWidth = 500
-            , fileExplorerHeight = 300
             , albums0 = Init.FileExplorer.albums0
             , albums1 = Init.FileExplorer.albums1
             , debug = 0
             }
+
         cmds =
             Cmd.none
     in
@@ -102,65 +88,55 @@ update msg model =
             ( { model | time = model.time + dt / 1000 }, Cmd.none )
         Msg.OpenApplication app ->
             case app of
-                Types.FileExplorer ->
+                Programs.FileExplorer info ->
                     ( model, Cmd.none )
-                Types.ShittyEmailProgram ->
+                Programs.WinampRipoff info ->
                     ( model, Cmd.none )
-                Types.CuteInfoCard ->
+                Programs.BrokeAssOutlook info ->
                     ( model, Cmd.none )
-        Msg.FileExplorerMouseDownOnTitleBar ->
+        Msg.MouseDownOnTitleBar program ->
             ( 
                 { model 
-                    | fileExplorerMouseDownOnTitleBar = Debug.log "titlebar" True
-                    , fileExplorerStartX = model.fileExplorerX
-                    , fileExplorerStartY = model.fileExplorerY
+                    -- | fileExplorerStartX = model.fileExplorerX
+                    -- , fileExplorerStartY = model.fileExplorerY
                     , absoluteStartX = model.absoluteX
                     , absoluteStartY = model.absoluteY
+                    , currentTitleBarHeldProgram = Debug.log "titleBar Program" (Just program)
                     -- | fileExplorerMouseDownOnTitleBar = True
                 }
             , Cmd.none 
             )
         Msg.FileExplorerMouseUpOnTitleBar ->
-            ( 
-                { model 
-                    | fileExplorerMouseDownOnTitleBar = Debug.log "titleBar" False
+            (
+                { model
+                    | currentTitleBarHeldProgram = Nothing
                     -- | fileExplorerMouseDownOnTitleBar = False
                 }
-            , Cmd.none 
+            , Cmd.none
             )
         Msg.MouseMoved coords ->
             let
-                moveByX = model.absoluteX - model.absoluteStartX
-                moveByY = model.absoluteY - model.absoluteStartY
-
                 model_ = 
-                    case model.fileExplorerMouseDownOnTitleBar of
-                        True ->
+                    case model.currentTitleBarHeldProgram of
+                        Just program ->
+
+                            let
+                                moveByX = model.absoluteX - model.absoluteStartX
+                                moveByY = model.absoluteY - model.absoluteStartY
+
+                            in
+                                { model
+                                    | absoluteX = coords.x
+                                    , absoluteY = coords.y
+                                    
+                                    -- , fileExplorerX = model.fileExplorerStartX + moveByX
+                                    -- , fileExplorerY = model.fileExplorerStartY + moveByY
+                                }
+                        Nothing ->
                             { model
                                 | absoluteX = coords.x
                                 , absoluteY = coords.y
-                                , fileExplorerX = model.fileExplorerStartX + moveByX
-                                , fileExplorerY = model.fileExplorerStartY + moveByY
                             }
-                        False ->
-                            { model
-                                | absoluteX = coords.x
-                                , absoluteY = coords.y
-                            }
-                cmd_ = Cmd.none
-            in
-                ( model_, cmd_ )
-        Msg.TitleBarMouseMoved coords ->
-            let
-                model_ =
-                    case model.fileExplorerMouseDownOnTitleBar of
-                        True ->
-                            -- { model
-                                -- | fileExplorerX = model.fileExplorerX - (Debug.log "" (model.fileExplorerStartX - model.absoluteX))
-                            -- }
-                            model
-                        False ->
-                            model
                 cmd_ = Cmd.none
             in
                 ( model_, cmd_ )

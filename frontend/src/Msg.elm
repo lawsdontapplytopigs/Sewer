@@ -2,16 +2,15 @@ module Msg exposing
     ( Msg(..)
     )
 
-import Types
+import Programs
 
 type Msg
     = Tick Float
-    | OpenApplication Types.App
+    | OpenApplication Programs.Program
 
-    | FileExplorerMouseDownOnTitleBar
-    | FileExplorerMouseUpOnTitleBar
+    | MouseDownOnTitleBar Programs.Program
+    | MouseUpOnTitleBar
     | MouseMoved Coords
-    | TitleBarMouseMoved Coords
 
 type alias Coords =
     { x : Int

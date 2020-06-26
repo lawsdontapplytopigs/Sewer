@@ -28,7 +28,7 @@ view title model =
             , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.MouseMoved screenCoords)
             , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
             -- , E.height E.fill
-            , EEvents.onMouseUp Msg.FileExplorerMouseUpOnTitleBar
+            , EEvents.onMouseUp Msg.MouseUpOnTitleBar
             ]
             <| mainDocumentColumn model
         ]

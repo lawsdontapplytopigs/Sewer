@@ -16,6 +16,7 @@ import Json.Decode as JDecode
 import Msg
 
 import Palette
+import Programs
 
 noHighlight =
     [ E.htmlAttribute <| Html.Attributes.style "-webkit-touch-callout" "none" -- iOS Safari
@@ -27,7 +28,8 @@ noHighlight =
                                                                         -- supported by Chrome, Edge, Opera and Firefox */
     ]
 
-makeTitleBar { mouseDownMsg , mouseUpMsg } buttons title =
+makeTitleBar : (List (E.Element Msg.Msg)) -> Programs.Program -> String -> E.Element Msg.Msg
+makeTitleBar buttons prog title =
     let
         mainPink = E.rgb255 255 180 210
         lightPink = E.rgb255 255 255 255
@@ -38,9 +40,9 @@ makeTitleBar { mouseDownMsg , mouseUpMsg } buttons title =
         [ E.height <| E.px 32
         , E.width E.fill
         , EBackground.color darkPink
-        , EEvents.onMouseDown mouseDownMsg
-        , EEvents.onMouseUp mouseUpMsg
-        , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.TitleBarMouseMoved screenCoords)
+        , EEvents.onMouseDown <| Msg.MouseDownOnTitleBar prog
+        , EEvents.onMouseUp <| Msg.MouseUpOnTitleBar prog
+        -- , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.TitleBarMouseMoved prog screenCoords)
         ]
         -- let's make sure you can't highlight text in the titlebar
         ++ noHighlight

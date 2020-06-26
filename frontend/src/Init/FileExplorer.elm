@@ -1,4 +1,10 @@
-module Init.FileExplorer exposing (..)
+module Init.FileExplorer exposing 
+    ( albums0
+    , albums1
+    , windowInformation
+    )
+
+import Programs
 
 albums0 =
     [ { coverImage = "./albums/0.jpg"
@@ -37,3 +43,15 @@ albums1 =
         , maybeAuthor = Nothing
         }
     ]
+
+initWindowInformation =
+    { title = "File Explorer - C://MyDocuments/Albums"
+    , x = 200
+    , y = 70
+    , width = 500
+    , height = 300
+    , minWidth = 200
+    , minHeight = 300
+    , recordX = Nothing
+    , recordY = Nothing
+    }
