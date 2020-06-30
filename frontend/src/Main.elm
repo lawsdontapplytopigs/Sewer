@@ -8,8 +8,12 @@ import View.Desktop
 import Msg
 
 import Programs
+import Programs.FileExplorer
+import Programs.WinampRipoff
 
 import Set
+
+import Window
 -- import Browser.Events exposing (onAnimationFrameDelta, onMouseDown, onMouseMove, onMouseUp, onResize)
 -- import Json.Decode as JD exposing (int)
 -- import Time exposing (Posix(..), posixToMillis)
@@ -23,6 +27,12 @@ main = Browser.document
     , subscriptions = subscriptions
     }
 
+type alias Apps =
+    { fileExplorer : Programs.FileExplorer.FileExplorer
+    , winampRipoff : Programs.WinampRipoff.WinampRipoff
+    -- , brokeAssOutlook : BrokeAssOutlook
+    }
+
 type alias Model =
     { time : Float
     , absoluteX : Int
@@ -31,9 +41,8 @@ type alias Model =
     , absoluteRecordX : Int
     , absoluteRecordY : Int
 
-    , installedPrograms : Set.Set Programs.Program
-    , openPrograms : Set.Set Programs.Program
-    , currentTitleBarHeldProgram : Maybe Programs.Program
+    , programs : Apps
+    , currentTitleBarHeldWindow : Maybe Programs.ApplicationWindow
 
     -- TODO: If I want to make this thing wrap properly based on width,
     -- It'll have to be just 1 list, not a few separate ones
@@ -52,10 +61,6 @@ init : () -> ( Model, Cmd Msg.Msg )
 init flags = 
     let
 
-        fileExplorer = 
-            Programs.FileExplorer Init.FileExplorer.windowInformation
-
-
         model =
             { time = 0
             , absoluteX = 0
@@ -63,12 +68,14 @@ init flags =
 
             -- we'll use this to track how much to move the window
             -- we set these when the mouse is pressed on the window's titlebar
-            , absoluteRecordX = Nothing
-            , absoluteRecordY = Nothing
+            , absoluteRecordX = 0
+            , absoluteRecordY = 0
 
-            , installedPrograms = Set.singleton fileExplorer
-            , openPrograms = Set.empty
-            , currentTitleBarHeldProgram = Nothing
+            , programs = 
+                { fileExplorer = Programs.FileExplorer.init
+                , winampRipoff = Programs.WinampRipoff.init
+                }
+            , currentTitleBarHeldWindow = Nothing
 
             , albums0 = Init.FileExplorer.albums0
             , albums1 = Init.FileExplorer.albums1
@@ -86,43 +93,60 @@ update msg model =
     case msg of
         Msg.Tick dt ->
             ( { model | time = model.time + dt / 1000 }, Cmd.none )
-        Msg.OpenApplication app ->
-            case app of
-                Programs.FileExplorer info ->
+        Msg.OpenWindow window ->
+            case window of
+                Programs.FileExplorerMainWindow ->
+                    let
+                        newFileExplorer = 
+                            case model.programs.fileExplorer of
+                                Programs.FileExplorer.FileExplorer windows specifics ->
+                                    Programs.FileExplorer.FileExplorer { mainWindow = (Window.close windows.mainWindow) } specifics
+                        programs = 
+                            { fileExplorer = newFileExplorer
+                            , winampRipoff = model.programs.winampRipoff
+                            }
+                        model_ =
+                            { model
+                                | programs = programs
+                            }
+
+                        cmd_ = Cmd.none
+                    in
+                    ( model_, cmd_
+                    )
+                Programs.WinampMainWindow ->
                     ( model, Cmd.none )
-                Programs.WinampRipoff info ->
+
+                Programs.WinampPlaylistWindow ->
                     ( model, Cmd.none )
-                Programs.BrokeAssOutlook info ->
-                    ( model, Cmd.none )
-        Msg.MouseDownOnTitleBar program ->
-            ( 
-                { model 
-                    -- | fileExplorerStartX = model.fileExplorerX
-                    -- , fileExplorerStartY = model.fileExplorerY
-                    , absoluteStartX = model.absoluteX
-                    , absoluteStartY = model.absoluteY
-                    , currentTitleBarHeldProgram = Debug.log "titleBar Program" (Just program)
-                    -- | fileExplorerMouseDownOnTitleBar = True
-                }
-            , Cmd.none 
-            )
-        Msg.FileExplorerMouseUpOnTitleBar ->
+
+        Msg.MouseDownOnTitleBar window ->
             (
                 { model
-                    | currentTitleBarHeldProgram = Nothing
-                    -- | fileExplorerMouseDownOnTitleBar = False
+                    -- | fileExplorerStartX = model.fileExplorerX
+                    -- , fileExplorerStartY = model.fileExplorerY
+                    | absoluteRecordX = model.absoluteX
+                    , absoluteRecordY= model.absoluteY
+                    , currentTitleBarHeldWindow = Debug.log "titleBar window" (Just window)
+                    -- | fileExplorerMouseDownOnTitleBar = True
+                }
+            , Cmd.none
+            )
+        Msg.MouseUpOnTitleBar ->
+            (
+                { model
+                    | currentTitleBarHeldWindow = Nothing
                 }
             , Cmd.none
             )
         Msg.MouseMoved coords ->
             let
                 model_ = 
-                    case model.currentTitleBarHeldProgram of
-                        Just program ->
-
+                    case model.currentTitleBarHeldWindow of
+                        Just window ->
                             let
-                                moveByX = model.absoluteX - model.absoluteStartX
-                                moveByY = model.absoluteY - model.absoluteStartY
+                                moveByX = model.absoluteX - model.absoluteRecordX
+                                moveByY = model.absoluteY - model.absoluteRecordY
 
                             in
                                 { model

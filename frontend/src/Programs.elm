@@ -1,18 +1,9 @@
-module Programs exposing 
-    ( Program(..)
-    )
+module Programs exposing
+    (..)
 
-type Program 
-    = FileExplorer WindowInformation
-    | WinampRipoff WindowInformation
-    | BrokeAssOutlook WindowInformation
+-- import Programs.Window
 
-type alias WindowInformation =
-    { x : Int
-    , y : Int
-    , width : Int
-    , height : Int
-    , minHeight : Int
-    , minWidth: Int
-    }
-
+type ApplicationWindow
+    = FileExplorerMainWindow
+    | WinampMainWindow
+    | WinampPlaylistWindow

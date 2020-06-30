@@ -28,8 +28,8 @@ noHighlight =
                                                                         -- supported by Chrome, Edge, Opera and Firefox */
     ]
 
-makeTitleBar : (List (E.Element Msg.Msg)) -> Programs.Program -> String -> E.Element Msg.Msg
-makeTitleBar buttons prog title =
+makeTitleBar : (List (E.Element Msg.Msg)) -> Programs.ApplicationWindow -> String -> E.Element Msg.Msg
+makeTitleBar buttons window title =
     let
         mainPink = E.rgb255 255 180 210
         lightPink = E.rgb255 255 255 255
@@ -40,8 +40,8 @@ makeTitleBar buttons prog title =
         [ E.height <| E.px 32
         , E.width E.fill
         , EBackground.color darkPink
-        , EEvents.onMouseDown <| Msg.MouseDownOnTitleBar prog
-        , EEvents.onMouseUp <| Msg.MouseUpOnTitleBar prog
+        , EEvents.onMouseDown <| Msg.MouseDownOnTitleBar window
+        , EEvents.onMouseUp <| Msg.MouseUpOnTitleBar
         -- , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.TitleBarMouseMoved prog screenCoords)
         ]
         -- let's make sure you can't highlight text in the titlebar

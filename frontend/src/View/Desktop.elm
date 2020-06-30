@@ -15,6 +15,8 @@ import Html.Events
 import Json.Decode as JDecode
 
 import Palette as Palette
+import Programs
+import Programs.FileExplorer
 
 import Windoze
 
@@ -33,7 +35,6 @@ view title model =
             <| mainDocumentColumn model
         ]
     }
-
 
 screenCoords : JDecode.Decoder Coords
 screenCoords =
@@ -139,6 +140,10 @@ fileExplorer model =
         widthSpacing = 40
         heightSpacing = 40
 
+        windowData = case model.programs.fileExplorer of
+            Programs.FileExplorer.FileExplorer windows specifics ->
+                windows.mainWindow
+
         makeAlbum : 
             Int 
             -> { coverImage : String, title : String, maybeAuthor : Maybe String } 
@@ -225,16 +230,19 @@ fileExplorer model =
 
         toolBar = Windoze.makeToolBar toolsList
         titleBar = Windoze.makeTitleBar 
-            { mouseDownMsg = Msg.FileExplorerMouseDownOnTitleBar
-            , mouseUpMsg = Msg.FileExplorerMouseUpOnTitleBar
-            }
+            -- { mouseDownMsg = Msg.FileExplorerMouseDownOnTitleBar
+            -- , mouseUpMsg = Msg.FileExplorerMouseUpOnTitleBar
+            -- }
             [ Windoze.makeButton Icons.xIcon ]
-            model.fileExplorerTitle
+            Programs.FileExplorerMainWindow
+            <| case model.programs.fileExplorer of
+                Programs.FileExplorer.FileExplorer windows specifics ->
+                    windows.mainWindow.title
     in
 
         E.el
-            [ E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt model.fileExplorerX) ++ "px")
-            , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt model.fileExplorerY) ++ "px")
+            [ E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowData.x) ++ "px")
+            , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowData.y) ++ "px")
             ]
             <| Windoze.type1Level2RaisedBorder
                 <| Windoze.type1Level1RaisedBorder
