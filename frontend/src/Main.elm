@@ -38,8 +38,12 @@ type alias Model =
     , absoluteX : Int
     , absoluteY : Int
 
-    , absoluteRecordX : Int
-    , absoluteRecordY : Int
+    , record :
+        { absoluteX : Int
+        , absoluteY : Int
+        , windowX : Int
+        , windowY : Int
+        }
 
     , programs : Apps
     , currentTitleBarHeldWindow : Maybe Programs.ApplicationWindow
@@ -68,8 +72,12 @@ init flags =
 
             -- we'll use this to track how much to move the window
             -- we set these when the mouse is pressed on the window's titlebar
-            , absoluteRecordX = 0
-            , absoluteRecordY = 0
+            , record =
+                { absoluteX = 0
+                , absoluteY = 0
+                , windowX = 0
+                , windowY = 0
+                }
 
             , programs = 
                 { fileExplorer = Programs.FileExplorer.init
@@ -94,44 +102,17 @@ update msg model =
         Msg.Tick dt ->
             ( { model | time = model.time + dt / 1000 }, Cmd.none )
         Msg.OpenWindow window ->
-            case window of
-                Programs.FileExplorerMainWindow ->
-                    let
-                        newFileExplorer = 
-                            case model.programs.fileExplorer of
-                                Programs.FileExplorer.FileExplorer windows specifics ->
-                                    Programs.FileExplorer.FileExplorer { mainWindow = (Window.close windows.mainWindow) } specifics
-                        programs = 
-                            { fileExplorer = newFileExplorer
-                            , winampRipoff = model.programs.winampRipoff
-                            }
-                        model_ =
-                            { model
-                                | programs = programs
-                            }
-
-                        cmd_ = Cmd.none
-                    in
-                    ( model_, cmd_
-                    )
-                Programs.WinampMainWindow ->
-                    ( model, Cmd.none )
-
-                Programs.WinampPlaylistWindow ->
-                    ( model, Cmd.none )
-
+            let
+                model_ =
+                    Programs.openWindow window model
+            in
+                ( model_, Cmd.none )
         Msg.MouseDownOnTitleBar window ->
-            (
-                { model
-                    -- | fileExplorerStartX = model.fileExplorerX
-                    -- , fileExplorerStartY = model.fileExplorerY
-                    | absoluteRecordX = model.absoluteX
-                    , absoluteRecordY= model.absoluteY
-                    , currentTitleBarHeldWindow = Debug.log "titleBar window" (Just window)
-                    -- | fileExplorerMouseDownOnTitleBar = True
-                }
-            , Cmd.none
-            )
+            let
+                model_ =
+                    Programs.record window model
+            in
+                ( model_ , Cmd.none )
         Msg.MouseUpOnTitleBar ->
             (
                 { model
@@ -145,17 +126,19 @@ update msg model =
                     case model.currentTitleBarHeldWindow of
                         Just window ->
                             let
-                                moveByX = model.absoluteX - model.absoluteRecordX
-                                moveByY = model.absoluteY - model.absoluteRecordY
-
+                                -- _ = Debug.log "start abs X" model.absoluteX
+                                -- _ = Debug.log "current abs X " model.record.absoluteX
+                                -- _ = Debug.log "MOVE BY" (model.absoluteX - model.record.absoluteX)
+                                moveByX = (model.absoluteX - model.record.absoluteX)
+                                moveByY = (model.absoluteY - model.record.absoluteY)
                             in
-                                { model
-                                    | absoluteX = coords.x
-                                    , absoluteY = coords.y
-                                    
-                                    -- , fileExplorerX = model.fileExplorerStartX + moveByX
-                                    -- , fileExplorerY = model.fileExplorerStartY + moveByY
-                                }
+                                Programs.move 
+                                    coords 
+                                    { x = model.record.windowX + moveByX
+                                    , y = model.record.windowY + moveByY
+                                    }
+                                    window
+                                    model
                         Nothing ->
                             { model
                                 | absoluteX = coords.x

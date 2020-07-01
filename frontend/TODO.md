@@ -11,3 +11,4 @@
     Should you call "run.sh" in the wrong directory, be ready for unexpected
     results. I'll have to change these to use a well defined, pre-determined 
     directory.
+[ ] make it so you can't drag a window's titlebar below the tasklist

@@ -10,6 +10,7 @@ module Window exposing
     , shrinkLeft
     , moveX
     , moveY
+    , move
     , close
     , open
     , minimize
@@ -84,15 +85,21 @@ shrinkLeft px win =
     }
 
 moveX : Int -> WindowData -> WindowData
-moveX px win =
+moveX x win =
     { win
-        | x = win.x + px
+        | x = x
     }
 
 moveY : Int -> WindowData -> WindowData
-moveY px win =
+moveY y win =
     { win
-        | y = win.y + px
+        | y = y
+    }
+
+move { x, y } win =
+    { win
+        | x = x
+        , y = y
     }
 
 close : WindowData -> WindowData

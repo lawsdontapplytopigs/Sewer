@@ -1,6 +1,7 @@
 module Programs.FileExplorer exposing
-    ( FileExplorer(..)
+    ( FileExplorer
     , init
+    , openMainWindow
     )
 
 import Window
@@ -13,14 +14,15 @@ type alias FileExplorerSpecifics =
     { path : String
     }
 
-type FileExplorer =
-    FileExplorer Windows FileExplorerSpecifics
+type alias FileExplorer =
+    { windows : Windows 
+    , specifics : FileExplorerSpecifics
+    }
 
 init: FileExplorer
 init =
     let
         path = "C:\\\\MyDocuments\\Albums"
-
 
         initFileManagerSpecifics =
             { path = path
@@ -43,4 +45,26 @@ init =
                 }
             }
     in
-        FileExplorer windows initFileManagerSpecifics
+        { windows = windows
+        , specifics = initFileManagerSpecifics
+        }
+
+openMainWindow : FileExplorer -> FileExplorer
+openMainWindow f =
+    let
+        openWindow = 
+            Window.open f.windows.mainWindow
+    in
+        { f
+            | windows = { mainWindow = openWindow }
+        }
+
+
+
+
+
+
+
+
+
+

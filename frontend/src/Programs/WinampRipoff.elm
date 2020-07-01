@@ -1,6 +1,8 @@
 module Programs.WinampRipoff exposing 
     ( WinampRipoff 
     , init
+    , openMainWindow
+    , openPlaylistWindow
     )
 
 import Window
@@ -17,7 +19,10 @@ type alias WinampSpecifics =
     { currentSong : Song
     }
 
-type WinampRipoff = WinampRipoff Windows WinampSpecifics
+type alias WinampRipoff = 
+    { windows : Windows 
+    , specifics : WinampSpecifics
+    }
 
 init =
     let
@@ -53,4 +58,43 @@ init =
             { currentSong = CherusTheme
             }
     in
-        WinampRipoff initWindows winampSpecifics
+        { windows = initWindows 
+        , specifics = winampSpecifics
+        }
+
+openMainWindow winamp =
+    let
+        openWindow = Window.open winamp.windows.mainWindow
+        updatedWindows = 
+            let
+                oldWindows = winamp.windows
+            in
+            { oldWindows
+                | mainWindow = openWindow
+            }
+    in
+        { winamp
+            | windows = updatedWindows
+        }
+
+openPlaylistWindow winamp =
+    let
+        openWindow = Window.open winamp.windows.playlistWindow
+        updatedWindows = 
+            let
+                oldWindows = winamp.windows
+            in
+            { oldWindows
+                | mainWindow = openWindow
+            }
+    in
+        { winamp
+            | windows = updatedWindows
+        }
+
+
+
+
+
+
+

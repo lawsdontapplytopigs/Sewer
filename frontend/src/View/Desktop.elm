@@ -140,10 +140,7 @@ fileExplorer model =
         widthSpacing = 40
         heightSpacing = 40
 
-        windowData = case model.programs.fileExplorer of
-            Programs.FileExplorer.FileExplorer windows specifics ->
-                windows.mainWindow
-
+        windowData = model.programs.fileExplorer.windows.mainWindow
         makeAlbum : 
             Int 
             -> { coverImage : String, title : String, maybeAuthor : Maybe String } 
@@ -235,9 +232,7 @@ fileExplorer model =
             -- }
             [ Windoze.makeButton Icons.xIcon ]
             Programs.FileExplorerMainWindow
-            <| case model.programs.fileExplorer of
-                Programs.FileExplorer.FileExplorer windows specifics ->
-                    windows.mainWindow.title
+            model.programs.fileExplorer.windows.mainWindow.title
     in
 
         E.el
