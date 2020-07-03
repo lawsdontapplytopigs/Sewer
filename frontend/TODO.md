@@ -12,3 +12,5 @@
     results. I'll have to change these to use a well defined, pre-determined 
     directory.
 [ ] make it so you can't drag a window's titlebar below the tasklist
+[ ] check if i can access the browser zoom amount. it seems to screw up 
+    dragging windows
