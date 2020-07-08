@@ -127,9 +127,6 @@ update msg model =
                     case model.currentTitleBarHeldWindow of
                         Just window ->
                             let
-                                -- _ = Debug.log "start abs X" model.absoluteX
-                                -- _ = Debug.log "current abs X " model.record.absoluteX
-                                -- _ = Debug.log "MOVE BY" (model.absoluteX - model.record.absoluteX)
                                 moveByX = (model.absoluteX - model.record.absoluteX)
                                 moveByY = (model.absoluteY - model.record.absoluteY)
                             in
@@ -159,13 +156,8 @@ subscriptions model =
 record : Windows.Window -> Model -> Model
 record window model =
     let
-        windowKey = case window of
-            Windows.FileExplorerMainWindow ->
-                "FileExplorerMainWindow"
-            Windows.WinampMainWindow ->
-                "WinampMainWindow"
-            Windows.WinampPlaylistWindow ->
-                "WinampPlaylistWindow"
+        windowKey = 
+            Windows.toString window
 
         maybeWindow = Dict.get windowKey model.windows
 

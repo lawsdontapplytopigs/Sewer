@@ -3,8 +3,6 @@ module Init.FileExplorer exposing
     , albums1
     )
 
-import Programs
-
 albums0 =
     [ { coverImage = "./albums/0.jpg"
         , title = "Draining Love Story"
