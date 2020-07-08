@@ -2,7 +2,7 @@ module Msg exposing
     ( Msg(..)
     )
 
-import Programs
+import Windows
 
 type Msg
     = Tick Float
@@ -13,8 +13,8 @@ type Msg
 
     -- I'd make "OpenApplication", but that's not what we're actually trying
     -- to do...
-    | OpenWindow Programs.ApplicationWindow
-    | MouseDownOnTitleBar Programs.ApplicationWindow
+    | OpenWindow Windows.Window
+    | MouseDownOnTitleBar Windows.Window
 
     | MouseUpOnTitleBar
     | MouseMoved Coords

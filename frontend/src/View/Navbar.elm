@@ -8,7 +8,7 @@ import Element.Font as EFont
 
 import Palette
 
-import Windoze
+import View.Windoze as Windoze
 
 makeNavbar model =
     let

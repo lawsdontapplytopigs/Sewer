@@ -1,19 +1,17 @@
 module Main exposing (..)
 
 import Browser
+import Dict
 import Html
 import Init.FileExplorer
 
-import View.Desktop
 import Msg
-
-import Programs
 import Programs.FileExplorer
 import Programs.WinampRipoff
 
-import Set
+import View.Desktop
 
-import Window
+import Windows
 -- import Browser.Events exposing (onAnimationFrameDelta, onMouseDown, onMouseMove, onMouseUp, onResize)
 -- import Json.Decode as JD exposing (int)
 -- import Time exposing (Posix(..), posixToMillis)
@@ -28,8 +26,8 @@ main = Browser.document
     }
 
 type alias Apps =
-    { fileExplorer : Programs.FileExplorer.FileExplorer
-    , winampRipoff : Programs.WinampRipoff.WinampRipoff
+    { fileExplorer : Programs.FileExplorer.FileExplorerData
+    , winampRipoff : Programs.WinampRipoff.WinampRipoffData
     -- , brokeAssOutlook : BrokeAssOutlook
     }
 
@@ -46,7 +44,8 @@ type alias Model =
         }
 
     , programs : Apps
-    , currentTitleBarHeldWindow : Maybe Programs.ApplicationWindow
+    , windows : Windows.Windows
+    , currentTitleBarHeldWindow : Maybe Windows.Window
 
     -- TODO: If I want to make this thing wrap properly based on width,
     -- It'll have to be just 1 list, not a few separate ones
@@ -83,6 +82,7 @@ init flags =
                 { fileExplorer = Programs.FileExplorer.init
                 , winampRipoff = Programs.WinampRipoff.init
                 }
+            , windows = Windows.initWindows
             , currentTitleBarHeldWindow = Nothing
 
             , albums0 = Init.FileExplorer.albums0
@@ -104,13 +104,14 @@ update msg model =
         Msg.OpenWindow window ->
             let
                 model_ =
-                    Programs.openWindow window model
+                    { model
+                        | windows = Windows.openWindow window model.windows
+                    }
             in
                 ( model_, Cmd.none )
         Msg.MouseDownOnTitleBar window ->
             let
-                model_ =
-                    Programs.record window model
+                model_ = record window model
             in
                 ( model_ , Cmd.none )
         Msg.MouseUpOnTitleBar ->
@@ -132,13 +133,16 @@ update msg model =
                                 moveByX = (model.absoluteX - model.record.absoluteX)
                                 moveByY = (model.absoluteY - model.record.absoluteY)
                             in
-                                Programs.move 
-                                    coords 
-                                    { x = model.record.windowX + moveByX
-                                    , y = model.record.windowY + moveByY
-                                    }
-                                    window
-                                    model
+                                { model
+                                    | windows = Windows.moveWindow
+                                        { x = model.record.windowX + moveByX
+                                        , y = model.record.windowY + moveByY
+                                        }
+                                        window
+                                        model.windows
+                                    , absoluteX = coords.x
+                                    , absoluteY = coords.y
+                                }
                         Nothing ->
                             { model
                                 | absoluteX = coords.x
@@ -151,6 +155,39 @@ update msg model =
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
     Sub.none
+
+record : Windows.Window -> Model -> Model
+record window model =
+    let
+        windowKey = case window of
+            Windows.FileExplorerMainWindow ->
+                "FileExplorerMainWindow"
+            Windows.WinampMainWindow ->
+                "WinampMainWindow"
+            Windows.WinampPlaylistWindow ->
+                "WinampPlaylistWindow"
+
+        maybeWindow = Dict.get windowKey model.windows
+
+        newRec =
+            let
+                rec = model.record
+            in
+            case maybeWindow of
+                Just win ->
+                    { rec
+                        | windowX = win.x
+                        , windowY = win.y
+                        , absoluteX = model.absoluteX
+                        , absoluteY = model.absoluteY
+                    }
+                Nothing ->
+                    model.record
+    in
+        { model
+            | record = newRec
+            , currentTitleBarHeldWindow = Just window
+        }
 
 -- HELPERS
 -- decodeMouse : (Int -> Int -> Msg.Msg) -> JD.Decoder Msg.Msg

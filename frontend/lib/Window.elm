@@ -26,7 +26,14 @@ type alias WindowData =
     , minHeight : Int
     , isOpen : Bool
     , isClosable : Bool
-    , isMinimized : Bool
+    -- TODO
+    -- have a union type where we store 
+    -- "isMinimizable : IsMinimizable"
+    -- type IsMinimizable
+        -- = Yes IsItMinimized
+        -- | No
+    -- type alias IsItMinimized = Bool
+    , isMinimized : Bool 
     , isMaximized : Bool
     , title : String
     }

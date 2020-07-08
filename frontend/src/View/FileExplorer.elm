@@ -1,6 +1,8 @@
 module View.FileExplorer exposing
     ( fileExplorer )
 
+
+import Dict
 import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
@@ -12,9 +14,9 @@ import Html
 import Html.Attributes
 
 import Palette
-import Programs
+import Windows
 
-import Windoze
+import View.Windoze as Windoze
 
 fileExplorer model =
     let
@@ -22,7 +24,14 @@ fileExplorer model =
         widthSpacing = 40
         heightSpacing = 40
 
-        windowData = model.programs.fileExplorer.windows.mainWindow
+        maybeWindowData = Dict.get (Windows.toString Windows.FileExplorerMainWindow) model.windows
+        windowData =
+            case maybeWindowData of
+                Just data ->
+                    data
+                Nothing ->
+                    Windows.initFileExplorerMainWindow
+                
 
         makeAlbumSized =
             makeAlbum imageSize
@@ -66,8 +75,8 @@ fileExplorer model =
             -- , mouseUpMsg = Msg.FileExplorerMouseUpOnTitleBar
             -- }
             [ Windoze.makeButton Icons.xIcon ]
-            Programs.FileExplorerMainWindow
-            model.programs.fileExplorer.windows.mainWindow.title
+            Windows.FileExplorerMainWindow
+            windowData.title
     in
         E.el
             [ E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowData.x) ++ "px")

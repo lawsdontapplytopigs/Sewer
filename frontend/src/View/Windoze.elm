@@ -1,4 +1,4 @@
-module Windoze exposing
+module View.Windoze exposing
     (..)
 
 import Element as E
@@ -16,7 +16,7 @@ import Json.Decode as JDecode
 import Msg
 
 import Palette
-import Programs
+import Windows
 
 noHighlight =
     [ E.htmlAttribute <| Html.Attributes.style "-webkit-touch-callout" "none" -- iOS Safari
@@ -28,7 +28,7 @@ noHighlight =
                                                                         -- supported by Chrome, Edge, Opera and Firefox */
     ]
 
-makeTitleBar : (List (E.Element Msg.Msg)) -> Programs.ApplicationWindow -> String -> E.Element Msg.Msg
+makeTitleBar : (List (E.Element Msg.Msg)) -> Windows.Window -> String -> E.Element Msg.Msg
 makeTitleBar buttons window title =
     let
         mainPink = E.rgb255 255 180 210

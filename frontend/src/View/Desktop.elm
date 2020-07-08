@@ -16,13 +16,10 @@ import Json.Decode as JDecode
 
 import Msg
 import Palette as Palette
-import Programs
 import Programs.FileExplorer
 
 import View.FileExplorer
 import View.Navbar
-
-import Windoze
 
 view title model =
     { title = title
