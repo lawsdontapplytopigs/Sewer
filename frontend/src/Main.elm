@@ -8,6 +8,7 @@ import Init.FileExplorer
 import Msg
 import Programs.FileExplorer
 import Programs.WinampRipoff
+import Programs.PoorMansOutlook
 
 import View.Desktop
 
@@ -25,10 +26,10 @@ main = Browser.document
     , subscriptions = subscriptions
     }
 
-type alias Apps =
+type alias Programs =
     { fileExplorer : Programs.FileExplorer.FileExplorerData
     , winampRipoff : Programs.WinampRipoff.WinampRipoffData
-    -- , brokeAssOutlook : BrokeAssOutlook
+    , poorMansOutlook : Programs.PoorMansOutlook.PoorMansOutlookData
     }
 
 type alias Model =
@@ -43,7 +44,7 @@ type alias Model =
         , windowY : Int
         }
 
-    , programs : Apps
+    , programs : Programs
     , windows : Windows.Windows
     , currentTitleBarHeldWindow : Maybe Windows.Window
 
@@ -81,6 +82,7 @@ init flags =
             , programs = 
                 { fileExplorer = Programs.FileExplorer.init
                 , winampRipoff = Programs.WinampRipoff.init
+                , poorMansOutlook = Programs.PoorMansOutlook.init
                 }
             , windows = Windows.initWindows
             , currentTitleBarHeldWindow = Nothing
@@ -148,6 +150,77 @@ update msg model =
                 cmd_ = Cmd.none
             in
                 ( model_, cmd_ )
+        Msg.EmailInput str ->
+            let
+                newOutlookData = 
+                    Programs.PoorMansOutlook.updateEmail str model.programs.poorMansOutlook
+
+                oldPrograms = model.programs
+                newPrograms =
+                    { oldPrograms
+                        | poorMansOutlook = newOutlookData
+                    }
+
+                model_ =
+                    { model
+                        | programs = newPrograms
+                    }
+                cmd_ = Cmd.none
+            in
+                ( model_, cmd_ )
+
+        Msg.SubjectInput str ->
+            let
+                newOutlookData = 
+                    Programs.PoorMansOutlook.updateSubject str model.programs.poorMansOutlook
+
+                oldPrograms = model.programs
+                newPrograms =
+                    { oldPrograms
+                        | poorMansOutlook = newOutlookData
+                    }
+
+                model_ =
+                    { model
+                        | programs = newPrograms
+                    }
+                cmd_ = Cmd.none
+            in
+                ( model_, cmd_ )
+
+        Msg.EmailContentInput str ->
+            let
+                newOutlookData = 
+                    Programs.PoorMansOutlook.updateContent str model.programs.poorMansOutlook
+
+                oldPrograms = model.programs
+                newPrograms =
+                    { oldPrograms
+                        | poorMansOutlook = newOutlookData
+                    }
+
+                model_ =
+                    { model
+                        | programs = newPrograms
+                    }
+                cmd_ = Cmd.none
+            in
+                ( model_, cmd_ )
+        Msg.TryToSendEmail ->
+            let
+                model_ = Debug.log "sent?" model
+            in
+                ( model_, Cmd.none )
+        Msg.StartButtonPressed ->
+            let
+                model_ = Debug.log "START" model
+            in
+                (model_, Cmd.none)
+        Msg.ToggleMinimize window ->
+            let
+                model_ = Debug.log "You should implement minimizing windows properly" model
+            in
+                (model_, Cmd.none)
 
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =

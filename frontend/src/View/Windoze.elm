@@ -1,5 +1,5 @@
 module View.Windoze exposing
-    (..)
+    (..) -- TODO: only expose what's necessary
 
 import Element as E
 import Element.Background as EBackground
@@ -131,6 +131,7 @@ lighterRaisedBorder content_ =
         , EBorder.color Palette.gray4
         ]
         <| content_
+
 lighterDepressedBorder content_ =
     E.el
         [ E.width E.fill
@@ -182,6 +183,7 @@ darkestRaisedBorder content_ =
         , EBorder.color Palette.gray0
         ]
         <| content_
+
 darkestDepressedBorder content_ =
     E.el
         [ E.width E.fill
@@ -192,6 +194,7 @@ darkestDepressedBorder content_ =
         <| content_
 
 
+-- lord forgive me
 type1Level1RaisedBorder content_ =
     lightestRaisedBorder
         <| darkerRaisedBorder content_
@@ -216,7 +219,6 @@ type2Level1DepressedBorder content_ =
 type2Level2RaisedBorder content_ =
     lightestRaisedBorder
         <| darkestRaisedBorder content_
-
 type2Level2DepressedBorder content_ =
     lightestDepressedBorder 
         <| darkestDepressedBorder content_
@@ -284,4 +286,46 @@ makeButton icon =
                         --     [
                         --     ] 
                             <| E.html icon
+
+vSeparator =
+    let
+        p = 1
+    in
+    E.row
+        [ E.height E.fill
+        ]
+        [ E.el
+            [ E.height E.fill
+            , E.width <| E.px p
+            , EBackground.color Palette.gray1
+            ]
+            <| E.none
+        , E.el
+            [ E.height E.fill
+            , E.width <| E.px p
+            , EBackground.color Palette.white
+            ]
+            <| E.none
+        ]
+
+hSeparator =
+    let
+        p = 1
+    in
+    E.column
+        [ E.width E.fill
+        ]
+        [ E.el
+            [ E.height <| E.px p
+            , E.width E.fill
+            , EBackground.color Palette.gray1
+            ]
+            <| E.none
+        , E.el
+            [ E.height <| E.px p
+            , E.width E.fill
+            , EBackground.color Palette.white
+            ]
+            <| E.none
+        ]
 

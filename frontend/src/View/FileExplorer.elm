@@ -45,7 +45,8 @@ fileExplorer model =
                 <| E.el
                     [ E.width E.fill
                     , E.height E.fill
-                    , EBackground.color <| E.rgb255  255 225 238
+                    -- , EBackground.color <| E.rgb255  255 225 238
+                    , EBackground.color <| Palette.color1
                     ]
                     <| E.column
                         [ E.centerX

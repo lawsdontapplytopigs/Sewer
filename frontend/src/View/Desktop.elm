@@ -20,6 +20,7 @@ import Programs.FileExplorer
 
 import View.FileExplorer
 import View.Navbar
+import View.PoorMansOutlook
 
 view title model =
     { title = title
@@ -113,6 +114,7 @@ desktop model =
         E.column
             [ E.alignLeft
             , E.inFront <| View.FileExplorer.fileExplorer model
+            , E.inFront <| View.PoorMansOutlook.poorMansOutlook model
             ]
             [ item1
             ]

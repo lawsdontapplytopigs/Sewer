@@ -19,3 +19,4 @@ gray4 = E.rgb255 255 210 230
 white = E.rgb255 255 255 255
 
 color0 = E.rgb255 255 170 210
+color1 = E.rgb255 255 215 228

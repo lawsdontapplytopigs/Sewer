@@ -1,19 +1,25 @@
 module Windows exposing
-    ( Window(..)
+    ( WindowType(..)
+    , Window
     , Windows
     , toString
     , initWindows
     , initFileExplorerMainWindow
     , initWinampMainWindow
     , initWinampPlaylistWindow
+    , initPoorMansOutlookMainWindow
     , openWindow
     , moveWindow
+    , closeWindow
     )
 
 import Dict
-import Window
+import WindowGeometry
 
-toString : Window -> String
+
+type alias Window = WindowType
+-- TODO: Can I use a union type as the key to the dictionary?
+toString : WindowType -> String
 toString window =
     case window of
         FileExplorerMainWindow ->
@@ -22,14 +28,17 @@ toString window =
             "WinampMainWindow"
         WinampPlaylistWindow ->
             "WinampPlaylistWindow"
+        PoorMansOutlookMainWindow ->
+            "PoorMansOutlookMainWindow"
 
-type Window 
+type WindowType
     = FileExplorerMainWindow
     | WinampMainWindow
     | WinampPlaylistWindow
+    | PoorMansOutlookMainWindow
 
 type alias Windows =
-    Dict.Dict String Window.WindowData
+    Dict.Dict String WindowGeometry.WindowGeometry
 
 initFileExplorerMainWindow =
     { x = 200
@@ -38,8 +47,7 @@ initFileExplorerMainWindow =
     , height = 300
     , minWidth = 300
     , minHeight = 200
-    , isOpen = True
-    , isClosable = True
+    , wantsToNotBeClosed = False
     , isMinimized = False
     , isMaximized = False
     , title = "File Explorer - "
@@ -52,8 +60,7 @@ initWinampMainWindow =
     , height = 300
     , minWidth = 300
     , minHeight = 200
-    , isOpen = True
-    , isClosable = True
+    , wantsToNotBeClosed = False
     , isMinimized = False
     , isMaximized = False
     , title = "Swamp"
@@ -66,11 +73,23 @@ initWinampPlaylistWindow =
     , height = 300
     , minWidth = 300
     , minHeight = 200
-    , isOpen = False
-    , isClosable = True
+    , wantsToNotBeClosed = False
     , isMinimized = False
     , isMaximized = False
     , title = "Swamp playlist"
+    }
+
+initPoorMansOutlookMainWindow =
+    { x = 1200
+    , y = 150
+    , width = 800
+    , height = 600
+    , minWidth = 200
+    , minHeight = 400
+    , wantsToNotBeClosed = False
+    , isMinimized = False
+    , isMaximized = False
+    , title = "BONK"
     }
 
 initWindows : Windows
@@ -86,48 +105,54 @@ initWindows =
         ,   (   "WinampPlaylistWindow"
             ,   initWinampPlaylistWindow
             )
+        ,   (   "PoorMansOutlookMainWindow"
+            ,   initPoorMansOutlookMainWindow
+            )
         ]
 
-openWindow : Window -> Windows -> Windows
+openWindow : WindowType -> Windows -> Windows
 openWindow win windows =
     let
-        windowKey = case win of
-            FileExplorerMainWindow ->
-                "FileExplorerMainWindow"
-            WinampMainWindow ->
-                "WinampMainWindow"
-            WinampPlaylistWindow ->
-                "WinampPlaylistWindow"
+        windowKey = toString win
 
-        open_ win_ =
-            case win_ of
-                Just w_ ->
-                    Just (Window.open w_)
-                Nothing ->
-                    Nothing
-
+        value =
+            case win of
+                FileExplorerMainWindow ->
+                    initFileExplorerMainWindow
+                WinampMainWindow ->
+                    initWinampMainWindow
+                WinampPlaylistWindow ->
+                    initWinampPlaylistWindow
+                PoorMansOutlookMainWindow ->
+                    initPoorMansOutlookMainWindow
     in
-        Dict.update windowKey open_ windows
+        -- TODO: test this. we really don't want to have the user type out a
+        -- long email, try to open the email program even though it's already 
+        -- open, and throw away all the message
+        case Dict.member windowKey windows of 
+            True ->
+                windows
+            False ->
+                Dict.insert windowKey value windows
 
-moveWindow : { x : Int, y : Int } -> Window -> Windows -> Windows
+moveWindow : { x : Int, y : Int } -> WindowType -> Windows -> Windows
 moveWindow to win windows =
     let
-        windowKey = case win of
-            FileExplorerMainWindow ->
-                "FileExplorerMainWindow"
-            WinampMainWindow ->
-                "WinampMainWindow"
-            WinampPlaylistWindow ->
-                "WinampPlaylistWindow"
+        windowKey = toString win
 
         move_ win_ =
             case win_ of
                 Just w_ ->
-                    Just (Window.move to w_)
+                    Just (WindowGeometry.move to w_)
                 Nothing ->
                     Nothing
 
     in
         Dict.update windowKey move_ windows
+
+closeWindow : WindowType -> Windows -> Windows
+closeWindow win windows =
+        Dict.remove (toString win) windows
+
 
 
