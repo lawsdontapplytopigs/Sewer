@@ -14,3 +14,4 @@
 [ ] make it so you can't drag a window's titlebar below the tasklist
 [ ] check if i can access the browser zoom amount. it seems to screw up 
     dragging windows
+[ ] optimize the album covers that the file explorer and other programs display
