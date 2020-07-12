@@ -22,6 +22,9 @@ import View.FileExplorer
 import View.Navbar
 import View.PoorMansOutlook
 
+import Window
+import Windows
+
 view title model =
     { title = title
     , body = 
@@ -110,17 +113,38 @@ makeLauncher icon title =
 desktop model =
     let
         item1 = makeLauncher "./icons/0.ico" "My Computer"
+
     in
         E.column
             [ E.alignLeft
-            , E.inFront <| View.FileExplorer.fileExplorer model
-            , E.inFront <| View.PoorMansOutlook.poorMansOutlook model
+            , E.inFront <| viewFileExplorer model
+            , E.inFront <| viewPoorMansOutlook model
             ]
             [ item1
             ]
+
+viewFileExplorer model =
+    case (Windows.get Window.FileExplorerMainWindow model.windows) of
+        (Window.Window t_ geometry) ->
+            case geometry.isMinimized of 
+                True ->
+                    E.none
+                False ->
+                    View.FileExplorer.fileExplorer model 
+
+viewPoorMansOutlook model =
+    case (Windows.get Window.PoorMansOutlookMainWindow model.windows) of
+        (Window.Window t_ geometry) ->
+            case geometry.isMinimized of 
+                True ->
+                    E.none
+                False ->
+                    View.PoorMansOutlook.poorMansOutlook model 
+
 
 heightBlock height =
     E.el
         [ E.height <| E.px height
         ]
         <| E.text ""
+

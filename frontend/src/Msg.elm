@@ -2,13 +2,13 @@ module Msg exposing
     ( Msg(..)
     )
 
-import Windows
+import Window
 
 type Msg
     = Tick Float
 
-    | OpenWindow Windows.Window
-    | MouseDownOnTitleBar Windows.Window
+    | OpenWindow Window.WindowType
+    | MouseDownOnTitleBar Window.WindowType
     | MouseUpOnTitleBar
     | MouseMoved Coords
 
@@ -17,7 +17,7 @@ type Msg
     | EmailContentInput String
     | TryToSendEmail
     | StartButtonPressed
-    | ToggleMinimize Windows.Window
+    | NavbarItemClicked Window.WindowType
 
 type alias Coords =
     { x : Int

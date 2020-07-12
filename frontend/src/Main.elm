@@ -12,6 +12,7 @@ import Programs.PoorMansOutlook
 
 import View.Desktop
 
+import Window
 import Windows
 -- import Browser.Events exposing (onAnimationFrameDelta, onMouseDown, onMouseMove, onMouseUp, onResize)
 -- import Json.Decode as JD exposing (int)
@@ -46,7 +47,7 @@ type alias Model =
 
     , programs : Programs
     , windows : Windows.Windows
-    , currentTitleBarHeldWindow : Maybe Windows.Window
+    , currentTitleBarHeldWindow : Maybe Window.WindowType
 
     -- TODO: If I want to make this thing wrap properly based on width,
     -- It'll have to be just 1 list, not a few separate ones
@@ -107,13 +108,17 @@ update msg model =
             let
                 model_ =
                     { model
-                        | windows = Windows.openWindow window model.windows
+                        | windows = Windows.openWindow model.windows window 
                     }
             in
                 ( model_, Cmd.none )
-        Msg.MouseDownOnTitleBar window ->
+        Msg.MouseDownOnTitleBar windowType ->
             let
-                model_ = record window model
+                recorded = record windowType model
+                model_ = 
+                    { recorded
+                        | windows = Windows.focus model.windows windowType
+                    }
             in
                 ( model_ , Cmd.none )
         Msg.MouseUpOnTitleBar ->
@@ -127,18 +132,18 @@ update msg model =
             let
                 model_ = 
                     case model.currentTitleBarHeldWindow of
-                        Just window ->
+                        Just windowType ->
                             let
                                 moveByX = (model.absoluteX - model.record.absoluteX)
                                 moveByY = (model.absoluteY - model.record.absoluteY)
                             in
                                 { model
                                     | windows = Windows.moveWindow
+                                        model.windows
                                         { x = model.record.windowX + moveByX
                                         , y = model.record.windowY + moveByY
                                         }
-                                        window
-                                        model.windows
+                                        windowType
                                     , absoluteX = coords.x
                                     , absoluteY = coords.y
                                 }
@@ -216,9 +221,34 @@ update msg model =
                 model_ = Debug.log "START" model
             in
                 (model_, Cmd.none)
-        Msg.ToggleMinimize window ->
+        Msg.NavbarItemClicked windowType ->
             let
-                model_ = Debug.log "You should implement minimizing windows properly" model
+
+                maybeWin = Dict.get (Window.toString windowType) model.windows
+                window = case maybeWin of 
+                    Just win ->
+                        win
+                    Nothing ->
+                        Windows.toDefault windowType
+
+                isThisWindowTheSameAsTheOneCurrentlyFocused =
+                    case window of
+                        (Window.Window t_ geometry) ->
+                            case geometry.isFocused of
+                                True ->
+                                    True
+                                False ->
+                                    False
+                model_ = 
+                    case isThisWindowTheSameAsTheOneCurrentlyFocused of
+                        True ->
+                            { model
+                                | windows = Windows.minimize model.windows windowType
+                            }
+                        False ->
+                            { model 
+                                | windows = Windows.unMinimize model.windows windowType
+                            }
             in
                 (model_, Cmd.none)
 
@@ -226,23 +256,21 @@ subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
     Sub.none
 
-record : Windows.Window -> Model -> Model
-record window model =
+record : Window.WindowType -> Model -> Model
+record windowType model =
     let
         windowKey = 
-            Windows.toString window
+            Window.toString windowType
 
         maybeWindow = Dict.get windowKey model.windows
 
+        oldRec = model.record
         newRec =
-            let
-                rec = model.record
-            in
             case maybeWindow of
-                Just win ->
-                    { rec
-                        | windowX = win.x
-                        , windowY = win.y
+                Just (Window.Window _ geometry) ->
+                    { oldRec
+                        | windowX = geometry.x
+                        , windowY = geometry.y
                         , absoluteX = model.absoluteX
                         , absoluteY = model.absoluteY
                     }
@@ -251,7 +279,8 @@ record window model =
     in
         { model
             | record = newRec
-            , currentTitleBarHeldWindow = Just window
+            , currentTitleBarHeldWindow = 
+                Just windowType
         }
 
 -- HELPERS

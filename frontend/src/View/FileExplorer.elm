@@ -14,6 +14,7 @@ import Html
 import Html.Attributes
 
 import Palette
+import Window
 import Windows
 
 import View.Windoze as Windoze
@@ -24,14 +25,15 @@ fileExplorer model =
         widthSpacing = 40
         heightSpacing = 40
 
-        maybeWindowData = Dict.get (Windows.toString Windows.FileExplorerMainWindow) model.windows
-        windowData =
+        maybeWindowData = Dict.get (Window.toString Window.FileExplorerMainWindow) model.windows
+        windowGeometry =
             case maybeWindowData of
-                Just data ->
-                    data
+                Just (Window.Window type_ geometry) ->
+                    geometry
                 Nothing ->
-                    Windows.initFileExplorerMainWindow
-                
+                    case Windows.initFileExplorerMainWindow of
+                        (Window.Window type_ geometry) ->
+                            geometry
 
         makeAlbumSized =
             makeAlbum imageSize
@@ -76,12 +78,13 @@ fileExplorer model =
             -- , mouseUpMsg = Msg.FileExplorerMouseUpOnTitleBar
             -- }
             [ Windoze.makeButton Icons.xIcon ]
-            Windows.FileExplorerMainWindow
-            windowData.title
+            Window.FileExplorerMainWindow
+            windowGeometry.title
+            windowGeometry.isFocused
     in
         E.el
-            [ E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowData.x) ++ "px")
-            , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowData.y) ++ "px")
+            [ E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
+            , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
             ]
             <| Windoze.type1Level2RaisedBorder
                 <| Windoze.type1Level1RaisedBorder

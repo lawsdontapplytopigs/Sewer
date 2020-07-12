@@ -16,7 +16,7 @@ import Json.Decode as JDecode
 import Msg
 
 import Palette
-import Windows
+import Window
 
 noHighlight =
     [ E.htmlAttribute <| Html.Attributes.style "-webkit-touch-callout" "none" -- iOS Safari
@@ -28,19 +28,30 @@ noHighlight =
                                                                         -- supported by Chrome, Edge, Opera and Firefox */
     ]
 
-makeTitleBar : (List (E.Element Msg.Msg)) -> Windows.Window -> String -> E.Element Msg.Msg
-makeTitleBar buttons window title =
+makeTitleBar : 
+    (List (E.Element Msg.Msg)) 
+    -> Window.WindowType 
+    -> String 
+    -> Bool
+    -> E.Element Msg.Msg
+makeTitleBar buttons windowType title isSelected =
     let
         mainPink = E.rgb255 255 180 210
-        lightPink = E.rgb255 255 255 255
-        darkPink = E.rgb255 200 100 140
+        -- lightPink = E.rgb255 255 255 255
+        selectedPink = E.rgb255 200 100 140
+        titlebarColor =
+            case isSelected of
+                True ->
+                    selectedPink
+                False ->
+                    mainPink
     in
     E.row
         (
         [ E.height <| E.px 32
         , E.width E.fill
-        , EBackground.color darkPink
-        , EEvents.onMouseDown <| Msg.MouseDownOnTitleBar window
+        , EBackground.color titlebarColor
+        , EEvents.onMouseDown <| Msg.MouseDownOnTitleBar windowType
         , EEvents.onMouseUp <| Msg.MouseUpOnTitleBar
         -- , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.TitleBarMouseMoved prog screenCoords)
         ]
@@ -63,7 +74,7 @@ makeTitleBar buttons window title =
             [ E.alignRight
             , E.height E.fill
             , E.paddingEach { top = 0, right = 0, bottom = 0, left = 200 }
-            , EBackground.color darkPink
+            , EBackground.color titlebarColor
             -- , EBackground.gradient 
             --     { angle = 3.14 / 2
             --     , steps = 

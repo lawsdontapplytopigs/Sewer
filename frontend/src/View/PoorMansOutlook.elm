@@ -17,23 +17,23 @@ import Icons
 import Msg
 import Palette
 
+import Window
 import Windows
 import View.Windoze as Windoze
 
 poorMansOutlook model =
     let
-        oldWindowData = Dict.get ( Windows.toString Windows.PoorMansOutlookMainWindow ) model.windows
-        windowData = case oldWindowData of
-            Just data ->
-                data
-            Nothing ->
-                Debug.log "wrong" Windows.initPoorMansOutlookMainWindow
+        windowGeometry = 
+            case (Windows.get Window.PoorMansOutlookMainWindow model.windows) of
+                (Window.Window type_ geometry) ->
+                    geometry
 
         titleBar = Windoze.makeTitleBar
             [ Windoze.makeButton Icons.xIcon
             ]
-            Windows.PoorMansOutlookMainWindow
-            windowData.title
+            Window.PoorMansOutlookMainWindow
+            windowGeometry.title
+            windowGeometry.isFocused
         toolBar = Windoze.makeToolBar
             [ Windoze.makeToolItem "File"
             , Windoze.makeToolItem "Edit"
@@ -159,10 +159,10 @@ poorMansOutlook model =
                 ]
     in
     E.el
-        [ E.width <| E.px windowData.width
-        , E.height <| E.px windowData.height
-        , E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowData.x) ++ "px")
-        , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowData.y) ++ "px")
+        [ E.width <| E.px windowGeometry.width
+        , E.height <| E.px windowGeometry.height
+        , E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
+        , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
         ]
         <| Windoze.type1Level2RaisedBorder
             <| Windoze.type1Level1RaisedBorder

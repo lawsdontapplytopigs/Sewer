@@ -1,22 +1,22 @@
-module WindowGeometry exposing
-    ( WindowGeometry
+module Window exposing
+    ( Window(..)
+    , WindowGeometry
+    , WindowType(..)
     , expandTop
     , expandRight
     , expandBottom
     , expandLeft
+    , maximize
+    , minimize
+    , moveX
+    , moveY
+    , move
     , shrinkTop
     , shrinkRight
     , shrinkBottom
     , shrinkLeft
-    , moveX
-    , moveY
-    , move
-    , minimize
-    , maximize
+    , toString
     )
-
--- type Window = 
---     Window WindowGeometry WindowType
 
 -- type Program =
 --     Program
@@ -29,7 +29,23 @@ module WindowGeometry exposing
 --         Window
 --         { isMinimized : Bool
 --         , isMaximized : Bool
+--         ... etc
 --         }
+
+-- type SecondaryWindow =
+--     SecondaryWindow
+--         Window
+--         { isMaximized : Bool
+--         }
+
+type Window = 
+    Window WindowType WindowGeometry
+
+type WindowType
+    = FileExplorerMainWindow
+    | WinampMainWindow
+    | WinampPlaylistWindow
+    | PoorMansOutlookMainWindow
 
 -- TODO: Maybe I can work out some better data type to hold all this together..
 -- can the `type` of the window change while it's being shown?
@@ -46,6 +62,9 @@ type alias WindowGeometry =
     , isMinimized : Bool
     , title : String
     , wantsToNotBeClosed : Bool
+    , shouldBeDisplayedInNavbar : Bool
+    , icon : String
+    , isFocused : Bool
     }
 
 expandTop : Int -> WindowGeometry -> WindowGeometry
@@ -124,3 +143,19 @@ minimize win =
     win
 maximize win =
     win
+
+
+-- Can I use a union type as the key to the dictionary?
+-- Note from the future: NO!!!!!
+toString : WindowType -> String
+toString window =
+    case window of
+        FileExplorerMainWindow ->
+            "FileExplorerMainWindow"
+        WinampMainWindow ->
+            "WinampMainWindow"
+        WinampPlaylistWindow ->
+            "WinampPlaylistWindow"
+        PoorMansOutlookMainWindow ->
+            "PoorMansOutlookMainWindow"
+
