@@ -6,12 +6,15 @@ import Dict
 import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
+import Element.Events as EEvents
 import Element.Font as EFont
 
-import Icons
 
 import Html
 import Html.Attributes
+import Icons
+
+import Msg
 
 import Palette
 import Window
@@ -85,6 +88,7 @@ fileExplorer model =
         E.el
             [ E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
             , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
+            , EEvents.onClick <| Msg.WindowClicked Window.FileExplorerMainWindow
             ]
             <| Windoze.type1Level2RaisedBorder
                 <| Windoze.type1Level1RaisedBorder

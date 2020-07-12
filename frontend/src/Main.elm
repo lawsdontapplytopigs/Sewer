@@ -252,6 +252,17 @@ update msg model =
             in
                 (model_, Cmd.none)
 
+        Msg.WindowClicked windowType ->
+            let
+                win = Windows.get windowType model.windows
+                model_ = 
+                    { model 
+                        | windows = Windows.focus model.windows windowType
+                    }
+            in
+                (model_, Cmd.none)
+                
+
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
     Sub.none

@@ -7,6 +7,7 @@ import Dict
 import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
+import Element.Events as EEvents
 import Element.Font as EFont
 import Element.Input as EInput
 
@@ -163,6 +164,7 @@ poorMansOutlook model =
         , E.height <| E.px windowGeometry.height
         , E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
         , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
+        , EEvents.onClick <| Msg.WindowClicked Window.PoorMansOutlookMainWindow
         ]
         <| Windoze.type1Level2RaisedBorder
             <| Windoze.type1Level1RaisedBorder

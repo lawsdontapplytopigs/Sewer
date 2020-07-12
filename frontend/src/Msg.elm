@@ -11,13 +11,17 @@ type Msg
     | MouseDownOnTitleBar Window.WindowType
     | MouseUpOnTitleBar
     | MouseMoved Coords
+    | WindowClicked Window.WindowType
 
+    -- navbar
+    | StartButtonPressed
+    | NavbarItemClicked Window.WindowType
+
+    -- poor man's outlook related
     | EmailInput String
     | SubjectInput String
     | EmailContentInput String
     | TryToSendEmail
-    | StartButtonPressed
-    | NavbarItemClicked Window.WindowType
 
 type alias Coords =
     { x : Int
