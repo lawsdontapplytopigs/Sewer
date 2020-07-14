@@ -15,3 +15,5 @@
 [ ] check if i can access the browser zoom amount. it seems to screw up 
     dragging windows
 [ ] optimize the album covers that the file explorer and other programs display
+[ ] use the right icons for all programs & menu items and everything and 
+    configure the make.sh script to copy all the right icons in the right place
