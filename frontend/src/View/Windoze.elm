@@ -261,7 +261,7 @@ makeTaskListProgram h icon name =
         , makeToolItem name
         ]
 
-makeButton icon =
+makeButton icon msg =
     
     -- let
     --     size = 32
@@ -282,7 +282,7 @@ makeButton icon =
     --                 ]
         
         E.el
-            [
+            [ EEvents.onClick msg
             ]
             <| type1Level2RaisedBorder
                 <| type1Level1RaisedBorder

@@ -115,12 +115,40 @@ desktop model =
     let
         item1 = makeLauncher "./icons/0.ico" "My Computer"
         item2 = makeLauncher "./icons/0.ico" "Webamp"
+
+        viewHelper windowType viewFunc =
+            case Windows.isOpen windowType model.windows of
+                True ->
+                    -- let
+                    --     _ = Debug.log "STILL OPEN" windowType
+                    -- in
+                    case (Windows.get windowType model.windows) of
+                        (Window.Window t_ geometry) ->
+                            case geometry.isMinimized of
+                                True ->
+                                    E.none
+                                False ->
+                                    viewFunc model
+                False ->
+                    -- let
+                    --     _ = (Debug.log "closed: " windowType) 
+                    -- in
+                        E.none
     in
         E.column
             [ E.alignLeft
-            , E.inFront <| viewFileExplorer model
-            , E.inFront <| viewPoorMansOutlook model
-            , E.inFront <| viewWinampRipoff model
+            , E.inFront
+                <| viewHelper
+                    Window.FileExplorerMainWindow
+                    View.FileExplorer.fileExplorer
+            , E.inFront
+                <| viewHelper
+                    Window.PoorMansOutlookMainWindow
+                    View.PoorMansOutlook.poorMansOutlook
+            , E.inFront
+                <| viewHelper
+                    Window.WinampMainWindow
+                    View.WinampRipoff.winampRipoff
             ]
             [ item1
             , item2
@@ -129,34 +157,36 @@ desktop model =
             -- , viewWinampRipoff model
             ]
 
-viewFileExplorer model =
-    case (Windows.get Window.FileExplorerMainWindow model.windows) of
-        (Window.Window t_ geometry) ->
-            case geometry.isMinimized of 
-                True ->
-                    E.none
-                False ->
-                    View.FileExplorer.fileExplorer model 
+-- viewFileExplorer model =
+--     case Windows.is
+--     case (Windows.get Window.FileExplorerMainWindow model.windows) of
+--         (Window.Window t_ geometry) ->
+--             case geometry.isMinimized of 
+--                 True ->
+--                     E.none
+--                 False ->
+--                     View.FileExplorer.fileExplorer model 
 
-viewPoorMansOutlook model =
-    case (Windows.get Window.PoorMansOutlookMainWindow model.windows) of
-        (Window.Window t_ geometry) ->
-            case geometry.isMinimized of 
-                True ->
-                    E.none
-                False ->
-                    View.PoorMansOutlook.poorMansOutlook model 
+-- viewPoorMansOutlook model =
+--     case (Windows.get Window.PoorMansOutlookMainWindow model.windows) of
+--         (Window.Window t_ geometry) ->
+--             case geometry.isMinimized of 
+--                 True ->
+--                     E.none
+--                 False ->
+--                     View.PoorMansOutlook.poorMansOutlook model 
 
-viewWinampRipoff model =
-    case (Windows.get Window.WinampMainWindow model.windows) of
-        (Window.Window t_ geometry) ->
-            case geometry.isMinimized of
-                True ->
-                    E.none
-                False ->
-                    -- we do this, since the winamp ripoff is actually webamp
-                    -- https://github.com/captbaritone/webamp
-                    E.html <| View.WinampRipoff.winampRipoff model
+-- viewWinampRipoff model =
+--     case (Windows.get Window.WinampMainWindow model.windows) of
+--         (Window.Window t_ geometry) ->
+--             case geometry.isMinimized of
+--                 True ->
+--                     E.none
+--                 False ->
+--                     -- we do this, since the winamp ripoff is actually webamp
+--                     -- https://github.com/captbaritone/webamp
+--                     E.html <| View.WinampRipoff.winampRipoff model
+
 
 heightBlock height =
     E.el

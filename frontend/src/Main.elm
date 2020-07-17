@@ -278,17 +278,20 @@ update msg model =
         Msg.WinampIn str ->
             let
                 windowType = Window.WinampMainWindow
+
                 weenamp = Windows.get windowType model.windows
                 newZ = model.currentZIndex + 1
                 newWins = 
                     case (View.WinampRipoff.jsonToWinampMsg str) of
                         View.WinampRipoff.WindowClicked ->
-                            model.windows
+                            Debug.log "webamp clicked"
+                            (model.windows
                                 |> Windows.changeZIndex windowType newZ
                                 |> Windows.focus windowType
+                            )
                         -- TODO
                         View.WinampRipoff.Close ->
-                            model.windows
+                            Debug.log "for some reason winamp should be closed" model.windows
                         View.WinampRipoff.Minimize ->
                             model.windows
                         View.WinampRipoff.SomethingWentTerriblyWrong ->
@@ -297,6 +300,15 @@ update msg model =
                     { model
                         | windows = newWins
                         , currentZIndex = newZ
+                    }
+            in
+                (model_, Cmd.none)
+
+        Msg.CloseWindow windowType ->
+            let
+                model_ =
+                    { model
+                        | windows = Windows.closeWindow (Debug.log "close" windowType) model.windows
                     }
             in
                 (model_, Cmd.none)

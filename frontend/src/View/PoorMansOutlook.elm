@@ -30,7 +30,7 @@ poorMansOutlook model =
                     geometry
 
         titleBar = Windoze.makeTitleBar
-            [ Windoze.makeButton Icons.xIcon
+            [ Windoze.makeButton Icons.xIcon (Msg.CloseWindow Window.PoorMansOutlookMainWindow)
             ]
             Window.PoorMansOutlookMainWindow
             windowGeometry.title

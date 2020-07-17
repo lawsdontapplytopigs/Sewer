@@ -4,6 +4,8 @@ module View.WinampRipoff exposing
     , WinampMsg(..)
     )
 
+import Element as E
+
 import Html
 import Html.Attributes
 
@@ -18,13 +20,13 @@ winampRipoff model =
             case (Windows.get Window.WinampMainWindow model.windows) of
                 (Window.Window t_ geom) ->
                     geom
-            
     in
-    Html.div
-        [ Html.Attributes.id "weenamp"
-        , Html.Attributes.style "z-index" (String.fromInt windowData.zIndex)
-        ]
-        []
+    E.html
+        <| Html.div
+            [ Html.Attributes.id "weenamp"
+            , Html.Attributes.style "z-index" (String.fromInt windowData.zIndex)
+            ]
+            []
 
 -- we use this to decode what comes through the "winampIn" port
 jsonToWinampMsg : String -> WinampMsg

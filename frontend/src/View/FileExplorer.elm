@@ -80,7 +80,8 @@ fileExplorer model =
             -- { mouseDownMsg = Msg.FileExplorerMouseDownOnTitleBar
             -- , mouseUpMsg = Msg.FileExplorerMouseUpOnTitleBar
             -- }
-            [ Windoze.makeButton Icons.xIcon ]
+            [ Windoze.makeButton Icons.xIcon (Msg.CloseWindow Window.FileExplorerMainWindow)
+            ]
             Window.FileExplorerMainWindow
             windowGeometry.title
             windowGeometry.isFocused

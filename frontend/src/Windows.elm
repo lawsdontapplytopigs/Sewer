@@ -6,6 +6,7 @@ module Windows exposing
     , initFileExplorerMainWindow
     , initWinampMainWindow
     , initPoorMansOutlookMainWindow
+    , isOpen
     , openWindow
     , moveWindow
     , closeWindow
@@ -134,6 +135,7 @@ openWindow windowType windows =
         -- TODO: test this. we really don't want to have the user type out a
         -- long email, try to open the email program even though it's already 
         -- open, and throw away all the message
+        -- TODO: replace this with `isOpen`
         case Dict.member windowKey windows of 
             True ->
                 windows
@@ -157,7 +159,7 @@ moveWindow windowType to windows =
 
 closeWindow : Window.WindowType -> Windows -> Windows
 closeWindow windowType windows =
-        Dict.remove (Window.toString windowType) windows
+    Dict.remove (Window.toString windowType) windows
 
 focus : Window.WindowType -> Windows -> Windows
 focus windowType windows =
@@ -250,6 +252,11 @@ unMinimize windowType windows =
             Dict.map unFocus windows
     in
         Dict.update winKey unMinim_ allUnFocused
+
+isOpen : Window.WindowType -> Windows -> Bool
+isOpen windowType windows =
+    Dict.member (Window.toString windowType) windows
+
 
 toString : Window.Window -> String
 toString (Window.Window t_ _ ) =

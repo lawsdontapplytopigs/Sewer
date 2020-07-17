@@ -8,6 +8,7 @@ type Msg
     = Tick Float
 
     | OpenWindow Window.WindowType
+    | CloseWindow Window.WindowType
     | MouseDownOnTitleBar Window.WindowType
     | MouseUpOnTitleBar
     | MouseMoved Coords
