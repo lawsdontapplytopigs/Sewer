@@ -86,9 +86,12 @@ fileExplorer model =
             windowGeometry.isFocused
     in
         E.el
-            [ E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
-            , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
-            , EEvents.onClick <| Msg.WindowClicked Window.FileExplorerMainWindow
+            [ E.htmlAttribute <| Html.Attributes.style "transform" ("translate(" ++ String.fromInt windowGeometry.x ++ "px" ++ ", " ++ String.fromInt windowGeometry.y ++ "px )")
+            -- [ E.htmlAttribute <| Html.Attributes.style "transform" "translate( 2.1px
+            -- , E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
+            -- , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
+            , E.htmlAttribute <| Html.Attributes.style "z-index" (String.fromInt windowGeometry.zIndex)
+            , EEvents.onMouseDown <| Msg.WindowClicked Window.FileExplorerMainWindow
             ]
             <| Windoze.type1Level2RaisedBorder
                 <| Windoze.type1Level1RaisedBorder

@@ -21,6 +21,7 @@ import Programs.FileExplorer
 import View.FileExplorer
 import View.Navbar
 import View.PoorMansOutlook
+import View.WinampRipoff
 
 import Window
 import Windows
@@ -55,12 +56,12 @@ mainDocumentColumn model =
         [ E.width E.fill
         , E.height E.fill
         , EBackground.color <| E.rgb255 0 120 127 -- #00787f
+        , E.behindContent <| desktop model
         ]
-        <| desktop model
+        <| E.none
 
 -- TODO: implement this properly: make it so that people can click, drag, drop,
 -- desktop items, and have them automatically reposition according to a grid
-
 makeLauncher icon title =
     let
         desktopItemWidth = 96
@@ -113,14 +114,19 @@ makeLauncher icon title =
 desktop model =
     let
         item1 = makeLauncher "./icons/0.ico" "My Computer"
-
+        item2 = makeLauncher "./icons/0.ico" "Webamp"
     in
         E.column
             [ E.alignLeft
             , E.inFront <| viewFileExplorer model
             , E.inFront <| viewPoorMansOutlook model
+            , E.inFront <| viewWinampRipoff model
             ]
             [ item1
+            , item2
+            -- , viewFileExplorer model
+            -- , viewPoorMansOutlook model
+            -- , viewWinampRipoff model
             ]
 
 viewFileExplorer model =
@@ -141,6 +147,16 @@ viewPoorMansOutlook model =
                 False ->
                     View.PoorMansOutlook.poorMansOutlook model 
 
+viewWinampRipoff model =
+    case (Windows.get Window.WinampMainWindow model.windows) of
+        (Window.Window t_ geometry) ->
+            case geometry.isMinimized of
+                True ->
+                    E.none
+                False ->
+                    -- we do this, since the winamp ripoff is actually webamp
+                    -- https://github.com/captbaritone/webamp
+                    E.html <| View.WinampRipoff.winampRipoff model
 
 heightBlock height =
     E.el

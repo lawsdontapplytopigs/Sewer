@@ -15,9 +15,14 @@ cp ./art/icons/w95_40.ico ./built/icons/1.ico #TODO: replace this with the right
 cp ./art/icons/w95_5.ico ./built/icons/2.ico # File Explorer
 cp ./art/icons/w95_6.ico ./built/icons/3.ico #TODO: get the right icon
 cp ./art/icons/w95_31.ico ./built/icons/4.ico # wannabe Outlook
-
 cp -r ./prebuilt/fonts ./built/
-
 cp -r ./prebuilt/albums ./built/
+
+
+# all the js
+cp ./prebuilt/webamp.bundle.min.js ./built/webamp.bundle.min.js
+
+# all the css
+cp ./prebuilt/general.css ./built/general.css
 
 elm make ./src/Main.elm --output=./built/app.js

@@ -23,6 +23,10 @@ type Msg
     | EmailContentInput String
     | TryToSendEmail
 
+    -- webamp related
+    | WinampIn String
+    | OpenWinamp
+
 type alias Coords =
     { x : Int
     , y : Int

@@ -1,10 +1,10 @@
 module Windows exposing
     ( Windows
+    , changeZIndex
     , get
     , initWindows
     , initFileExplorerMainWindow
     , initWinampMainWindow
-    , initWinampPlaylistWindow
     , initPoorMansOutlookMainWindow
     , openWindow
     , moveWindow
@@ -38,9 +38,11 @@ initFileExplorerMainWindow =
         , shouldBeDisplayedInNavbar = True
         , icon = "./icons/2.ico"
         , isFocused = False
+        , zIndex = 0
         }
 
 initWinampMainWindow =
+    -- since we're using webamp, a lot of this data is now not really useful
     Window.Window
         Window.WinampMainWindow
         { x = 400
@@ -56,24 +58,7 @@ initWinampMainWindow =
         , shouldBeDisplayedInNavbar = True
         , icon = "./icons/3.ico"
         , isFocused = False
-        }
-
-initWinampPlaylistWindow =
-    Window.Window
-        Window.WinampPlaylistWindow
-        { x = 600
-        , y = 400
-        , width = 400
-        , height = 300
-        , minWidth = 300
-        , minHeight = 200
-        , wantsToNotBeClosed = False
-        , isMinimized = False
-        , isMaximized = False
-        , title = "Swamp playlist"
-        , shouldBeDisplayedInNavbar = False
-        , icon = ""
-        , isFocused = False
+        , zIndex = 0
         }
 
 initPoorMansOutlookMainWindow =
@@ -92,6 +77,7 @@ initPoorMansOutlookMainWindow =
         , shouldBeDisplayedInNavbar = True
         , icon = "./icons/4.ico"
         , isFocused = False
+        , zIndex = 0
         }
 
 initWindows : Windows
@@ -103,9 +89,6 @@ initWindows =
             )
         ,   (   "WinampMainWindow"
             ,   initWinampMainWindow
-            )
-        ,   (   "WinampPlaylistWindow"
-            ,   initWinampPlaylistWindow
             )
         ,   (   "PoorMansOutlookMainWindow"
             ,   initPoorMansOutlookMainWindow
@@ -132,13 +115,11 @@ toDefault windowType =
             initFileExplorerMainWindow
         Window.WinampMainWindow ->
             initWinampMainWindow
-        Window.WinampPlaylistWindow ->
-            initWinampPlaylistWindow
         Window.PoorMansOutlookMainWindow ->
             initPoorMansOutlookMainWindow
 
-openWindow : Windows -> Window.WindowType -> Windows
-openWindow windows windowType =
+openWindow : Window.WindowType -> Windows -> Windows
+openWindow windowType windows =
     let
         win =
             case windowType of
@@ -146,8 +127,6 @@ openWindow windows windowType =
                     initFileExplorerMainWindow
                 Window.WinampMainWindow ->
                     initWinampMainWindow
-                Window.WinampPlaylistWindow ->
-                    initWinampPlaylistWindow
                 Window.PoorMansOutlookMainWindow ->
                     initPoorMansOutlookMainWindow
         windowKey = Window.toString windowType
@@ -162,8 +141,8 @@ openWindow windows windowType =
                 Dict.insert 
                     windowKey win windows
 
-moveWindow : Windows -> { x : Int, y : Int } -> Window.WindowType -> Windows
-moveWindow windows to windowType =
+moveWindow : Window.WindowType -> { x : Int, y : Int } -> Windows -> Windows
+moveWindow windowType to windows =
     let
         windowKey = Window.toString windowType
 
@@ -176,12 +155,12 @@ moveWindow windows to windowType =
     in
         Dict.update windowKey move_ windows
 
-closeWindow : Windows -> Window.WindowType -> Windows
-closeWindow windows windowType =
+closeWindow : Window.WindowType -> Windows -> Windows
+closeWindow windowType windows =
         Dict.remove (Window.toString windowType) windows
 
-focus : Windows -> Window.WindowType -> Windows
-focus windows windowType =
+focus : Window.WindowType -> Windows -> Windows
+focus windowType windows =
     let
         winKey = Window.toString windowType
 
@@ -203,6 +182,24 @@ focus windows windowType =
     in
         Dict.update winKey sel allUnFocused
 
+changeZIndex : Window.WindowType -> Int -> Windows -> Windows
+changeZIndex windowType z windows =
+    let
+        winKey = Window.toString windowType
+
+        newZ maybeWin =
+            case maybeWin of
+                Just (Window.Window t_ geometry) ->
+                    Just (Window.Window t_
+                        { geometry
+                            | zIndex = z
+                        }
+                    )
+                Nothing ->
+                    Nothing
+    in
+        Dict.update winKey newZ windows
+
 unFocus : String -> Window.Window -> Window.Window
 unFocus k (Window.Window t_ geometry) =
     (Window.Window t_ 
@@ -211,8 +208,8 @@ unFocus k (Window.Window t_ geometry) =
         }
     )
 
-minimize : Windows -> Window.WindowType -> Windows
-minimize windows windowType =
+minimize : Window.WindowType -> Windows -> Windows
+minimize windowType windows =
     let
         winKey = Window.toString windowType
 
@@ -231,8 +228,8 @@ minimize windows windowType =
     in
         Dict.update winKey minim_ windows
 
-unMinimize : Windows -> Window.WindowType -> Windows
-unMinimize windows windowType =
+unMinimize : Window.WindowType -> Windows -> Windows
+unMinimize windowType windows =
     let
         winKey = Window.toString windowType
 

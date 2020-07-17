@@ -10,6 +10,8 @@ import Element.Border as EBorder
 import Element.Font as EFont
 import Element.Input as EInput
 
+import Html.Attributes
+
 import Msg
 import Palette
 

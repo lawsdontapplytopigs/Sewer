@@ -44,7 +44,6 @@ type Window =
 type WindowType
     = FileExplorerMainWindow
     | WinampMainWindow
-    | WinampPlaylistWindow
     | PoorMansOutlookMainWindow
 
 -- TODO: Maybe I can work out some better data type to hold all this together..
@@ -65,6 +64,7 @@ type alias WindowGeometry =
     , shouldBeDisplayedInNavbar : Bool
     , icon : String
     , isFocused : Bool
+    , zIndex : Int
     }
 
 expandTop : Int -> WindowGeometry -> WindowGeometry
@@ -154,8 +154,6 @@ toString window =
             "FileExplorerMainWindow"
         WinampMainWindow ->
             "WinampMainWindow"
-        WinampPlaylistWindow ->
-            "WinampPlaylistWindow"
         PoorMansOutlookMainWindow ->
             "PoorMansOutlookMainWindow"
 

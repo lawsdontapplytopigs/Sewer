@@ -1,14 +1,17 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Browser
 import Dict
 import Html
+import Json.Decode as JDecode
 import Init.FileExplorer
 
 import Msg
 import Programs.FileExplorer
 import Programs.WinampRipoff
 import Programs.PoorMansOutlook
+
+import View.WinampRipoff
 
 import View.Desktop
 
@@ -18,6 +21,8 @@ import Windows
 -- import Json.Decode as JD exposing (int)
 -- import Time exposing (Posix(..), posixToMillis)
 
+port winampIn : (String -> msg) -> Sub msg
+port winampOut : String -> Cmd msg
 
 main : Program () Model Msg.Msg
 main = Browser.document
@@ -53,7 +58,8 @@ type alias Model =
     -- It'll have to be just 1 list, not a few separate ones
     , albums0 : List AlbumData
     , albums1 : List AlbumData
-    , debug : Int
+    , currentZIndex : Int
+    , debug : String
     }
 
 type alias AlbumData =
@@ -90,7 +96,8 @@ init flags =
 
             , albums0 = Init.FileExplorer.albums0
             , albums1 = Init.FileExplorer.albums1
-            , debug = 0
+            , currentZIndex = 1
+            , debug = ""
             }
 
         cmds =
@@ -104,11 +111,11 @@ update msg model =
     case msg of
         Msg.Tick dt ->
             ( { model | time = model.time + dt / 1000 }, Cmd.none )
-        Msg.OpenWindow window ->
+        Msg.OpenWindow windowType ->
             let
                 model_ =
                     { model
-                        | windows = Windows.openWindow model.windows window 
+                        | windows = Windows.openWindow windowType model.windows
                     }
             in
                 ( model_, Cmd.none )
@@ -117,7 +124,7 @@ update msg model =
                 recorded = record windowType model
                 model_ = 
                     { recorded
-                        | windows = Windows.focus model.windows windowType
+                        | windows = Windows.focus windowType model.windows 
                     }
             in
                 ( model_ , Cmd.none )
@@ -139,11 +146,11 @@ update msg model =
                             in
                                 { model
                                     | windows = Windows.moveWindow
-                                        model.windows
+                                        windowType
                                         { x = model.record.windowX + moveByX
                                         , y = model.record.windowY + moveByY
                                         }
-                                        windowType
+                                        model.windows
                                     , absoluteX = coords.x
                                     , absoluteY = coords.y
                                 }
@@ -243,29 +250,65 @@ update msg model =
                     case isThisWindowTheSameAsTheOneCurrentlyFocused of
                         True ->
                             { model
-                                | windows = Windows.minimize model.windows windowType
+                                | windows = Windows.minimize windowType model.windows
                             }
                         False ->
                             { model 
-                                | windows = Windows.unMinimize model.windows windowType
+                                | windows = Windows.unMinimize windowType model.windows
                             }
             in
                 (model_, Cmd.none)
 
         Msg.WindowClicked windowType ->
             let
-                win = Windows.get windowType model.windows
+                newZ = model.currentZIndex + 1
+                
+                newWins = 
+                    model.windows
+                        |> Windows.changeZIndex windowType newZ
+                        |> Windows.focus windowType
+
                 model_ = 
                     { model 
-                        | windows = Windows.focus model.windows windowType
+                        | windows = newWins
+                        , currentZIndex = newZ
                     }
             in
                 (model_, Cmd.none)
-                
+        Msg.WinampIn str ->
+            let
+                windowType = Window.WinampMainWindow
+                weenamp = Windows.get windowType model.windows
+                newZ = model.currentZIndex + 1
+                newWins = 
+                    case (View.WinampRipoff.jsonToWinampMsg str) of
+                        View.WinampRipoff.WindowClicked ->
+                            model.windows
+                                |> Windows.changeZIndex windowType newZ
+                                |> Windows.focus windowType
+                        -- TODO
+                        View.WinampRipoff.Close ->
+                            model.windows
+                        View.WinampRipoff.Minimize ->
+                            model.windows
+                        View.WinampRipoff.SomethingWentTerriblyWrong ->
+                            model.windows
+                model_ = 
+                    { model
+                        | windows = newWins
+                        , currentZIndex = newZ
+                    }
+            in
+                (model_, Cmd.none)
+        Msg.OpenWinamp ->
+            let
+                model_ = model
+            in
+                (model_, winampOut "open")
 
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
-    Sub.none
+    winampIn Msg.WinampIn
 
 record : Window.WindowType -> Model -> Model
 record windowType model =

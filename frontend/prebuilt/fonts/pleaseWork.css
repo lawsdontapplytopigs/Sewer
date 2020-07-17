@@ -1,0 +1,12 @@
+input[type=range] {
+    outline : 0px;
+    opacity : 1;
+    }
+
+input[type=range]::-moz-range-thumb {
+    opacity : 1;
+    }
+
+#webamp {
+    z-index : 8;
+}

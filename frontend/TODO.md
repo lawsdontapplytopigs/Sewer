@@ -17,3 +17,13 @@
 [ ] optimize the album covers that the file explorer and other programs display
 [ ] use the right icons for all programs & menu items and everything and 
     configure the make.sh script to copy all the right icons in the right place
+[ ] instead of using "top" and "left" to move windows, use "translate". It seems
+    it doesn't stop moving windows when the mouse goes outside the browser window.
+[ ] when just selected, the taskbar items have a dotted border on their inside.
+    the ones I wrote don't... Fix it.
+[ ] display the proper time
+[ ] while dragging a window, if the user takes the mouse outside the screen, 
+    the dragging ceases in webamp this doesn't happen, so there surely is a
+    way to fix this
+[ ] get a bunch of gifs from skynet.net (when you press the "im feeling lucky"
+    button) and use them on the site

@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <script src="./app.js" type="text/javascript"></script>
+    <!-- <script src="https://unpkg.com/webamp@1.4.0/built/webamp.bundle.min.js"></script> -->
+    <script src="./webamp.bundle.min.js" type="text/javascript"></script>
     <link href="./fonts/fonts.css" rel="stylesheet">
+    <link href="general.css" rel="stylesheet" type="text/plain">
 </head>
 <body>
     <div>
@@ -12,17 +15,76 @@
     </div>
     <div id="elm-node"></div>
     <script>
-        let app = Elm.Main.init({ 
+        let elm = Elm.Main.init({ 
             node: document.getElementById("elm-node"),
         });
 
         // unfortunately we have to do this here, since the mdgriffith/elm-ui 
         // library overrides our attributes if we do 
         // "E.htmlAttribute <| Html.Attributes.style "autofill" "email"
+        // note: we do NOT want to use the mdgriffith/elm-ui function for creating
+        // an email input field, because on invalid email adresses it looks 
+        // super ugly. Not the library's fault, but the browser's.
         let email = document.getElementById("emailBox");
         if (email != undefined) {
             email.autofill = "email"
         };
+        </script>
+
+        <script>
+
+        const webamp = new Webamp({
+            initialTracks: [{
+                metaData: {
+                    artist: "DJ Mike Llama",
+                    title: "Llama Whippin' Intro"
+                },
+                url: "https://cdn.jsdelivr.net/gh/captbaritone/webamp@43434d82cfe0e37286dbbe0666072dc3190a83bc/mp3/llama-2.91.mp3",
+                duration: 5.322286
+            }],
+        });
+
+        webamp.onClose(() => {
+            elm.ports.winampIn.send(JSON.stringify({ "event" : "close" }));
+            /* function handleClick() { */
+            /*     webamp.reopen(); */
+            /*     open.remove(); */
+            /*     open.removeEventListener("click", handleClick); */
+            /* } */
+        });
+
+        elm.ports.winampOut.subscribe((msg) => {
+            if (msg == "open") {
+                webamp.reopen();
+            };
+            console.log(msg);
+        });
+
+        let weenamp = document.getElementById("weenamp");
+        webamp.renderWhenReady(weenamp);
+
+        let resolveQuirks = () => {
+            let wamp = document.getElementById("weenamp");
+            let wa = document.getElementById("webamp");
+            wamp.append(wa);
+            wa.onmousedown = () => {
+                elm.ports.winampIn.send(
+                    JSON.stringify(
+                        { "event" : "windowClicked"
+                        }
+                    )
+                );
+            };
+        };
+
+        window.onload = resolveQuirks;
+        document.body.style.overflow = "hidden";
+
+
+    </script>
+
+    <script>
     </script>
 </body>
+<link href="./fonts/pleaseWork.css" rel="stylesheet" type="text/css">
 </html>

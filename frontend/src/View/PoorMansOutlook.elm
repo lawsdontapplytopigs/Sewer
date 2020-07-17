@@ -162,9 +162,12 @@ poorMansOutlook model =
     E.el
         [ E.width <| E.px windowGeometry.width
         , E.height <| E.px windowGeometry.height
-        , E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
-        , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
-        , EEvents.onClick <| Msg.WindowClicked Window.PoorMansOutlookMainWindow
+        , E.htmlAttribute <| Html.Attributes.style "transform" ("translate(" ++ String.fromInt windowGeometry.x ++ "px" ++ ", " ++ String.fromInt windowGeometry.y ++ "px )")
+
+        , E.htmlAttribute <| Html.Attributes.style "z-index" (String.fromInt windowGeometry.zIndex)
+        -- , E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
+        -- , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
+        , EEvents.onMouseDown <| Msg.WindowClicked Window.PoorMansOutlookMainWindow
         ]
         <| Windoze.type1Level2RaisedBorder
             <| Windoze.type1Level1RaisedBorder
