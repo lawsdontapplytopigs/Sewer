@@ -126,14 +126,15 @@ desktop model =
                         (Window.Window t_ geometry) ->
                             case geometry.isMinimized of
                                 True ->
-                                    E.none
+                                    E.html <| Html.div [] []
                                 False ->
                                     viewFunc model
                 False ->
                     -- let
                     --     _ = (Debug.log "closed: " windowType) 
                     -- in
-                        E.none
+                        E.html
+                            <| Html.div [] []
     in
         E.column
             [ E.alignLeft
