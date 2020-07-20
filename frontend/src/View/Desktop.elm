@@ -62,7 +62,7 @@ mainDocumentColumn model =
 
 -- TODO: implement this properly: make it so that people can click, drag, drop,
 -- desktop items, and have them automatically reposition according to a grid
-makeLauncher icon title =
+makeLauncher icon title msg =
     let
         desktopItemWidth = 96
         desktopItemHeight = 96
@@ -71,6 +71,7 @@ makeLauncher icon title =
     E.el
         [ E.height <| E.px desktopItemHeight
         , E.width <| E.px desktopItemWidth
+        , EEvents.onDoubleClick msg
         -- , EBackground.color <| E.rgb255  80 80 80
         ]
         <| E.column
@@ -113,28 +114,32 @@ makeLauncher icon title =
 
 desktop model =
     let
-        item1 = makeLauncher "./icons/0.ico" "My Computer"
-        item2 = makeLauncher "./icons/0.ico" "Webamp"
+        item1 = makeLauncher 
+            Palette.iconMyComputer
+            "My Computer"
+            (Msg.OpenWindow Window.FileExplorerMainWindow)
+        item2 = makeLauncher 
+            Palette.iconWebamp
+            "Webamp"
+            (Msg.OpenWindow Window.WinampMainWindow)
 
         viewHelper windowType viewFunc =
             case Windows.isOpen windowType model.windows of
                 True ->
-                    -- let
-                    --     _ = Debug.log "STILL OPEN" windowType
-                    -- in
                     case (Windows.get windowType model.windows) of
                         (Window.Window t_ geometry) ->
                             case geometry.isMinimized of
                                 True ->
+                                    let
+                                        _ = Debug.log "is Minimized"
+                                    in
                                     E.html <| Html.div [] []
                                 False ->
                                     viewFunc model
                 False ->
-                    -- let
-                    --     _ = (Debug.log "closed: " windowType) 
-                    -- in
                         E.html
                             <| Html.div [] []
+
     in
         E.column
             [ E.alignLeft
@@ -146,10 +151,9 @@ desktop model =
                 <| viewHelper
                     Window.PoorMansOutlookMainWindow
                     View.PoorMansOutlook.poorMansOutlook
-            , E.inFront
-                <| viewHelper
-                    Window.WinampMainWindow
-                    View.WinampRipoff.winampRipoff
+            -- of course, we have to treat webamp differently, simply because of
+            -- unexpected behavior
+            , E.inFront <| View.WinampRipoff.winampRipoff model
             ]
             [ item1
             , item2

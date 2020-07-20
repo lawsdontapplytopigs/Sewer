@@ -35,6 +35,7 @@ poorMansOutlook model =
             Window.PoorMansOutlookMainWindow
             windowGeometry.title
             windowGeometry.isFocused
+            windowGeometry.iconSmall
         toolBar = Windoze.makeToolBar
             [ Windoze.makeToolItem "File"
             , Windoze.makeToolItem "Edit"

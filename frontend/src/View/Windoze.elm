@@ -33,8 +33,10 @@ makeTitleBar :
     -> Window.WindowType 
     -> String 
     -> Bool
+    -> String
     -> E.Element Msg.Msg
-makeTitleBar buttons windowType title isSelected =
+-- TODO: make this just take all the window data as argument
+makeTitleBar buttons windowType title isSelected icon =
     let
         mainPink = E.rgb255 255 180 210
         -- lightPink = E.rgb255 255 255 255
@@ -59,7 +61,21 @@ makeTitleBar buttons windowType title isSelected =
         ++ noHighlight
 
         )
-        [ E.el 
+        [ E.el
+            [ E.height E.fill
+            , E.width <| E.px 24
+            -- , EBackground.color <| E.rgb255 80 80 80
+            ]
+            <| E.image
+                [ E.width <| E.px 16
+                , E.height <| E.px 16
+                , E.centerX
+                , E.centerY
+                ]
+                { src = icon
+                , description = "TODO"
+                }
+        , E.el 
             [ E.alignLeft
             , EFont.size Palette.fontSize1
             , EFont.color <| E.rgb255 20 20 20

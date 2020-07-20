@@ -85,6 +85,7 @@ fileExplorer model =
             Window.FileExplorerMainWindow
             windowGeometry.title
             windowGeometry.isFocused
+            windowGeometry.iconSmall
     in
         E.el
             [ E.htmlAttribute <| Html.Attributes.style "transform" ("translate(" ++ String.fromInt windowGeometry.x ++ "px" ++ ", " ++ String.fromInt windowGeometry.y ++ "px )")

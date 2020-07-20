@@ -20,6 +20,8 @@ module Windows exposing
 import Dict
 import Window
 
+import Palette
+
 type alias Windows =
     Dict.Dict String Window.Window
 
@@ -37,7 +39,8 @@ initFileExplorerMainWindow =
         , isMaximized = False
         , title = "File Explorer - "
         , shouldBeDisplayedInNavbar = True
-        , icon = "./icons/2.ico"
+        , icon = Palette.iconFileExplorer
+        , iconSmall = Palette.iconFileExplorer
         , isFocused = False
         , zIndex = 0
         }
@@ -55,9 +58,10 @@ initWinampMainWindow =
         , wantsToNotBeClosed = False
         , isMinimized = False
         , isMaximized = False
-        , title = "Swamp"
+        , title = "Webamp"
         , shouldBeDisplayedInNavbar = True
-        , icon = "./icons/3.ico"
+        , icon = Palette.iconWebamp
+        , iconSmall = Palette.iconWebamp
         , isFocused = False
         , zIndex = 0
         }
@@ -74,9 +78,10 @@ initPoorMansOutlookMainWindow =
         , wantsToNotBeClosed = False
         , isMinimized = False
         , isMaximized = False
-        , title = "BONK"
+        , title = "MAKE IT STOP PLEASE MAKE IT STOP NNO NO NO NO NO NO"
         , shouldBeDisplayedInNavbar = True
-        , icon = "./icons/4.ico"
+        , icon = Palette.iconPoorMansOutlook
+        , iconSmall = Palette.iconPoorMansOutlookSmall
         , isFocused = False
         , zIndex = 0
         }
@@ -241,6 +246,7 @@ unMinimize windowType windows =
                 Just (Window.Window t_ geometry) ->
                     Just (Window.Window t_
                         { geometry
+                            -- TODO: Maybe separate minimization from actual focusing
                             | isMinimized = False
                             , isFocused = True
                         }

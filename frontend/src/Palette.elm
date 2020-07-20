@@ -20,3 +20,12 @@ white = E.rgb255 255 255 255
 
 color0 = E.rgb255 255 170 210
 color1 = E.rgb255 255 215 228
+
+ic name = "./icons/" ++ name
+
+iconMyComputer = ic "0.ico"
+iconFileExplorer = ic "2.0.png"
+iconFileExplorerSmall = ic "2.1.png"
+iconWebamp = ic "3.png"
+iconPoorMansOutlook = ic "4.0.png"
+iconPoorMansOutlookSmall = ic "4.1.png"

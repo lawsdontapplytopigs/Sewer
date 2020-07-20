@@ -204,7 +204,7 @@ makeNavbar model =
             E.row
                 [ E.padding 1
                 , E.width E.fill
-                , E.height <| E.px 30
+                , E.height <| E.px 32
                 ]
                 [ windozeButton
                 , E.row
@@ -246,7 +246,7 @@ type alias NavbarItem =
 addDisplayable : String -> Window.Window -> List NavbarItem -> List NavbarItem
 addDisplayable _ (Window.Window t_ geometry) navbarItems =
     { title = geometry.title
-    , icon = geometry.icon
+    , icon = geometry.iconSmall
     , windowType = t_
     , isFocused = geometry.isFocused
     } :: navbarItems

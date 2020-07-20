@@ -20,11 +20,29 @@ winampRipoff model =
             case (Windows.get Window.WinampMainWindow model.windows) of
                 (Window.Window t_ geom) ->
                     geom
+
+        shouldShow =
+            let
+                windowType = Window.WinampMainWindow
+            in
+            -- JESUS IT WAS HARD JUST GETTING THIS TO WORK PROPERLY
+            case Windows.isOpen windowType model.windows of
+                True ->
+                    case (Windows.get windowType model.windows) of
+                        (Window.Window t_ geometry) ->
+                            case geometry.isMinimized of
+                                True ->
+                                    "none"
+                                False ->
+                                    "inline"
+                False ->
+                    "none"
     in
     E.html
         <| Html.div
             [ Html.Attributes.id "weenamp"
             , Html.Attributes.style "z-index" (String.fromInt windowData.zIndex)
+            , Html.Attributes.style "display" shouldShow
             ]
             []
 
@@ -45,6 +63,8 @@ jsonToWinampMsg str =
                 WindowClicked
             "minimize" ->
                 Minimize
+            "unMinimize" ->
+                UnMinimize
             _ ->
                 SomethingWentTerriblyWrong 
 
@@ -52,6 +72,7 @@ type WinampMsg
     = WindowClicked
     | Close
     | Minimize
+    | UnMinimize
     | SomethingWentTerriblyWrong -- jk, it's probably just a stupid error on the js side
 
 winampJsonDecoder =

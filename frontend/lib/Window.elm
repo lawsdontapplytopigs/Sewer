@@ -63,6 +63,7 @@ type alias WindowGeometry =
     , wantsToNotBeClosed : Bool
     , shouldBeDisplayedInNavbar : Bool
     , icon : String
+    , iconSmall : String
     , isFocused : Bool
     , zIndex : Int
     }

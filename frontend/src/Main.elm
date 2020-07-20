@@ -113,12 +113,35 @@ update msg model =
             ( { model | time = model.time + dt / 1000 }, Cmd.none )
         Msg.OpenWindow windowType ->
             let
+                newZ =
+                    model.currentZIndex + 1
                 model_ =
                     { model
-                        | windows = Windows.openWindow windowType model.windows
+                        | windows =
+                            model.windows
+                                |> Windows.openWindow windowType
+                                |> Windows.focus windowType
+                                |> Windows.changeZIndex windowType newZ
+                        , currentZIndex = newZ
+                    }
+                cmd_ =
+                    case windowType of
+                        Window.WinampMainWindow ->
+                            winampOut "open"
+                        _ ->
+                            Cmd.none
+            in
+                ( model_, cmd_ )
+
+        Msg.CloseWindow windowType ->
+            let
+                model_ =
+                    { model
+                        | windows = Windows.closeWindow (Debug.log "close" windowType) model.windows
                     }
             in
-                ( model_, Cmd.none )
+                (model_, Cmd.none)
+
         Msg.MouseDownOnTitleBar windowType ->
             let
                 recorded = record windowType model
@@ -230,7 +253,6 @@ update msg model =
                 (model_, Cmd.none)
         Msg.NavbarItemClicked windowType ->
             let
-
                 maybeWin = Dict.get (Window.toString windowType) model.windows
                 window = case maybeWin of 
                     Just win ->
@@ -246,18 +268,39 @@ update msg model =
                                     True
                                 False ->
                                     False
-                model_ = 
+                model_ =
+                    let
+                        newZ = model.currentZIndex + 1
+                    in
                     case isThisWindowTheSameAsTheOneCurrentlyFocused of
                         True ->
                             { model
+                                -- TODO: un-focus everything
                                 | windows = Windows.minimize windowType model.windows
                             }
                         False ->
+                            let
+                                newWins =
+                                    model.windows
+                                        |> Windows.unMinimize windowType
+                                        |> Windows.changeZIndex windowType newZ
+                            in
                             { model 
-                                | windows = Windows.unMinimize windowType model.windows
+                                | windows = newWins
+                                , currentZIndex = newZ
                             }
+
+                cmd_ = case windowType of
+                    Window.WinampMainWindow ->
+                        case isThisWindowTheSameAsTheOneCurrentlyFocused of
+                            True ->
+                                winampOut "minimize"
+                            False ->
+                                winampOut "unMinimize"
+                    _ ->
+                        Cmd.none
             in
-                (model_, Cmd.none)
+                (model_, cmd_)
 
         Msg.WindowClicked windowType ->
             let
@@ -284,18 +327,18 @@ update msg model =
                 newWins = 
                     case (View.WinampRipoff.jsonToWinampMsg str) of
                         View.WinampRipoff.WindowClicked ->
-                            Debug.log "webamp clicked"
                             (model.windows
                                 |> Windows.changeZIndex windowType newZ
                                 |> Windows.focus windowType
                             )
-                        -- TODO
                         View.WinampRipoff.Close ->
-                            Debug.log "for some reason winamp should be closed" model.windows
+                            Windows.closeWindow (Debug.log "close" windowType) model.windows
                         View.WinampRipoff.Minimize ->
-                            model.windows
+                            Windows.minimize windowType model.windows
+                        View.WinampRipoff.UnMinimize ->
+                            Windows.unMinimize windowType model.windows
                         View.WinampRipoff.SomethingWentTerriblyWrong ->
-                            model.windows
+                            Debug.log "something went terribly wrong.........." model.windows
                 model_ = 
                     { model
                         | windows = newWins
@@ -304,14 +347,6 @@ update msg model =
             in
                 (model_, Cmd.none)
 
-        Msg.CloseWindow windowType ->
-            let
-                model_ =
-                    { model
-                        | windows = Windows.closeWindow (Debug.log "close" windowType) model.windows
-                    }
-            in
-                (model_, Cmd.none)
         Msg.OpenWinamp ->
             let
                 model_ = model
@@ -348,11 +383,4 @@ record windowType model =
             , currentTitleBarHeldWindow = 
                 Just windowType
         }
-
--- HELPERS
--- decodeMouse : (Int -> Int -> Msg.Msg) -> JD.Decoder Msg.Msg
--- decodeMouse mapper =
---     JD.map2 mapper
---         (JD.field "clientX" int)
---         (JD.field "clientY" int)
 

@@ -52,14 +52,22 @@
             /*     open.removeEventListener("click", handleClick); */
             /* } */
         });
+        webamp.onMinimize(() => {
+            elm.ports.winampIn.send(JSON.stringify({ "event" : "minimize" }));
+        });
 
         elm.ports.winampOut.subscribe((msg) => {
             if (msg == "open") {
                 webamp.reopen();
+            } else if (msg == "minimize") {
+                elm.ports.winampIn.send(JSON.stringify({ "event" : "minimize" }));
+            } else if (msg == "unMinimize") {
+                elm.ports.winampIn.send(JSON.stringify({ "event" : "unMinimize" }));
             };
-            console.log(msg);
+            console.log("we've got mail... " + msg);
         });
 
+        // this doesn't actually do anything, in spite of webamp's documentation
         let weenamp = document.getElementById("weenamp");
         webamp.renderWhenReady(weenamp);
 
@@ -67,7 +75,12 @@
             let wamp = document.getElementById("weenamp");
             let wa = document.getElementById("webamp");
             wamp.append(wa);
+
+            // for SOME REASON. it doesn't work if we set this up before it is
+            // drawn, but thse things work here if we grab the element and THEN
+            // set all of this up
             wa.onmousedown = () => {
+                /* console.log("webamp clicked"); */
                 elm.ports.winampIn.send(
                     JSON.stringify(
                         { "event" : "windowClicked"
@@ -77,14 +90,13 @@
             };
         };
 
+
         window.onload = resolveQuirks;
         document.body.style.overflow = "hidden";
 
 
     </script>
 
-    <script>
-    </script>
 </body>
 <link href="./fonts/pleaseWork.css" rel="stylesheet" type="text/css">
 </html>
