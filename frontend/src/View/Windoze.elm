@@ -39,9 +39,10 @@ makeTitleBar :
 -- TODO: make this just take all the window data as argument
 makeTitleBar buttons windowType title isSelected icon =
     let
-        mainPink = E.rgb255 255 180 210
+        -- mainPink = E.rgb255 255 180 210
+        mainPink = E.rgb255 235 190 250
         -- lightPink = E.rgb255 255 255 255
-        selectedPink = E.rgb255 200 100 140
+        selectedPink = E.rgb255 210 120 240
         titlebarColor =
             case isSelected of
                 True ->

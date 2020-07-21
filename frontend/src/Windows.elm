@@ -42,7 +42,7 @@ initFileExplorerMainWindow =
         , icon = Palette.iconFileExplorer
         , iconSmall = Palette.iconFileExplorer
         , isFocused = False
-        , zIndex = 0
+        , zIndex = 1
         }
 
 initWinampMainWindow =
@@ -69,7 +69,7 @@ initWinampMainWindow =
 initPoorMansOutlookMainWindow =
     Window.Window
         Window.PoorMansOutlookMainWindow
-        { x = 1200
+        { x = 300
         , y = 150
         , width = 800
         , height = 600
@@ -78,7 +78,7 @@ initPoorMansOutlookMainWindow =
         , wantsToNotBeClosed = False
         , isMinimized = False
         , isMaximized = False
-        , title = "PAIN"
+        , title = "MAIL"
         , shouldBeDisplayedInNavbar = True
         , icon = Palette.iconPoorMansOutlook
         , iconSmall = Palette.iconPoorMansOutlookSmall
