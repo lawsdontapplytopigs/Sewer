@@ -11,6 +11,9 @@ import Programs.FileExplorer
 import Programs.WinampRipoff
 import Programs.PoorMansOutlook
 
+import Task
+import Time
+
 import View.WinampRipoff
 
 import View.Desktop
@@ -39,7 +42,8 @@ type alias Programs =
     }
 
 type alias Model =
-    { time : Float
+    { time : Time.Posix
+    , zone : Time.Zone
     , absoluteX : Int
     , absoluteY : Int
 
@@ -71,9 +75,9 @@ type alias AlbumData =
 init : () -> ( Model, Cmd Msg.Msg )
 init flags = 
     let
-
         model =
-            { time = 0
+            { time = Time.millisToPosix 0
+            , zone = Time.utc
             , absoluteX = 0
             , absoluteY = 0
 
@@ -101,7 +105,7 @@ init flags =
             }
 
         cmds =
-            Cmd.none
+            Task.perform Msg.AdjustTimeZone Time.here
     in
         ( model, cmds )
 
@@ -109,8 +113,6 @@ init flags =
 update : Msg.Msg -> Model -> ( Model, Cmd Msg.Msg )
 update msg model =
     case msg of
-        Msg.Tick dt ->
-            ( { model | time = model.time + dt / 1000 }, Cmd.none )
         Msg.OpenWindow windowType ->
             let
                 newZ =
@@ -141,6 +143,15 @@ update msg model =
                     }
             in
                 (model_, Cmd.none)
+
+        Msg.MinimizeWindow windowType ->
+            let
+                model_ =
+                    { model
+                        | windows = Windows.minimize windowType model.windows
+                    }
+            in
+                ( model_, Cmd.none )
 
         Msg.MouseDownOnTitleBar windowType ->
             let
@@ -347,15 +358,31 @@ update msg model =
             in
                 (model_, Cmd.none)
 
-        Msg.OpenWinamp ->
+        Msg.Tick time ->
             let
-                model_ = model
+                model_ =
+                    { model
+                        | time = time
+                    }
             in
-                (model_, winampOut "open")
+                (model_, Cmd.none)
+        Msg.AdjustTimeZone zone ->
+            let
+                model_ =
+                    { model
+                        | zone = zone
+                    }
+            in
+                (model_, Cmd.none)
+        Msg.NoOp ->
+            ( model, Cmd.none )
 
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
-    winampIn Msg.WinampIn
+    Sub.batch
+        [ winampIn Msg.WinampIn
+        , Time.every 1000 Msg.Tick
+        ]
 
 record : Window.WindowType -> Model -> Model
 record windowType model =

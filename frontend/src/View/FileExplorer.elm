@@ -24,7 +24,7 @@ import View.Windoze as Windoze
 
 fileExplorer model =
     let
-        imageSize = 100
+        imageSize = 80
         widthSpacing = 40
         heightSpacing = 40
 
@@ -58,7 +58,7 @@ fileExplorer model =
                         -- , EBackground.color <| E.rgb255  240 190 10
                         -- TODO: take this out & refactor. 
                         -- It wouldn't be needed if the code were written properly
-                        , E.paddingEach { top = 60, right = 0, bottom = 0, left = 0 }                 
+                        , E.paddingEach { top = 40, right = 0, bottom = 0, left = 0 }                 
                         ]
                         [ E.row
                             [ E.spacing widthSpacing
@@ -80,7 +80,15 @@ fileExplorer model =
             -- { mouseDownMsg = Msg.FileExplorerMouseDownOnTitleBar
             -- , mouseUpMsg = Msg.FileExplorerMouseUpOnTitleBar
             -- }
-            [ Windoze.makeButton Icons.xIcon (Msg.CloseWindow Window.FileExplorerMainWindow)
+            [ E.row
+                [ E.width <| E.px 48
+                -- , EBackground.color <| E.rgb255 80 80 80
+                , E.spacing 7
+                ]
+                [ Windoze.minimizeButton (E.rgb255 0 0 0) (Just (Msg.MinimizeWindow Window.FileExplorerMainWindow))
+                , Windoze.maximizeButton (E.rgb255 0 0 0) (Just Msg.NoOp)
+                ]
+            , Windoze.xButton (E.rgb255 0 0 0) (Just (Msg.CloseWindow Window.FileExplorerMainWindow))
             ]
             Window.FileExplorerMainWindow
             windowGeometry.title
@@ -110,6 +118,13 @@ fileExplorer model =
                                 <| toolBar
                             , Windoze.type1Level1DepressedBorder 
                                 <| Windoze.type1Level2DepressedBorder wholeContent
+                            , E.el
+                                [ E.width E.fill
+                                , EBackground.color Palette.color0
+                                , EBorder.widthEach { top = 2, right = 0, bottom = 0, left = 0 }
+                                , EBorder.color <| Palette.color0
+                                ]
+                                <| Windoze.makeInfoBar "8 objects" "99999999999999999999kb"
                             ]
 
 makeAlbum : 

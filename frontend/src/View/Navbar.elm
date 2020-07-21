@@ -1,7 +1,6 @@
 module View.Navbar exposing 
     ( makeNavbar )
 
-
 import Dict
 
 import Element as E
@@ -15,9 +14,11 @@ import Html.Attributes
 import Msg
 import Palette
 
+import Time
+
+import View.Windoze as Windoze
 import Window
 import Windows
-import View.Windoze as Windoze
 
 makeNavbar model =
     let
@@ -103,45 +104,6 @@ makeNavbar model =
                     ]
                         <| content_
 
-        clock =
-            E.el
-                [ E.height E.fill
-                ]
-                <| E.el
-                    [ E.height E.fill
-                    , EFont.family
-                        [ EFont.typeface Palette.font0
-                        ]
-                    , EFont.size Palette.fontSize0
-                    , E.paddingXY 0 1
-                    ]
-                    <| Windoze.type1Level1DepressedBorder
-                        <| E.row
-                            [ E.width <| E.px 96
-                            , E.height E.fill
-                            ]
-                            [ E.el
-                                [ E.height E.fill
-                                , E.width <| E.px 20
-                                ]
-                                <| E.image
-                                    [ E.centerY
-                                    , E.centerX
-                                    -- , EBackground.color <| E.rgb255 20 20 20
-                                    , E.height <| E.px 16
-                                    , E.width <| E.px 16
-                                    ]
-                                    { src = "./icons/2.ico"
-                                    , description = "should be volume, but i dont have that yet"
-                                    }
-                            , E.el
-                                [ E.centerY
-                                , E.alignRight
-                                , E.paddingEach { top = 0, right = 8, bottom = 0, left = 0 }
-                                ]
-                                <| E.text "12:41 PM"
-                            ]
-
         windozeButton = 
             E.el
                 [ E.height E.fill
@@ -221,7 +183,7 @@ makeNavbar model =
                         -- [ makeProgramItem 
                             -- { programTitle, iconData } window =
                         -- ]
-                , clock
+                , clock model
                 ]
     in
         
@@ -250,3 +212,115 @@ addDisplayable _ (Window.Window t_ geometry) navbarItems =
     , windowType = t_
     , isFocused = geometry.isFocused
     } :: navbarItems
+
+clock model =
+    let
+        amORpm =
+            if (Time.toHour model.zone model.time) < 12 then
+                "AM"
+            else
+                "PM"
+
+        hour = 
+            let
+                looped = remainderBy 12 (Time.toHour model.zone model.time)
+            in
+                if looped == 0 then
+                    12
+                else
+                    looped
+            -- case Time.toHour model.zone model.time of
+            --     0 ->
+            --         12
+            --     1 -> 
+            --         1
+            --     2 ->
+            --         2
+            --     3 ->
+            --         3
+            --     4 ->
+            --         4
+            --     5 ->
+            --         5
+            --     6 ->
+            --         6
+            --     7 ->
+            --         7
+            --     8 ->
+            --         8
+            --     9 ->
+            --         9
+            --     10 ->
+            --         10
+            --     11 ->
+            --         11
+            --     12 ->
+            --         12
+            --     13 ->
+            --         1
+            --     14 ->
+            --         2
+            --     15 ->
+            --         3
+            --     16 ->
+            --         4
+            --     17 ->
+            --         5
+            --     18 ->
+            --         6
+            --     19 ->
+            --         7
+            --     20 ->
+            --         8
+            --     21 ->
+            --         9
+            --     22 ->
+            --         10
+            --     _ ->
+            --         11
+
+        minutes = Time.toHour model.zone model.time
+    in
+    E.el
+        [ E.height E.fill
+        ]
+        <| E.el
+            [ E.height E.fill
+            , EFont.family
+                [ EFont.typeface Palette.font0
+                ]
+            , EFont.size Palette.fontSize0
+            , E.paddingXY 0 1
+            ]
+            <| Windoze.type1Level1DepressedBorder
+                <| E.row
+                    [ E.width <| E.px 96
+                    , E.height E.fill
+                    ]
+                    [ E.el
+                        [ E.height E.fill
+                        , E.width <| E.px 20
+                        ]
+                        <| E.image
+                            [ E.centerY
+                            , E.centerX
+                            -- , EBackground.color <| E.rgb255 20 20 20
+                            , E.height <| E.px 16
+                            , E.width <| E.px 16
+                            ]
+                            { src = Palette.iconSpeakerSmall
+                            , description = "should be volume, but i dont have that yet"
+                            }
+                    , E.el
+                        [ E.centerY
+                        , E.alignRight
+                        , E.paddingEach { top = 0, right = 8, bottom = 0, left = 0 }
+                        ]
+                        <| E.text 
+                            <| String.fromInt hour
+                            ++ ":"
+                            ++ String.fromInt minutes
+                            ++ " "
+                            ++ amORpm
+                    ]
+

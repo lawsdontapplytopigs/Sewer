@@ -30,7 +30,15 @@ poorMansOutlook model =
                     geometry
 
         titleBar = Windoze.makeTitleBar
-            [ Windoze.makeButton Icons.xIcon (Msg.CloseWindow Window.PoorMansOutlookMainWindow)
+            [ E.row
+                [ E.width <| E.px 48
+                -- , EBackground.color <| E.rgb255 80 80 80
+                , E.spacing 7
+                ]
+                [ Windoze.minimizeButton (E.rgb255 0 0 0) (Just (Msg.MinimizeWindow Window.PoorMansOutlookMainWindow))
+                , Windoze.maximizeButton (E.rgb255 0 0 0) (Just Msg.NoOp)
+                ]
+            , Windoze.xButton (E.rgb255 0 0 0) (Just (Msg.CloseWindow Window.PoorMansOutlookMainWindow))
             ]
             Window.PoorMansOutlookMainWindow
             windowGeometry.title

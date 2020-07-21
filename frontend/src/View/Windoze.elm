@@ -6,6 +6,7 @@ import Element.Background as EBackground
 import Element.Border as EBorder
 import Element.Events as EEvents
 import Element.Font as EFont
+import Element.Input as EInput
 
 import Html.Events 
 import Html.Attributes
@@ -50,16 +51,16 @@ makeTitleBar buttons windowType title isSelected icon =
     in
     E.row
         (
-        [ E.height <| E.px 32
+        [ E.height <| E.px 24
         , E.width E.fill
         , EBackground.color titlebarColor
-        , EEvents.onMouseDown <| Msg.MouseDownOnTitleBar windowType
+        -- TODO: make it so you can click buttons, and not be able to drag the window
+        , EEvents.onMouseDown <| Msg.MouseDownOnTitleBar windowType 
         , EEvents.onMouseUp <| Msg.MouseUpOnTitleBar
         -- , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.TitleBarMouseMoved prog screenCoords)
         ]
         -- let's make sure you can't highlight text in the titlebar
         ++ noHighlight
-
         )
         [ E.el
             [ E.height E.fill
@@ -86,11 +87,13 @@ makeTitleBar buttons windowType title isSelected icon =
             , E.paddingEach { top = 0, right = 0, bottom = 0, left = 5 }
             ]
             <| E.text title
-        , E.row
+        , E.el
             [ E.alignRight
             , E.height E.fill
-            , E.paddingEach { top = 0, right = 0, bottom = 0, left = 200 }
+            , E.paddingEach { top = 0, right = 5, bottom = 0, left = 200 }
             , EBackground.color titlebarColor
+            , E.centerY
+            -- , EBackground.color <| E.rgb255 20 20 20
             -- , EBackground.gradient 
             --     { angle = 3.14 / 2
             --     , steps = 
@@ -99,7 +102,10 @@ makeTitleBar buttons windowType title isSelected icon =
             --         ]
             --     }
             ]
-            buttons
+            <| E.row
+                [ E.centerY
+                ]
+                buttons
         ]
 
 screenCoords : JDecode.Decoder Coords
@@ -355,4 +361,447 @@ hSeparator =
             ]
             <| E.none
         ]
+
+xButton color msg =
+    let
+
+        p = 1
+
+        buttonWidth = (12 * p)
+        buttonHeight = (10 * p)
+
+        px col =
+            E.el
+                [ E.width <| E.px p
+                , E.height <| E.px p
+                , EBackground.color col
+                ]
+                <| E.none
+
+        fillWidth w = 
+            E.el
+                [ E.width <| E.px (p * w)
+                , E.height <| E.px p
+                ]
+                <| E.none
+
+        row1 =
+            E.row
+                [ 
+                ]
+                [ fillWidth buttonWidth
+                ]
+        row2 =
+            E.row
+                [
+                ]
+                [ fillWidth 2
+                , px color
+                , px color
+                , fillWidth 4
+                , px color
+                , px color
+                , fillWidth 2
+                ]
+        row3 =
+            E.row
+                [
+                ]
+                [ fillWidth 3
+                , px color
+                , px color
+                , fillWidth 2
+                , px color
+                , px color
+                , fillWidth 3
+                ]
+        row4 =
+            E.row
+                [
+                ]
+                [ fillWidth 4
+                , px color
+                , px color
+                , px color
+                , px color
+                , fillWidth 4
+                ]
+        row5 =
+            E.row
+                [
+                ]
+                [ fillWidth 5
+                , px color
+                , px color
+                , fillWidth 5
+                ]
+        row6 =
+            E.row
+                [
+                ]
+                [ fillWidth 4
+                , px color
+                , px color
+                , px color
+                , px color
+                , fillWidth 4
+                ]
+        row7 =
+            E.row
+                [
+                ]
+                [ fillWidth 3
+                , px color
+                , px color
+                , fillWidth 2
+                , px color
+                , px color
+                , fillWidth 3
+                ]
+        row8 =
+            E.row
+                [
+                ]
+                [ fillWidth 2
+                , px color
+                , px color
+                , fillWidth 4
+                , px color
+                , px color
+                , fillWidth 2
+                ]
+        row9 =
+            E.row
+                [ 
+                ]
+                [ fillWidth buttonWidth
+                ]
+        row10 =
+            E.row
+                [ 
+                ]
+                [ fillWidth buttonWidth
+                ]
+
+        drawing =
+            E.column
+                -- [ E.width <| E.px buttonWidth
+                -- , E.height <| E.px buttonHeight
+                -- ]
+                [
+                ]
+                [ row1
+                , row2
+                , row3
+                , row4
+                , row5
+                , row6
+                , row7
+                , row8
+                , row9
+                , row10
+                ]
+    in
+        
+        E.el
+            [ E.height <| E.px (buttonHeight + 4)
+            , E.width <| E.px (buttonWidth + 4)
+            , E.htmlAttribute <| Html.Attributes.style "transform" "scale(1.4)"
+            ]
+            <| EInput.button
+                [ EBackground.color Palette.color0
+                , E.width E.fill
+                , E.height E.fill
+                , EBorder.width 0
+                -- , EBorder.color <| E.rgb255 200 100 140
+                , EBorder.color <| E.rgba255 0 0 0 0
+                , E.focused
+                    [ EBorder.color <| E.rgba255 0 0 0 1
+                    ]
+                ]
+                { onPress = msg
+                , label =
+                    type2Level2RaisedBorder
+                        <| type2Level1RaisedBorder
+                            drawing
+                            -- E.image
+                            --     [ E.height <| E.px 10
+                            --     , E.width <| E.px 12
+                            --     ]
+                            --     { src = "./icons/xButton.png"
+                            --     , description = "uhhhh"
+                            --     }
+                }
+                    
+
+-- TODO
+maximizeButton color msg =
+    let
+
+        p = 1
+
+        buttonWidth = (12 * p)
+        buttonHeight = (10 * p)
+
+        px col =
+            E.el
+                [ E.width <| E.px p
+                , E.height <| E.px p
+                , EBackground.color col
+                ]
+                <| E.none
+
+        fillWidth w = 
+            E.el
+                [ E.width <| E.px (p * w)
+                , E.height <| E.px p
+                ]
+                <| E.none
+
+        row1 =
+            E.row
+                [ 
+                ]
+                [ fillWidth 1
+                , px color
+                , px color
+                , px color
+                , px color
+                , px color
+                , px color
+                , px color
+                , px color
+                , px color
+                , fillWidth 2
+                ]
+        row2 =
+            row1
+        row3 =
+            E.row
+                [
+                ]
+                [ fillWidth 1
+                , px color
+                , fillWidth 7
+                , px color
+                , fillWidth 2
+                ]
+        row4 =
+            row3
+        row5 =
+            row3
+        row6 =
+            row3
+        row7 =
+            row3
+        row8 =
+            row3
+        row9 =
+            row1
+        row10 =
+            E.row
+                [ 
+                ]
+                [ fillWidth buttonWidth
+                ]
+
+        drawing =
+            E.column
+                -- [ E.width <| E.px buttonWidth
+                -- , E.height <| E.px buttonHeight
+                -- ]
+                [
+                ]
+                [ row1
+                , row2
+                , row3
+                , row4
+                , row5
+                , row6
+                , row7
+                , row8
+                , row9
+                , row10
+                ]
+    in
+        
+        E.el
+            [ E.height <| E.px (buttonHeight + 4)
+            , E.width <| E.px (buttonWidth + 4)
+            , E.htmlAttribute <| Html.Attributes.style "transform" "scale(1.4)"
+            ]
+            <| EInput.button
+                [ EBackground.color Palette.color0
+                , E.width E.fill
+                , E.height E.fill
+                , EBorder.width 0
+                -- , EBorder.color <| E.rgb255 200 100 140
+                , EBorder.color <| E.rgba255 0 0 0 0
+                , E.focused
+                    [ EBorder.color <| E.rgba255 0 0 0 1
+                    ]
+                ]
+                { onPress = msg
+                , label =
+                    type2Level2RaisedBorder
+                        <| type2Level1RaisedBorder
+                            drawing
+                            -- E.image
+                            --     [ E.height <| E.px 10
+                            --     , E.width <| E.px 12
+                            --     ]
+                            --     { src = "./icons/xButton.png"
+                            --     , description = "uhhhh"
+                            --     }
+                }
+
+minimizeButton color msg =
+    let
+
+        p = 1
+
+        buttonWidth = (12 * p)
+        buttonHeight = (10 * p)
+
+        px col =
+            E.el
+                [ E.width <| E.px p
+                , E.height <| E.px p
+                , EBackground.color col
+                ]
+                <| E.none
+
+        fillWidth w = 
+            E.el
+                [ E.width <| E.px (p * w)
+                , E.height <| E.px p
+                ]
+                <| E.none
+
+        row1 =
+            E.row
+                [ 
+                ]
+                [ fillWidth buttonWidth
+                ]
+        row2 =
+            row1
+        row3 =
+            row1
+        row4 =
+            row1
+        row5 =
+            row1
+        row6 =
+            row1
+        row7 =
+            row1
+        row8 =
+            E.row
+                [
+                ]
+                [ fillWidth 2
+                , px color
+                , px color
+                , px color
+                , px color
+                , px color
+                , px color
+                , fillWidth 4
+                ]
+        row9 =
+            row8
+        row10 =
+            row1
+
+        drawing =
+            E.column
+                -- [ E.width <| E.px buttonWidth
+                -- , E.height <| E.px buttonHeight
+                -- ]
+                [
+                ]
+                [ row1
+                , row2
+                , row3
+                , row4
+                , row5
+                , row6
+                , row7
+                , row8
+                , row9
+                , row10
+                ]
+    in
+        
+        E.el
+            [ E.height <| E.px (buttonHeight + 4)
+            , E.width <| E.px (buttonWidth + 4)
+            , E.htmlAttribute <| Html.Attributes.style "transform" "scale(1.4)"
+            ]
+            <| EInput.button
+                [ EBackground.color Palette.color0
+                , E.width E.fill
+                , E.height E.fill
+                , EBorder.width 0
+                -- , EBorder.color <| E.rgb255 200 100 140
+                , EBorder.color <| E.rgba255 0 0 0 0
+                , E.focused
+                    [ EBorder.color <| E.rgba255 0 0 0 1
+                    ]
+                ]
+                { onPress = msg
+                , label =
+                    type2Level2RaisedBorder
+                        <| type2Level1RaisedBorder
+                            drawing
+                            -- E.image
+                            --     [ E.height <| E.px 10
+                            --     , E.width <| E.px 12
+                            --     ]
+                            --     { src = "./icons/xButton.png"
+                            --     , description = "uhhhh"
+                            --     }
+                }
+
+-- I call "infobars" the bars that windows 95 sometimes had on some programs
+-- for example the slightly depressed bar at the bottom where there was some
+-- info like Kb of the file(s), or how many files are there, etc
+makeInfoBar text1 text2 =
+    E.row
+        [ EFont.family
+            [ EFont.typeface Palette.font0
+            ]
+        , EFont.size Palette.fontSize0
+        , E.width E.fill
+        , E.spacing 2
+        ]
+        [ E.el
+            [ E.width (E.maximum 120 E.fill)
+            ]
+            <| type1Level1DepressedBorder
+                <| E.el
+                    (
+                    [ E.padding 4
+                    -- , EBackground.color <| E.rgb255 20 20 20
+                    ]
+                    ++ noHighlight
+                    )
+                    <| E.text text1
+        , type1Level1DepressedBorder 
+            <| E.el
+                (
+                [ E.width E.fill
+                , E.padding 4
+                ]
+                ++ noHighlight
+                )
+                <| E.text text2
+        ]
+
+
+
+
+
+
 
