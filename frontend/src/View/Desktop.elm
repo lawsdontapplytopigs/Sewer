@@ -130,9 +130,6 @@ desktop model =
                         (Window.Window t_ geometry) ->
                             case geometry.isMinimized of
                                 True ->
-                                    let
-                                        _ = Debug.log "is Minimized"
-                                    in
                                     E.html <| Html.div [] []
                                 False ->
                                     viewFunc model

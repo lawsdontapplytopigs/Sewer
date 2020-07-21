@@ -33,9 +33,28 @@ cp "$IC/loudspeaker_rays-1.png" ./built/icons/5.1.png
 cp -r ./prebuilt/fonts ./built/
 cp -r ./prebuilt/albums ./built/
 
+
 # all the js
 cp ./prebuilt/webamp.bundle.min.js ./built/webamp.bundle.min.js
 # all the css
 cp ./prebuilt/general.css ./built/general.css
 
-elm make ./src/Main.elm --output=./built/app.js
+JS="./built/elm.js"
+MIN="./built/elm.min.js"
+ELM_MAIN="./src/Main.elm"
+
+
+if [[ "$1" = "--optimize" ]]; then
+    
+    elm make $ELM_MAIN --optimize --output="$JS"
+    uglifyjs $JS --compress 'pure_funcs="F2,F3,F4,F5,F6,F7,F8,F9,A2,A3,A4,A5,A6,A7,A8,A9",pure_getters,keep_fargs=false,unsafe_comps,unsafe' | uglifyjs --mangle > $MIN
+    echo "Compiled size:$(cat $JS | wc -c) bytes  ($JS)"
+    echo "Minified size:$(cat $MIN | wc -c) bytes  ($MIN)"
+    echo "Gzipped size: $(cat $MIN | gzip -c | wc -c) bytes"
+else
+    elm make $ELM_MAIN --output="$JS"
+
+fi
+
+
+

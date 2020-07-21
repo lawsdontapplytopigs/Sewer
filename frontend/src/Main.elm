@@ -139,7 +139,7 @@ update msg model =
             let
                 model_ =
                     { model
-                        | windows = Windows.closeWindow (Debug.log "close" windowType) model.windows
+                        | windows = Windows.closeWindow windowType model.windows
                     }
             in
                 (model_, Cmd.none)
@@ -254,12 +254,12 @@ update msg model =
                 ( model_, cmd_ )
         Msg.TryToSendEmail ->
             let
-                model_ = Debug.log "sent?" model
+                model_ = model
             in
                 ( model_, Cmd.none )
         Msg.StartButtonPressed ->
             let
-                model_ = Debug.log "START" model
+                model_ = model
             in
                 (model_, Cmd.none)
         Msg.NavbarItemClicked windowType ->
@@ -343,13 +343,13 @@ update msg model =
                                 |> Windows.focus windowType
                             )
                         View.WinampRipoff.Close ->
-                            Windows.closeWindow (Debug.log "close" windowType) model.windows
+                            Windows.closeWindow windowType model.windows
                         View.WinampRipoff.Minimize ->
                             Windows.minimize windowType model.windows
                         View.WinampRipoff.UnMinimize ->
                             Windows.unMinimize windowType model.windows
                         View.WinampRipoff.SomethingWentTerriblyWrong ->
-                            Debug.log "something went terribly wrong.........." model.windows
+                            model.windows
                 model_ = 
                     { model
                         | windows = newWins
