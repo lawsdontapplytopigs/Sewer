@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <script src="./elm.min.js" type="text/javascript"></script>
+    <script src="./elm.js" type="text/javascript"></script>
     <!-- <script src="https://unpkg.com/webamp@1.4.0/built/webamp.bundle.min.js"></script> -->
     <script src="./webamp.bundle.min.js" type="text/javascript"></script>
     <link href="./fonts/fonts.css" rel="stylesheet">
@@ -11,7 +11,6 @@
 <body>
     <div>
         You need to have javascript enabled for this site to render.
-        (But we could just have the text of this site here, and you could still read it.)
     </div>
     <div id="elm-node"></div>
     <script>
@@ -33,82 +32,96 @@
 
         <script>
 
-        const webamp = new Webamp({
-            initialTracks: [
-                {
-                    metadata: {
-                        artist: "Sewerslvt",
-                        title: "Love Is A Mighty Big Word",
+        let data = (title) => {
+            let rt =
+                { 
+                    artist: "Sewerslvt",
+                    title: title,
+                    album: "Draining Love Story"
+                };
+            return rt
+        };
+
+        async function main() {
+            const webamp = new Webamp({
+                initialTracks: [
+                    {
+                        metaData: data("Love Is A Mighty Big Word"),
+                        duration : 131,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LoveIsAMightyBigWord.mp3",
                     },
-                    url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LoveIsAMightyBigWord.mp3",
-                    duration : 138,
-                },
-                /* { */
-                /*     defaultName: "Newlove", */
-                /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Newlove.mp3", */
-                /* }, */
-                /* { */
-                /*     defaultName: "Yandere Complex", */
-                /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/YandereComplex.mp3", */
-                /* }, */
-                /* { */
-                /*     defaultName: "Ecifiricas", */
-                /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Ecifiricas.mp3", */
-                /* }, */
-                /* { */
-                /*     defaultName: "Lexapro Delirium", */
-                /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LexaproDelirium.mp3", */
-                /* }, */
-                /* { */
-                /*     defaultName: "This Fleeting Feeling", */
-                /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/ThisFleetingFeeling.mp3", */
-                /* }, */
-                /* { */
-                /*     defaultName: "Swinging In His Cell", */
-                /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/SwingingInHisCell.mp3", */
-                /* }, */
-                /* { */
-                /*     defaultName: "Mr. Kill Myself", */
-                /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Mr.KillMyself.mp3", */
-                /* }, */
-                /* { */
-                /*     defaultName: "Down The Drain (feat. Nurtheon)", */
-                /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/DownTheDrain.mp3", */
-                /* }, */
-                /* { */
-                /*     defaultName: "Slowdeath", */
-                /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Slowdeath.mp3", */
-                /* }, */
-            ],
-        });
+                    {
+                        metaData: data("Newlove"),
+                        duration : 359,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Newlove.mp3",
+                    },
+                    {
+                        metaData: data("Yandere Complex"),
+                        duration: 250,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/YandereComplex.mp3",
+                    },
+                    {
+                        metaData: data("Ecifircas"),
+                        duration: 347,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Ecifircas.mp3",
+                    },
+                    {
+                        metaData: data("Lexapro Delirium"),
+                        duration: 435,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LexaproDelirium.mp3",
+                    },
+                    {
+                        metaData: data("This Fleeting Feeling"),
+                        duration: 211,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/ThisFleetingFeeling.mp3",
+                    },
+                    {
+                        metaData: data("Swinging In His Cell"),
+                        duration: 322,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/SwingingInHisCell.mp3",
+                    },
+                    {
+                        metaData: data("Mr. Kill Myself"),
+                        duration: 471,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Mr.KillMyself.mp3",
+                    },
+                    {
+                        metaData: data("Down The Drain (feat. Nurtheon)"),
+                        duration: 488,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/DownTheDrain.mp3",
+                    },
+                    {
+                        metaData: data("Slowdeath"),
+                        duration: 492,
+                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Slowdeath.mp3",
+                    },
+                ],
+            });
 
-        webamp.onClose(() => {
-            elm.ports.winampIn.send(JSON.stringify({ "event" : "close" }));
-            /* function handleClick() { */
-            /*     webamp.reopen(); */
-            /*     open.remove(); */
-            /*     open.removeEventListener("click", handleClick); */
-            /* } */
-        });
-        webamp.onMinimize(() => {
-            elm.ports.winampIn.send(JSON.stringify({ "event" : "minimize" }));
-        });
-
-        elm.ports.winampOut.subscribe((msg) => {
-            if (msg == "open") {
-                webamp.reopen();
-            } else if (msg == "minimize") {
+            webamp.onClose(() => {
+                elm.ports.winampIn.send(JSON.stringify({ "event" : "close" }));
+            });
+            webamp.onMinimize(() => {
                 elm.ports.winampIn.send(JSON.stringify({ "event" : "minimize" }));
-            } else if (msg == "unMinimize") {
-                elm.ports.winampIn.send(JSON.stringify({ "event" : "unMinimize" }));
-            };
-            console.log("we've got mail... " + msg);
-        });
+            });
+            elm.ports.winampOut.subscribe((msg) => {
+                if (msg == "open") {
+                    webamp.reopen();
+                } else if (msg == "minimize") {
+                    elm.ports.winampIn.send(JSON.stringify({ "event" : "minimize" }));
+                } else if (msg == "unMinimize") {
+                    elm.ports.winampIn.send(JSON.stringify({ "event" : "unMinimize" }));
+                };
+                console.log("we've got mail... " + msg);
+            });
 
-        // this doesn't actually do anything, in spite of webamp's documentation
-        let weenamp = document.getElementById("weenamp");
-        webamp.renderWhenReady(weenamp);
+            // this doesn't actually do anything, in spite of webamp's documentation
+            let weenamp = document.getElementById("weenamp");
+            webamp.renderWhenReady(weenamp);
+        };
+        main();
 
+        
         let resolveQuirks = () => {
             let wamp = document.getElementById("weenamp");
             let wa = document.getElementById("webamp");
@@ -128,11 +141,8 @@
             };
         };
 
-
         window.onload = resolveQuirks;
         document.body.style.overflow = "hidden";
-
-
     </script>
 
 </body>
