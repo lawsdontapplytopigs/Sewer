@@ -4,7 +4,7 @@ module Windows exposing
     , get
     , initWindows
     , initFileExplorerMainWindow
-    , initWinampMainWindow
+    , initMediaPlayerMainWindow
     , initPoorMansOutlookMainWindow
     , isOpen
     , openWindow
@@ -42,28 +42,27 @@ initFileExplorerMainWindow =
         , icon = Palette.iconFileExplorer
         , iconSmall = Palette.iconFileExplorer
         , isFocused = False
-        , zIndex = 1
+        , zIndex = 0
         }
 
-initWinampMainWindow =
-    -- since we're using webamp, a lot of this data is now not really useful
+initMediaPlayerMainWindow =
     Window.Window
-        Window.WinampMainWindow
+        Window.MediaPlayerMainWindow
         { x = 400
         , y = 200
-        , width = 400
-        , height = 300
+        , width = 320
+        , height = 500
         , minWidth = 300
         , minHeight = 200
         , wantsToNotBeClosed = False
         , isMinimized = False
         , isMaximized = False
-        , title = "Webamp"
+        , title = "media player"
         , shouldBeDisplayedInNavbar = True
         , icon = Palette.iconWebamp
         , iconSmall = Palette.iconWebamp
         , isFocused = False
-        , zIndex = 0
+        , zIndex = 1
         }
 
 initPoorMansOutlookMainWindow =
@@ -93,8 +92,8 @@ initWindows =
             (   "FileExplorerMainWindow"
             ,   initFileExplorerMainWindow
             )
-        ,   (   "WinampMainWindow"
-            ,   initWinampMainWindow
+        ,   (   "MediaPlayerMainWindow"
+            ,   initMediaPlayerMainWindow
             )
         ,   (   "PoorMansOutlookMainWindow"
             ,   initPoorMansOutlookMainWindow
@@ -119,8 +118,8 @@ toDefault windowType =
     case windowType of
         Window.FileExplorerMainWindow ->
             initFileExplorerMainWindow
-        Window.WinampMainWindow ->
-            initWinampMainWindow
+        Window.MediaPlayerMainWindow ->
+            initMediaPlayerMainWindow
         Window.PoorMansOutlookMainWindow ->
             initPoorMansOutlookMainWindow
 
@@ -131,8 +130,8 @@ openWindow windowType windows =
             case windowType of
                 Window.FileExplorerMainWindow ->
                     initFileExplorerMainWindow
-                Window.WinampMainWindow ->
-                    initWinampMainWindow
+                Window.MediaPlayerMainWindow ->
+                    initMediaPlayerMainWindow
                 Window.PoorMansOutlookMainWindow ->
                     initPoorMansOutlookMainWindow
         windowKey = Window.toString windowType

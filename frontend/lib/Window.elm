@@ -43,7 +43,7 @@ type Window =
 
 type WindowType
     = FileExplorerMainWindow
-    | WinampMainWindow
+    | MediaPlayerMainWindow
     | PoorMansOutlookMainWindow
 
 -- TODO: Maybe I can work out some better data type to hold all this together..
@@ -153,8 +153,8 @@ toString window =
     case window of
         FileExplorerMainWindow ->
             "FileExplorerMainWindow"
-        WinampMainWindow ->
-            "WinampMainWindow"
+        MediaPlayerMainWindow ->
+            "MediaPlayerMainWindow"
         PoorMansOutlookMainWindow ->
             "PoorMansOutlookMainWindow"
 

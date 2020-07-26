@@ -4,11 +4,13 @@ module Msg exposing
 
 import Time exposing (Posix)
 import Window
+import Programs.MediaPlayer
 
 type Msg
     = Tick Time.Posix
     | AdjustTimeZone Time.Zone
 
+    -- Window Related
     | OpenWindow Window.WindowType
     | CloseWindow Window.WindowType
     | MinimizeWindow Window.WindowType
@@ -17,7 +19,7 @@ type Msg
     | MouseMoved Coords
     | WindowClicked Window.WindowType
 
-    -- navbar
+    -- Navbar
     | StartButtonPressed
     -- TODO: We can take this out if we have each navbar item decide what to do
     -- when clicked. for example, whether the navbar item clicked should send a
@@ -30,11 +32,24 @@ type Msg
     | EmailContentInput String
     | TryToSendEmail
 
-    -- webamp related
-    | WinampIn String
+    -- Audio Related
+    | GotSongData Programs.MediaPlayer.SongData
+    | GotAlbumData Programs.MediaPlayer.AlbumData
+
+    | PressedPlayOrPause
+    | PressedNextSong
+    | PressedPrevSong
+    | SongLoaded
+    | MediaPlayerTrackSliderMoved Float
+    | SongEnded
+    | SongPlaying
+    | SongPaused
+    | JsonParseError String
+
     | NoOp
 
 type alias Coords =
     { x : Int
     , y : Int
     }
+

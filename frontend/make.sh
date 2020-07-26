@@ -4,15 +4,17 @@
 if [[ ! -d ./built ]]; then
     mkdir ./built
 fi
-# cp ./art/windoze.jpg ./built/windoze.jpg
 cp ./prebuilt/index.html ./built/index.html
 
 if [[ ! -d ./built/icons ]]; then
     mkdir ./built/icons
 fi
+#IMAGES
+cp ./prebuilt/no_signal_bars.jpg ./built/
+cp -r ./prebuilt/albums ./built/
 
+#ICONS
 IC='./art/icons/additional/windows98-icons/png'
-
 #My computer icons
 cp "$IC/computer_explorer-2.png" ./built/icons/0.0.png
 
@@ -31,11 +33,10 @@ cp "$IC/loudspeaker_rays-0.png" ./built/icons/5.0.png
 cp "$IC/loudspeaker_rays-1.png" ./built/icons/5.1.png
 
 cp -r ./prebuilt/fonts ./built/
-cp -r ./prebuilt/albums ./built/
 
 
 # all the js
-cp ./prebuilt/webamp.bundle.min.js ./built/webamp.bundle.min.js
+cp ./prebuilt/howler.core.min.js ./built/
 # all the css
 cp ./prebuilt/general.css ./built/general.css
 

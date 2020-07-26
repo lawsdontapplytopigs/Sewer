@@ -21,7 +21,7 @@ import Programs.FileExplorer
 import View.FileExplorer
 import View.Navbar
 import View.PoorMansOutlook
-import View.WinampRipoff
+import View.MediaPlayer
 
 import Window
 import Windows
@@ -33,7 +33,6 @@ view title model =
             [ E.inFront (View.Navbar.makeNavbar model)
             , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.MouseMoved screenCoords)
             , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
-            -- , E.height E.fill
             , EEvents.onMouseUp Msg.MouseUpOnTitleBar
             ]
             <| mainDocumentColumn model
@@ -72,11 +71,9 @@ makeLauncher icon title msg =
         [ E.height <| E.px desktopItemHeight
         , E.width <| E.px desktopItemWidth
         , EEvents.onDoubleClick msg
-        -- , EBackground.color <| E.rgb255  80 80 80
         ]
         <| E.column
             [ E.spacing 5
-            -- , EBackground.color <| E.rgb255 20 20 20
             , E.centerX
             , E.centerY
             ]
@@ -85,7 +82,6 @@ makeLauncher icon title msg =
                 , E.height <| E.px iconSize
                 , E.centerX
                 , E.alignTop
-                -- , EBackground.color <| E.rgb255 150 150 150
                 ]
                 <| E.image
                     [ E.width E.fill
@@ -101,7 +97,6 @@ makeLauncher icon title msg =
                     [ EFont.typeface Palette.font0
                     ]
                 , EFont.size Palette.fontSize0
-                -- , EFont.size Palette.fontSize0
                 , EFont.color <| Palette.white
                 , EFont.center
                 ]
@@ -121,7 +116,7 @@ desktop model =
         item2 = makeLauncher 
             Palette.iconWebamp
             "Webamp"
-            (Msg.OpenWindow Window.WinampMainWindow)
+            (Msg.OpenWindow Window.MediaPlayerMainWindow)
 
         viewHelper windowType viewFunc =
             case Windows.isOpen windowType model.windows of
@@ -148,48 +143,14 @@ desktop model =
                 <| viewHelper
                     Window.PoorMansOutlookMainWindow
                     View.PoorMansOutlook.poorMansOutlook
-            -- of course, we have to treat webamp differently, simply because of
-            -- unexpected behavior
-            , E.inFront <| View.WinampRipoff.winampRipoff model
+            , E.inFront 
+                <| viewHelper
+                    Window.MediaPlayerMainWindow
+                    View.MediaPlayer.mediaPlayer
             ]
             [ item1
             , item2
-            -- , viewFileExplorer model
-            -- , viewPoorMansOutlook model
-            -- , viewWinampRipoff model
             ]
-
--- viewFileExplorer model =
---     case Windows.is
---     case (Windows.get Window.FileExplorerMainWindow model.windows) of
---         (Window.Window t_ geometry) ->
---             case geometry.isMinimized of 
---                 True ->
---                     E.none
---                 False ->
---                     View.FileExplorer.fileExplorer model 
-
--- viewPoorMansOutlook model =
---     case (Windows.get Window.PoorMansOutlookMainWindow model.windows) of
---         (Window.Window t_ geometry) ->
---             case geometry.isMinimized of 
---                 True ->
---                     E.none
---                 False ->
---                     View.PoorMansOutlook.poorMansOutlook model 
-
--- viewWinampRipoff model =
---     case (Windows.get Window.WinampMainWindow model.windows) of
---         (Window.Window t_ geometry) ->
---             case geometry.isMinimized of
---                 True ->
---                     E.none
---                 False ->
---                     -- we do this, since the winamp ripoff is actually webamp
---                     -- https://github.com/captbaritone/webamp
---                     E.html <| View.WinampRipoff.winampRipoff model
-
-
 heightBlock height =
     E.el
         [ E.height <| E.px height

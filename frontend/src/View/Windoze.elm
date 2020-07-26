@@ -91,7 +91,7 @@ makeTitleBar buttons windowType title isSelected icon =
         , E.el
             [ E.alignRight
             , E.height E.fill
-            , E.paddingEach { top = 0, right = 5, bottom = 0, left = 200 }
+            , E.paddingEach { top = 0, right = 5, bottom = 0, left = 100 }
             , EBackground.color titlebarColor
             , E.centerY
             -- , EBackground.color <| E.rgb255 20 20 20

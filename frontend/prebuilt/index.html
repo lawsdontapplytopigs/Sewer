@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <script src="./elm.js" type="text/javascript"></script>
-    <!-- <script src="https://unpkg.com/webamp@1.4.0/built/webamp.bundle.min.js"></script> -->
-    <script src="./webamp.bundle.min.js" type="text/javascript"></script>
+    <script src="./howler.core.min.js" type="text/javascript"></script>
     <link href="./fonts/fonts.css" rel="stylesheet">
     <link href="general.css" rel="stylesheet" type="text/plain">
 </head>
@@ -28,123 +27,329 @@
         if (email != undefined) {
             email.autofill = "email"
         };
-        </script>
 
-        <script>
+        let albumDir = "./albums/";
 
-        let data = (title) => {
-            let rt =
-                { 
-                    artist: "Sewerslvt",
-                    title: title,
-                    album: "Draining Love Story"
-                };
-            return rt
+        let album0 = {
+            title : "Draining Love Story",
+            albumCoverSrc : albumDir + "0.jpg",
+            songs : [ 
+                {
+                    title : "Love Is A Mighty Big Word",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LoveIsAMightyBigWord.mp3"
+                },
+                {
+                    title : "Newlove",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Newlove.mp3"
+                },
+                {
+                    title : "Yandere Complex",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/YandereComplex.mp3"
+                },
+                {
+                    title : "Ecifircas",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Ecifircas.mp3"
+                },
+                {
+                    title : "Lexapro Delirium",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LexaproDelirium.mp3"
+                },
+                {
+                    title : "This Fleeting Feeling",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/ThisFleetingFeeling.mp3"
+                },
+                {
+                    title : "Swinging In His Cell",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/SwingingInHisCell.mp3"
+                },
+                {
+                    title : "Mr. Kill Myself",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Mr.KillMyself.mp3"
+                },
+                {
+                    title : "Down The Drain",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/DownTheDrain.mp3"
+                },
+                {
+                    title : "Slowdeath",
+                    artist : "Sewerslvt",
+                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Slowdeath.mp3"
+                },
+            ]
         };
 
-        async function main() {
-            const webamp = new Webamp({
-                initialTracks: [
-                    {
-                        metaData: data("Love Is A Mighty Big Word"),
-                        duration : 131,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LoveIsAMightyBigWord.mp3",
-                    },
-                    {
-                        metaData: data("Newlove"),
-                        duration : 359,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Newlove.mp3",
-                    },
-                    {
-                        metaData: data("Yandere Complex"),
-                        duration: 250,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/YandereComplex.mp3",
-                    },
-                    {
-                        metaData: data("Ecifircas"),
-                        duration: 347,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Ecifircas.mp3",
-                    },
-                    {
-                        metaData: data("Lexapro Delirium"),
-                        duration: 435,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LexaproDelirium.mp3",
-                    },
-                    {
-                        metaData: data("This Fleeting Feeling"),
-                        duration: 211,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/ThisFleetingFeeling.mp3",
-                    },
-                    {
-                        metaData: data("Swinging In His Cell"),
-                        duration: 322,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/SwingingInHisCell.mp3",
-                    },
-                    {
-                        metaData: data("Mr. Kill Myself"),
-                        duration: 471,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Mr.KillMyself.mp3",
-                    },
-                    {
-                        metaData: data("Down The Drain (feat. Nurtheon)"),
-                        duration: 488,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/DownTheDrain.mp3",
-                    },
-                    {
-                        metaData: data("Slowdeath"),
-                        duration: 492,
-                        url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Slowdeath.mp3",
-                    },
-                ],
-            });
+        let Player = ( elmApp, album ) => {
+            elmApp.ports.audioPortFromJS.send(album);
 
-            webamp.onClose(() => {
-                elm.ports.winampIn.send(JSON.stringify({ "event" : "close" }));
-            });
-            webamp.onMinimize(() => {
-                elm.ports.winampIn.send(JSON.stringify({ "event" : "minimize" }));
-            });
-            elm.ports.winampOut.subscribe((msg) => {
-                if (msg == "open") {
-                    webamp.reopen();
-                } else if (msg == "minimize") {
-                    elm.ports.winampIn.send(JSON.stringify({ "event" : "minimize" }));
-                } else if (msg == "unMinimize") {
-                    elm.ports.winampIn.send(JSON.stringify({ "event" : "unMinimize" }));
-                };
-                console.log("we've got mail... " + msg);
-            });
+            let pl = {};
+            pl.index = 0;
+            pl.songs = album.songs;
 
-            // this doesn't actually do anything, in spite of webamp's documentation
-            let weenamp = document.getElementById("weenamp");
-            webamp.renderWhenReady(weenamp);
-        };
-        main();
+            // For some reason this causes a cyclic object value type error
+            setInterval(() => {
+                let audio = pl.songs[pl.index].howl;
+                pl.sendTimeData();
+            }, 1000);
 
-        
-        let resolveQuirks = () => {
-            let wamp = document.getElementById("weenamp");
-            let wa = document.getElementById("webamp");
-            wamp.append(wa);
-
-            // for SOME REASON. it doesn't work if we set this up before it is
-            // drawn, but thse things work here if we grab the element and THEN
-            // set all of this up
-            wa.onmousedown = () => {
-                /* console.log("webamp clicked"); */
-                elm.ports.winampIn.send(
-                    JSON.stringify(
-                        { "event" : "windowClicked"
+            pl.play = () => {
+                let song = pl.songs[pl.index];
+                if (typeof(song.howl) === "undefined") {
+                    song.howl = new Howl({
+                        src : [ song.src ],
+                        onplay : () => {
+                            elmApp.ports.audioPortFromJS.send({
+                                event: "SONG_PLAYING"
+                            });
+                        },
+                        onload : () => {
+                            elmApp.ports.audioPortFromJS.send({
+                                event: "SONG_LOADED"
+                            });
+                        },
+                        onend : () => {
+                            elmApp.ports.audioPortFromJS.send({
+                                event: "SONG_ENDED"
+                            });
+                        },
+                        onpause : () => {
+                            elmApp.ports.audioPortFromJS.send({
+                                event: "SONG_PAUSED"
+                            });
+                        },
+                        onseek : () => {
+                            console.log("sup");
+                            elmApp.ports.audioPortFromJS.send({
+                                elapsed : song.howl.seek()
+                            });
                         }
-                    )
-                );
+                    });
+                };
+                song.howl.play();
             };
+
+            pl.next = () => {
+                pl.playAt(pl.index + 1);
+            };
+
+            pl.prev = () => {
+                pl.playAt(pl.index - 1);
+            };
+
+            pl.playAt = ( ind ) => {
+                let audio = pl.songs[pl.index].howl;
+                if (audio) {
+                    audio.stop();
+                };
+
+                let index = ind;
+                if (index >= pl.songs.length) {
+                    index = 0;
+                } else if (index < 0) {
+                    index = 0
+                };
+                pl.index = index;
+
+                pl.play(ind);
+            };
+
+            pl.volume = (val) => {
+                Howler.volume(val);
+            };
+
+            pl.pause = () => {
+                let audio = pl.songs[pl.index].howl;
+                if (audio) {
+                    audio.pause();
+                } else {
+                    console.log("tried pausing, but theres no howl instance to pause");
+                };
+            };
+
+            pl.seek = (secs) => {
+                let audio = pl.songs[pl.index].howl;
+                if (audio) {
+                    audio.seek(secs);
+                } else {
+                    console.log("there's no howl instance to seek. trying to start one...");
+                    pl.play();
+                    pl.seek(secs);
+                };
+            };
+
+            pl.togglePlay = () => {
+                let audio = pl.songs[pl.index].howl;
+                if (audio) {
+                    if (audio.playing()) {
+                        pl.pause();
+                    } else {
+                        pl.play();
+                    };
+                } else {
+                    pl.play();
+                };
+            };
+
+            pl.sendCurrentSongData = () => {
+                let song = pl.songs[pl.index];
+                elmApp.ports.audioPortFromJS.send({
+                    title : song.title,
+                    artist : song.artist,
+                }); 
+            };
+
+            pl.sendTimeData = () => {
+                let song = pl.songs[pl.index];
+                if (song.howl) {
+                    elmApp.ports.audioPortFromJS.send({
+                        elapsed : song.howl.seek(),
+                        duration : song.howl.duration(),
+                        isPlaying : song.howl.playing(),
+                    });
+                };
+            };
+
+            return pl;
         };
 
-        window.onload = resolveQuirks;
-        document.body.style.overflow = "hidden";
-    </script>
+        let player = Player(elm, album0);
+        elm.ports.audioPortToJS.subscribe((msg) => {
+            console.log(msg);
+            if (msg === "TOGGLE_PLAY") {
+                console.log("should toggle play");
+                player.togglePlay();
+            } else if (msg === "PLAY") {
+                console.log("elm says play");
+                player.play();
+            } else if (msg === "PAUSE") {
+                console.log("elm says pause");
+                player.pause();
+            } else if (msg === "NEXT") {
+                player.next();
+            } else if (msg === "PREV") {
+                player.prev();
+            // i shouldn't be doing this, but it'll get the job done
+            } else if (msg.seek){
+                console.log("should seek");
+                player.seek(msg.seek);
+            } else {
+                console.log("something didn't go as planned...")
+                console.log(msg);
+            };
+            
+        });
 
+
+
+/*         let audio; */ 
+
+/*         elm.ports.audioPortToJS.subscribe((msg) => { */
+/*             if (msg.fetch !== undefined ) { */
+/*                 console.log(msg.fetch); */
+/*                 audio = new Howl({ */
+/*                     src: [ msg.fetch ], */
+/*                     onload: () => { */
+/*                         elm.ports.audioPortFromJS.send({ */
+/*                             event : "SONG_LOADED" */
+/*                         }); */
+/*                         elm.ports.audioPortFromJS.send({ */
+/*                             duration : audio.duration(), */
+/*                         }); */
+/*                     }, */
+/*                     onseek: () => { */
+/*                         elm.ports.audioPortFromJS.send({ */
+/*                             elapsed : audio.seek(), */
+/*                         }); */
+/*                     }, */
+/*                     onend: () => { */
+/*                         elm.ports.audioPortFromJS.send({ */
+/*                             event : "SONG_ENDED" */
+/*                         }); */
+/*                     } */
+/*                 }); */
+/*             } else if (msg === "play") { */
+/*                 console.log("elm says play"); */
+/*                 audio.play(); */
+/*             } else if (msg === "pause") { */
+/*                 console.log("elm says pause"); */
+/*                 audio.pause(); */
+/*             // i shouldn't be doing this, but it'll get the job done */
+/*             } else if (msg.seek !== undefined){ */
+/*                 audio.seek(msg.seek); */
+/*             } else { */
+/*                 console.log("something didn't go as planned...") */
+/*                 console.log(msg); */
+/*             }; */
+/*         }); */
+/*         setInterval(() => { */
+/*             if (audio !== undefined) { */
+/*                 elm.ports.audioPortFromJS.send({ */
+/*                     elapsed : audio.seek(), */
+/*                 }); */
+/*             }; */
+/*         }, 1000); */
+
+        </script>
 </body>
 <link href="./fonts/pleaseWork.css" rel="stylesheet" type="text/css">
 </html>
+<script>
+                    /* { */
+                    /*     metaData: data("Love Is A Mighty Big Word"), */
+                    /*     duration : 131, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LoveIsAMightyBigWord.mp3", */
+                    /* }, */
+                    /* { */
+                    /*     metaData: data("Newlove"), */
+                    /*     duration : 359, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Newlove.mp3", */
+                    /* }, */
+                    /* { */
+                    /*     metaData: data("Yandere Complex"), */
+                    /*     duration: 250, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/YandereComplex.mp3", */
+                    /* }, */
+                    /* { */
+                    /*     metaData: data("Ecifircas"), */
+                    /*     duration: 347, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Ecifircas.mp3", */
+                    /* }, */
+                    /* { */
+                    /*     metaData: data("Lexapro Delirium"), */
+                    /*     duration: 435, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LexaproDelirium.mp3", */
+                    /* }, */
+                    /* { */
+                    /*     metaData: data("This Fleeting Feeling"), */
+                    /*     duration: 211, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/ThisFleetingFeeling.mp3", */
+                    /* }, */
+                    /* { */
+                    /*     metaData: data("Swinging In His Cell"), */
+                    /*     duration: 322, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/SwingingInHisCell.mp3", */
+                    /* }, */
+                    /* { */
+                    /*     metaData: data("Mr. Kill Myself"), */
+                    /*     duration: 471, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Mr.KillMyself.mp3", */
+                    /* }, */
+                    /* { */
+                    /*     metaData: data("Down The Drain (feat. Nurtheon)"), */
+                    /*     duration: 488, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/DownTheDrain.mp3", */
+                    /* }, */
+                    /* { */
+                    /*     metaData: data("Slowdeath"), */
+                    /*     duration: 492, */
+                    /*     url: "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Slowdeath.mp3", */
+                    /* }, */
+</script>
