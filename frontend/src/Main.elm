@@ -16,7 +16,7 @@ import Song
 import Task
 import Time
 
-import View.Desktop
+import View
 
 import Window
 import Windows
@@ -27,10 +27,10 @@ import Windows
 port audioPortToJS : Json.Encode.Value -> Cmd msg
 port audioPortFromJS : (Json.Decode.Value -> msg) -> Sub msg
 
-main : Program () Model Msg.Msg
+main : Program ViewportData Model Msg.Msg
 main = Browser.document
     { init = init
-    , view = View.Desktop.view "Sewerslvt"
+    , view = View.view "Sewerslvt"
     , update = update
     , subscriptions = subscriptions
     }
@@ -43,8 +43,8 @@ type alias Programs =
 type alias Model =
     { time : Time.Posix
     , zone : Time.Zone
-    , absoluteX : Int
-    , absoluteY : Int
+    , viewportWidth : Int
+    , viewportHeight : Int
 
     , record :
         { absoluteX : Int
@@ -52,6 +52,8 @@ type alias Model =
         , windowX : Int
         , windowY : Int
         }
+    , absoluteX : Int
+    , absoluteY : Int
 
     , mediaPlayer : Programs.MediaPlayer.MediaPlayerData
     , programs : Programs
@@ -72,15 +74,14 @@ type alias AlbumData =
     , maybeAuthor : Maybe String
     }
 
-init : () -> ( Model, Cmd Msg.Msg )
+init : ViewportData -> ( Model, Cmd Msg.Msg )
 init flags = 
     let
         model =
             { time = Time.millisToPosix 0
             , zone = Time.utc
-            , absoluteX = 0
-            , absoluteY = 0
-
+            , viewportWidth = flags.viewportWidth
+            , viewportHeight = flags.viewportHeight
             -- we'll use this to track how much to move the window
             -- we set these when the mouse is pressed on the window's titlebar
             , record =
@@ -89,6 +90,8 @@ init flags =
                 , windowX = 0
                 , windowY = 0
                 }
+            , absoluteX = 0
+            , absoluteY = 0
 
             , mediaPlayer = Programs.MediaPlayer.init
             , programs = 
@@ -113,6 +116,15 @@ init flags =
 update : Msg.Msg -> Model -> ( Model, Cmd Msg.Msg )
 update msg model =
     case msg of
+        Msg.GotViewportData data ->
+            let
+                model_ =
+                    { model
+                        | viewportWidth = data.viewportWidth
+                        , viewportHeight = data.viewportHeight
+                    }
+            in
+                (model_, Cmd.none)
         Msg.OpenWindow windowType ->
             let
                 newZ =
@@ -342,13 +354,34 @@ update msg model =
             in
                 ( model_, cmd_)
 
-
         Msg.PressedPlayOrPause ->
             ( model, togglePlayCMD )
         Msg.PressedNextSong ->
             ( model, nextCMD )
         Msg.PressedPrevSong ->
             ( model, prevCMD )
+        Msg.PressedToggleShuffle ->
+            -- contrary to the way we do other things, we update our state here
+            -- anyway, since this cannot fail
+            let
+                model_ = 
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.toggleShuffle model.mediaPlayer
+                    }
+                    
+            in
+            ( model_, toggleShuffleCMD )
+        Msg.PressedToggleRepeat ->
+            -- contrary to the way we do other things, we update our state here
+            -- anyway, since this cannot fail
+            let
+                model_ = 
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.toggleRepeat model.mediaPlayer
+                    }
+                    
+            in
+            ( model_, toggleRepeatCMD )
 
         Msg.GotAlbumData data ->
             let
@@ -364,7 +397,17 @@ update msg model =
             let
                 model_ =
                     { model
-                        | mediaPlayer = Programs.MediaPlayer.updateSongData data model.mediaPlayer
+                        | mediaPlayer = Programs.MediaPlayer.updateCurrentSong data model.mediaPlayer
+                    }
+                cmd_ =
+                    Cmd.none
+            in
+                ( model_, cmd_ )
+        Msg.GotTimeData data ->
+            let
+                model_ =
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.updateTimeData data model.mediaPlayer
                     }
                 cmd_ =
                     Cmd.none
@@ -377,18 +420,14 @@ update msg model =
                     audioPortToJS (Json.Encode.object [ ("seek", Json.Encode.float float) ])
             in
                 (model_, cmd_)
-        Msg.SongPaused ->
-            (model, Cmd.none)
-        Msg.SongPlaying ->
-            (model, Cmd.none)
         Msg.SongLoaded ->
-            (model, Cmd.none)
-        -- TODO: take this out
+            ( model, Cmd.none )
+        Msg.SongPlaying ->
+            ( model, Cmd.none )
+        Msg.SongPaused ->
+            ( model, Cmd.none )
         Msg.SongEnded ->
-            let
-                model_ = model
-            in
-                (model_, Cmd.none)
+            ( model, Cmd.none )
         Msg.JsonParseError str ->
             let
                 _ = Debug.log "uh ohhh" str
@@ -432,51 +471,90 @@ record windowType model =
                 Just windowType
         }
 
-
 fromJSPortSub json =
-    case Json.Decode.decodeValue decoder json of
+    case Json.Decode.decodeValue audioPortFromJSDecoder json of
         Ok val ->
             val
         Err err ->
             Msg.JsonParseError (Json.Decode.errorToString err)
 
-decoder =
-    Json.Decode.oneOf
-        [ Json.Decode.map (\data -> Msg.GotSongData data) songDataDecoder
-        , Json.Decode.map (\data -> Msg.GotAlbumData data) albumDecoder
-        , Json.Decode.map 
-            (\str ->
-                case str of
-                    "SONG_PLAYING" ->
-                        Msg.SongPlaying
-                    "SONG_PAUSED" ->
-                        Msg.SongPaused
-                    "SONG_LOADED" ->
-                        Msg.SongLoaded
-                    "SONG_ENDED" ->
-                        Msg.SongEnded
-                    _ ->
-                        Msg.JsonParseError str
-            )
-            eventDecoder
-        ]
+audioPortFromJSDecoder =
+    let
+        branchType t =
+            case t of
+                0 ->
+                    Json.Decode.map 
+                        (\str ->
+                            case str of
+                                "SONG_PLAYING" ->
+                                    Msg.SongPlaying
+                                "SONG_PAUSED" ->
+                                    Msg.SongPaused
+                                "SONG_LOADED" ->
+                                    Msg.SongLoaded
+                                "SONG_ENDED" ->
+                                    Msg.SongEnded
+                                _ ->
+                                    Msg.JsonParseError str
+                        )
+                        eventDecoder
+                1 ->
+                    Json.Decode.map (\data -> Msg.GotAlbumData data) albumDataDecoder
+                2 ->
+                    Json.Decode.map (\data -> Msg.GotTimeData data) timeDataDecoder
+                3 ->
+                    Json.Decode.map (\data -> Msg.GotSongData data) songDataDecoder
+                4 ->
+                    Json.Decode.map (\data -> Msg.GotViewportData data) viewportDataDecoder
+                _ ->
+                    Msg.JsonParseError ("bizarro type number: " ++ String.fromInt t) |> Json.Decode.succeed
+    in
+    Json.Decode.field "type" Json.Decode.int
+        |> Json.Decode.andThen 
+            branchType
 
-songDataDecoder =
-    Json.Decode.map4 Programs.MediaPlayer.SongData
+
+type alias ViewportData =
+    { viewportWidth : Int
+    , viewportHeight : Int
+    }
+viewportDataDecoder : Json.Decode.Decoder ViewportData
+viewportDataDecoder =
+    Json.Decode.map2 ViewportData
+        (Json.Decode.field "viewportWidth" Json.Decode.int)
+        (Json.Decode.field "viewportHeight" Json.Decode.int)
+    
+
+-- there may be a bug in either the compiler, or some core library.
+-- tried to decode the "elapsed" field as a float, decoded it, stored it in my 
+-- model, and then when i tried to use it somewhere where a float was needed, 
+-- it told me that the value i was passing in was an Int i tried `toFloat`, and 
+-- then it complained that the value was already a float
+-- obviously, this is clownworld;
+-- elm: "you need a float here!"
+-- me: "ok, `toFloat value`"
+-- elm: "its already a float!"
+-- me: "what"
+-- TODO: Try to encode the floats as a JSON string on the JS side and then try 
+-- to parse them here
+timeDataDecoder : Json.Decode.Decoder Programs.MediaPlayer.TimeData
+timeDataDecoder =
+    Json.Decode.map3 Programs.MediaPlayer.TimeData
+        (Json.Decode.field "elapsed" (Json.Decode.nullable Json.Decode.int))
         (Json.Decode.field "duration" Json.Decode.float)
-        (Json.Decode.field "elapsed" Json.Decode.float)
         (Json.Decode.field "isPlaying" Json.Decode.bool)
-        (Json.Decode.field "currentSong" songDecoder)
-songDecoder =
-    Json.Decode.map2 Programs.MediaPlayer.Song
+songDataDecoder : Json.Decode.Decoder  Programs.MediaPlayer.SongData
+songDataDecoder =
+    Json.Decode.map2 Programs.MediaPlayer.SongData
         (Json.Decode.field "title" Json.Decode.string)
         (Json.Decode.field "artist" Json.Decode.string)
 
-albumDecoder =
+albumDataDecoder : Json.Decode.Decoder Programs.MediaPlayer.AlbumData
+albumDataDecoder =
     Json.Decode.map3 Programs.MediaPlayer.AlbumData
         (Json.Decode.field "title" Json.Decode.string)
         (Json.Decode.field "albumCoverSrc" Json.Decode.string)
-        (Json.Decode.field "songs" (Json.Decode.list songDecoder))
+        (Json.Decode.field "songs" (Json.Decode.list songDataDecoder))
 
 eventDecoder =
     Json.Decode.field "event" Json.Decode.string
@@ -486,3 +564,5 @@ pauseCMD = audioPortToJS (Json.Encode.string "PAUSE")
 nextCMD = audioPortToJS (Json.Encode.string "NEXT")
 prevCMD = audioPortToJS (Json.Encode.string "PREV")
 togglePlayCMD = audioPortToJS (Json.Encode.string "TOGGLE_PLAY")
+toggleShuffleCMD = audioPortToJS (Json.Encode.string "TOGGLE_SHUFFLE")
+toggleRepeatCMD = audioPortToJS (Json.Encode.string "TOGGLE_REPEAT")

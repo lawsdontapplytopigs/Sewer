@@ -29,27 +29,6 @@ poorMansOutlook model =
                 (Window.Window type_ geometry) ->
                     geometry
 
-        titleBar = Windoze.makeTitleBar
-            [ E.row
-                [ E.width <| E.px 48
-                -- , EBackground.color <| E.rgb255 80 80 80
-                , E.spacing 7
-                ]
-                [ Windoze.minimizeButton (E.rgb255 0 0 0) (Just (Msg.MinimizeWindow Window.PoorMansOutlookMainWindow))
-                , Windoze.maximizeButton (E.rgb255 0 0 0) (Just Msg.NoOp)
-                ]
-            , Windoze.xButton (E.rgb255 0 0 0) (Just (Msg.CloseWindow Window.PoorMansOutlookMainWindow))
-            ]
-            Window.PoorMansOutlookMainWindow
-            windowGeometry.title
-            windowGeometry.isFocused
-            windowGeometry.iconSmall
-        toolBar = Windoze.makeToolBar
-            [ Windoze.makeToolItem "File"
-            , Windoze.makeToolItem "Edit"
-            , Windoze.makeToolItem "Help"
-            ]
-
         actualContent =
             let
                 button =
@@ -91,7 +70,8 @@ poorMansOutlook model =
                 , E.width E.fill
                 , E.height E.fill
                 ]
-                [ E.column
+                [ Windoze.hSeparator
+                , E.column
                     [ E.height E.fill
                     , E.width E.fill
                     -- , EBackground.color <| E.rgb255 80 80 80
@@ -168,32 +148,7 @@ poorMansOutlook model =
                     ]
                 ]
     in
-    E.el
-        [ E.width <| E.px windowGeometry.width
-        , E.height <| E.px windowGeometry.height
-        , E.htmlAttribute <| Html.Attributes.style "transform" ("translate(" ++ String.fromInt windowGeometry.x ++ "px" ++ ", " ++ String.fromInt windowGeometry.y ++ "px )")
-
-        , E.htmlAttribute <| Html.Attributes.style "z-index" (String.fromInt windowGeometry.zIndex)
-        -- , E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
-        -- , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
-        , EEvents.onMouseDown <| Msg.WindowClicked Window.PoorMansOutlookMainWindow
-        ]
-        <| Windoze.type1Level2RaisedBorder
-            <| Windoze.type1Level1RaisedBorder
-                <| Windoze.makeMainBorder
-                    <| E.column
-                        [ E.width E.fill
-                        , E.height E.fill
-                        ]
-                        [ titleBar
-                        , E.el
-                            [ E.width E.fill
-                            , EBackground.color Palette.color0
-                            ]
-                            <| toolBar
-                        , Windoze.hSeparator
-                        , actualContent
-                        ]
+        actualContent
 
 inputBar title bar =
     E.column

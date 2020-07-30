@@ -7,17 +7,16 @@ module Programs.MediaPlayer exposing
 type alias AlbumData =
     { title : String
     , albumCoverSrc : String
-    , songs : List Song
+    , songs : List SongData
+    }
+
+type alias TimeData =
+    { elapsed : Maybe Int -- I would use a float here, but I think there's and elm compiler bug
+    , duration : Float
+    , isPlaying : Bool
     }
 
 type alias SongData =
-    { elapsed : Float
-    , duration : Float
-    , isPlaying : Bool
-    , currentSong : Song
-    }
-
-type alias Song =
     { title : String
     , artist : String
     }
@@ -26,23 +25,39 @@ type alias Song =
 -- we only use this data to display stuff properly in the media player
 type alias MediaPlayerData =
     { isPlaying : Bool
-    , elapsed : Maybe Float
+    , elapsed : Maybe Int
     , currentSongDuration : Maybe Float
-    , currentSong : Maybe Song
-    , playlist : List Song
+    , currentSong : Maybe SongData
+    , playlist : List SongData
     , albumCoverSrc : Maybe String
     , albumTitle : Maybe String
+    , shouldShuffle : Bool
+    , shouldRepeat : Bool
     }
 
 init : MediaPlayerData
 init =
     { isPlaying = False
-    , elapsed = Just 0.0
+    , elapsed = Nothing
     , currentSongDuration = Nothing
     , currentSong = Nothing
     , playlist = []
     , albumCoverSrc = Nothing
     , albumTitle = Nothing
+    , shouldShuffle = False
+    , shouldRepeat = False
+    }
+
+toggleShuffle : MediaPlayerData -> MediaPlayerData
+toggleShuffle mpd =
+    { mpd
+        | shouldShuffle = not mpd.shouldShuffle
+    }
+
+toggleRepeat : MediaPlayerData -> MediaPlayerData
+toggleRepeat mpd =
+    { mpd
+        | shouldRepeat = not mpd.shouldRepeat
     }
 
 updateAlbum : AlbumData -> MediaPlayerData -> MediaPlayerData
@@ -53,11 +68,16 @@ updateAlbum data mpd =
         , playlist = data.songs
     }
 
-updateSongData : SongData -> MediaPlayerData -> MediaPlayerData
-updateSongData data mpd =
+updateTimeData : TimeData -> MediaPlayerData -> MediaPlayerData
+updateTimeData data mpd =
     { mpd
         | currentSongDuration = Just data.duration
-        , elapsed = Just data.elapsed
+        , elapsed = data.elapsed -- we might get null here, so fuck it. we just store it anyway
         , isPlaying = data.isPlaying
-        , currentSong = Just data.currentSong
     }
+updateCurrentSong : SongData -> MediaPlayerData -> MediaPlayerData
+updateCurrentSong data mpd =
+    { mpd
+        | currentSong = Just data
+    }
+

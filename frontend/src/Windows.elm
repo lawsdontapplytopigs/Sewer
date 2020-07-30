@@ -12,6 +12,7 @@ module Windows exposing
     , closeWindow
     , focus
     , unFocus
+    , isMinimized
     , minimize
     , unMinimize
     , toDefault
@@ -213,6 +214,16 @@ unFocus k (Window.Window t_ geometry) =
             | isFocused = False
         }
     )
+
+isMinimized : Window.WindowType -> Windows -> Bool
+isMinimized windowType windows =
+    let
+        win = get windowType windows
+    in
+        case win of
+            ( Window.Window winType winData ) ->
+                winData.isMinimized
+                        
 
 minimize : Window.WindowType -> Windows -> Windows
 minimize windowType windows =

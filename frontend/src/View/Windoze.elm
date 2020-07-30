@@ -85,6 +85,7 @@ makeTitleBar buttons windowType title isSelected icon =
             , EFont.family
                 [ EFont.typeface Palette.font0
                 ]
+            , E.htmlAttribute <| Html.Attributes.style "text-rendering" "geometricPrecision"
             , E.paddingEach { top = 0, right = 0, bottom = 0, left = 5 }
             ]
             <| E.text title
@@ -535,7 +536,6 @@ xButton color msg =
                 }
                     
 
--- TODO
 maximizeButton color msg =
     let
 
@@ -799,6 +799,58 @@ makeInfoBar text1 text2 =
                 )
                 <| E.text text2
         ]
+
+makeWindow : Window.Window -> E.Element Msg.Msg -> E.Element Msg.Msg
+makeWindow (Window.Window windowType windowData) content =
+    let
+        titleBar = makeTitleBar 
+            [ E.row
+                [ E.width <| E.px 48
+                , E.spacing 7
+                ]
+                [ minimizeButton (E.rgb255 0 0 0) (Just (Msg.MinimizeWindow windowType))
+                , maximizeButton (E.rgb255 0 0 0) (Just Msg.NoOp) -- TODO
+                ]
+            , xButton (E.rgb255 0 0 0) (Just (Msg.CloseWindow windowType))
+            ]
+            windowType
+            windowData.title
+            windowData.isFocused
+            windowData.iconSmall
+
+        toolBar = makeToolBar
+            [ makeToolItem "File" 
+            , makeToolItem "Edit"
+            , makeToolItem "Help"
+            ]
+
+    in
+        E.el
+            [ E.width <| E.px windowData.width
+            , E.height <| E.px windowData.height
+            , E.htmlAttribute <| Html.Attributes.style "transform" 
+                ("translate(" ++ String.fromInt windowData.x ++ "px" ++ ", " ++ String.fromInt windowData.y ++ "px )")
+            , E.htmlAttribute <| Html.Attributes.style "z-index" (String.fromInt windowData.zIndex)
+            , EEvents.onMouseDown <| Msg.WindowClicked windowType
+            ]
+            <| type1Level2RaisedBorder
+                <| type1Level1RaisedBorder
+                    <| makeMainBorder
+                        <| E.column
+                            [ E.width E.fill
+                            , EBackground.color Palette.color0
+                            , E.height E.fill
+                            ]
+                            [ titleBar
+                            , E.el
+                                [ E.width E.fill
+                                , EBackground.color Palette.color0
+                                ]
+                                <| toolBar
+                            , content
+                            ]
+
+
 
 
 

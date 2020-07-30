@@ -22,6 +22,12 @@ white = E.rgb255 255 255 255
 color0 = E.rgb255 245 180 255
 color1 = E.rgb255 255 215 228
 
+padding0 = 10
+padding1 = 20
+padding2 = 40
+padding3 = 60
+padding4 = 80
+
 ic name = "./icons/" ++ name
 
 iconMyComputer = ic "0.0.png"

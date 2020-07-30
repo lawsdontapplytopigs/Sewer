@@ -15,7 +15,18 @@
     <script>
         let elm = Elm.Main.init({ 
             node: document.getElementById("elm-node"),
+            flags: { 
+                viewportWidth : window.innerWidth,
+                viewportHeight : window.innerHeight,
+            }
         });
+        window.onresize = () => {
+            elm.ports.audioPortFromJS.send({
+                type : 4,
+                viewportWidth : window.innerWidth,
+                viewportHeight : window.innerHeight,
+            });
+        };
 
         // unfortunately we have to do this here, since the mdgriffith/elm-ui 
         // library overrides our attributes if we do 
@@ -88,56 +99,105 @@
         };
 
         let Player = ( elmApp, album ) => {
-            elmApp.ports.audioPortFromJS.send(album);
 
-            let pl = {};
+            let pl = {
+                howl : undefined
+            };
             pl.index = 0;
             pl.songs = album.songs;
+            pl.shouldShuffle = false;
+            pl.shouldBePlaying = false;
+            pl.shouldRepeat = false;
+            // NOTE: we don't use this to actually track the amount elapsed in
+            // real time of the current song. we only use this for things like
+            // seeking in a track before it's been fetched, so when the user
+            // clicks "play" we can start from that position
+            pl.seekAmount = 0;
 
-            // For some reason this causes a cyclic object value type error
-            setInterval(() => {
-                let audio = pl.songs[pl.index].howl;
-                pl.sendTimeData();
-            }, 1000);
+            // TODO: instead of just inserting this into the album, make another
+            // object with the type and embed the album in there
+            album.type = 1; 
+            elmApp.ports.audioPortFromJS.send(album);
 
-            pl.play = () => {
+            pl.fetchSong = () => {
+                Howler.unload();
                 let song = pl.songs[pl.index];
-                if (typeof(song.howl) === "undefined") {
-                    song.howl = new Howl({
-                        src : [ song.src ],
-                        onplay : () => {
-                            elmApp.ports.audioPortFromJS.send({
-                                event: "SONG_PLAYING"
-                            });
-                        },
-                        onload : () => {
-                            elmApp.ports.audioPortFromJS.send({
-                                event: "SONG_LOADED"
-                            });
-                        },
-                        onend : () => {
-                            elmApp.ports.audioPortFromJS.send({
-                                event: "SONG_ENDED"
-                            });
-                        },
-                        onpause : () => {
-                            elmApp.ports.audioPortFromJS.send({
-                                event: "SONG_PAUSED"
-                            });
-                        },
-                        onseek : () => {
-                            console.log("sup");
-                            elmApp.ports.audioPortFromJS.send({
-                                elapsed : song.howl.seek()
-                            });
-                        }
-                    });
-                };
-                song.howl.play();
+                pl.howl = new Howl({
+                    src : [ song.src ],
+                    onplay : () => {
+                        elmApp.ports.audioPortFromJS.send({
+                            type : 0,
+                            event: "SONG_PLAYING"
+                        });
+                        pl.sendTimeData(pl.howl.seek());
+                        pl.sendSongData();
+                    },
+                    onload : () => {
+                        elmApp.ports.audioPortFromJS.send({
+                            type : 0,
+                            event: "SONG_LOADED"
+                        });
+                        if (pl.shouldBePlaying) {
+                            pl.howl.seek(pl.seekAmount);
+                            pl.howl.play();
+                        };
+                    },
+                    onend : () => {
+                        elmApp.ports.audioPortFromJS.send({
+                            type : 0,
+                            event: "SONG_ENDED"
+                        });
+                        pl.next();
+                    },
+                    // TODO: make this work well. sometimes there's `null`s
+                    // in the JSON
+                    /* onstop : () => { */
+                    /*     pl.shouldBePlaying = false; */
+                    /* }, */
+                    onpause : () => {
+                        elmApp.ports.audioPortFromJS.send({
+                            type : 0,
+                            event: "SONG_PAUSED"
+                        });
+                        pl.sendTimeData(pl.howl.seek());
+                        pl.sendSongData();
+                    },
+                    onseek : () => {
+                        pl.seekAmount = pl.howl.seek();
+                        pl.sendSongData();
+                        pl.sendTimeData(pl.howl.seek());
+                    }
+                });
+            };
+
+            pl.toggleShuffle = () => {
+                pl.shouldShuffle = !pl.shouldShuffle;
+            };
+
+            pl.toggleRepeat = () => {
+                pl.shouldRepeat = !pl.shouldRepeat;
+            };
+
+            pl.playRandom = () => {
+                pl.playAt(Math.floor(Math.random() * pl.songs.length));
+            };
+
+            pl.forceNext = () => {
+                if (pl.shouldShuffle) {
+                    pl.playRandom();
+                } else {
+                    pl.playAt(pl.index + 1);
+                }
             };
 
             pl.next = () => {
-                pl.playAt(pl.index + 1);
+                if (pl.shouldRepeat) {
+                    pl.playAt(pl.index);
+                } else if (pl.shouldShuffle) {
+                    pl.playRandom();
+                } else {
+                    pl.playAt(pl.index + 1);
+                }
             };
 
             pl.prev = () => {
@@ -145,20 +205,36 @@
             };
 
             pl.playAt = ( ind ) => {
-                let audio = pl.songs[pl.index].howl;
-                if (audio) {
-                    audio.stop();
+                pl.shouldBePlaying = true;
+                /* let audio = pl.songs[pl.index].howl; */
+                /* if (audio) { */
+                /*     audio.stop(); */
+                /* }; */
+                if (ind === pl.index) {
+                    if (pl.howl) {
+                        pl.howl.play();
+                    } else {
+                        pl.fetchSong();
+                    }
+                    return
                 };
+
 
                 let index = ind;
                 if (index >= pl.songs.length) {
                     index = 0;
                 } else if (index < 0) {
-                    index = 0
+                    index = 0;
                 };
+                pl.seekAmount = 0;
                 pl.index = index;
+                pl.sendSongData(); // we do NOT want to send time data here since
+                // we don't know if there is a howl instance yet
+                pl.fetchSong();
+            };
 
-                pl.play(ind);
+            pl.play = () => {
+                pl.playAt(pl.index);
             };
 
             pl.volume = (val) => {
@@ -166,56 +242,78 @@
             };
 
             pl.pause = () => {
-                let audio = pl.songs[pl.index].howl;
-                if (audio) {
-                    audio.pause();
-                } else {
+                if (!pl.howl) {
                     console.log("tried pausing, but theres no howl instance to pause");
+                    return
                 };
+                pl.howl.pause();
+                pl.shouldBePlaying = false;
             };
 
             pl.seek = (secs) => {
-                let audio = pl.songs[pl.index].howl;
-                if (audio) {
-                    audio.seek(secs);
-                } else {
-                    console.log("there's no howl instance to seek. trying to start one...");
-                    pl.play();
-                    pl.seek(secs);
+                pl.seekAmount = secs;
+                if (pl.howl) {
+                    pl.howl.seek(secs);
                 };
+                pl.sendTimeData(pl.seekAmount);
             };
 
             pl.togglePlay = () => {
-                let audio = pl.songs[pl.index].howl;
-                if (audio) {
-                    if (audio.playing()) {
+                if (!pl.howl) {
+                    pl.play();
+                } else {
+                    if (pl.howl.playing()) {
                         pl.pause();
                     } else {
                         pl.play();
                     };
-                } else {
-                    pl.play();
                 };
             };
 
-            pl.sendCurrentSongData = () => {
+            /* pl.sendCurrentSongData = () => { */
+            /*     let song = pl.songs[pl.index]; */
+            /*     elmApp.ports.audioPortFromJS.send({ */
+            /*         title : song.title, */
+            /*         artist : song.artist, */
+            /*     }); */ 
+            /* }; */
+            pl.sendSongData = () => {
                 let song = pl.songs[pl.index];
                 elmApp.ports.audioPortFromJS.send({
+                    type : 3,
                     title : song.title,
                     artist : song.artist,
-                }); 
+                });
             };
 
-            pl.sendTimeData = () => {
-                let song = pl.songs[pl.index];
-                if (song.howl) {
+            // we want to parameterize the seek amount because sometimes we don't
+            // want to send the seek amount of the howl instance (because there 
+            // isn't one. we want to send the seek amount that WE stored so it'll
+            // be displayed properly in the media player. this way the user can 
+            // seek into a song before it's even loaded
+            // TODO: I just realized: we can't do it unless we send some duration 
+            // and also some "isPlaying" state. so i'll have to somehow do that 
+
+            pl.sendTimeData = ( seekAMT ) => {
+                if (pl.howl) {
                     elmApp.ports.audioPortFromJS.send({
-                        elapsed : song.howl.seek(),
-                        duration : song.howl.duration(),
-                        isPlaying : song.howl.playing(),
+                        type : 2,
+                        elapsed : Math.floor(seekAMT),
+                        duration : pl.howl.duration(),
+                        isPlaying : pl.howl.playing(),
                     });
                 };
             };
+            // send song data right when we pass a new album
+            pl.sendSongData();
+            // For some reason this causes a cyclic object value type error
+            setInterval(() => {
+                /* let audio = pl.songs[pl.index].howl; */
+                pl.sendSongData();
+                if (pl.howl) {
+                    pl.sendTimeData(pl.howl.seek());
+                };
+            }, 1000);
 
             return pl;
         };
@@ -227,13 +325,15 @@
                 console.log("should toggle play");
                 player.togglePlay();
             } else if (msg === "PLAY") {
-                console.log("elm says play");
                 player.play();
             } else if (msg === "PAUSE") {
-                console.log("elm says pause");
                 player.pause();
             } else if (msg === "NEXT") {
-                player.next();
+                player.forceNext();
+            } else if (msg === "TOGGLE_SHUFFLE") {
+                player.toggleShuffle();
+            } else if (msg === "TOGGLE_REPEAT") {
+                player.toggleRepeat();
             } else if (msg === "PREV") {
                 player.prev();
             // i shouldn't be doing this, but it'll get the job done
@@ -246,57 +346,6 @@
             };
             
         });
-
-
-
-/*         let audio; */ 
-
-/*         elm.ports.audioPortToJS.subscribe((msg) => { */
-/*             if (msg.fetch !== undefined ) { */
-/*                 console.log(msg.fetch); */
-/*                 audio = new Howl({ */
-/*                     src: [ msg.fetch ], */
-/*                     onload: () => { */
-/*                         elm.ports.audioPortFromJS.send({ */
-/*                             event : "SONG_LOADED" */
-/*                         }); */
-/*                         elm.ports.audioPortFromJS.send({ */
-/*                             duration : audio.duration(), */
-/*                         }); */
-/*                     }, */
-/*                     onseek: () => { */
-/*                         elm.ports.audioPortFromJS.send({ */
-/*                             elapsed : audio.seek(), */
-/*                         }); */
-/*                     }, */
-/*                     onend: () => { */
-/*                         elm.ports.audioPortFromJS.send({ */
-/*                             event : "SONG_ENDED" */
-/*                         }); */
-/*                     } */
-/*                 }); */
-/*             } else if (msg === "play") { */
-/*                 console.log("elm says play"); */
-/*                 audio.play(); */
-/*             } else if (msg === "pause") { */
-/*                 console.log("elm says pause"); */
-/*                 audio.pause(); */
-/*             // i shouldn't be doing this, but it'll get the job done */
-/*             } else if (msg.seek !== undefined){ */
-/*                 audio.seek(msg.seek); */
-/*             } else { */
-/*                 console.log("something didn't go as planned...") */
-/*                 console.log(msg); */
-/*             }; */
-/*         }); */
-/*         setInterval(() => { */
-/*             if (audio !== undefined) { */
-/*                 elm.ports.audioPortFromJS.send({ */
-/*                     elapsed : audio.seek(), */
-/*                 }); */
-/*             }; */
-/*         }, 1000); */
-
         </script>
 </body>
 <link href="./fonts/pleaseWork.css" rel="stylesheet" type="text/css">

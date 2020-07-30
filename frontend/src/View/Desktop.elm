@@ -25,32 +25,9 @@ import View.MediaPlayer
 
 import Window
 import Windows
+import View.Windoze
 
-view title model =
-    { title = title
-    , body = 
-        [ E.layout
-            [ E.inFront (View.Navbar.makeNavbar model)
-            , E.htmlAttribute <| Html.Events.on "mousemove" (JDecode.map Msg.MouseMoved screenCoords)
-            , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
-            , EEvents.onMouseUp Msg.MouseUpOnTitleBar
-            ]
-            <| mainDocumentColumn model
-        ]
-    }
-
-screenCoords : JDecode.Decoder Coords
-screenCoords =
-    JDecode.map2 Coords
-        (JDecode.field "screenX" JDecode.int)
-        (JDecode.field "screenY" JDecode.int)
-
-type alias Coords =
-    { x : Int
-    , y : Int
-    }
-
-mainDocumentColumn model =
+view model =
     E.el
         [ E.width E.fill
         , E.height E.fill
@@ -119,38 +96,49 @@ desktop model =
             (Msg.OpenWindow Window.MediaPlayerMainWindow)
 
         viewHelper windowType viewFunc =
-            case Windows.isOpen windowType model.windows of
-                True ->
-                    case (Windows.get windowType model.windows) of
-                        (Window.Window t_ geometry) ->
-                            case geometry.isMinimized of
-                                True ->
-                                    E.html <| Html.div [] []
-                                False ->
-                                    viewFunc model
-                False ->
-                        E.html
-                            <| Html.div [] []
+            -- TODO: write a windows.isMinimized function and use it here
+            case (Windows.isOpen windowType model.windows, Windows.isMinimized windowType model.windows) of
+                (True, False) ->
+                    viewFunc
+                (_, _) ->
+                    E.none
+
+        mediaPlayerInWindow =
+            let
+                mediaPlayerProgram =
+                    Windows.get Window.MediaPlayerMainWindow model.windows 
+                viewWin =
+                    View.Windoze.makeWindow mediaPlayerProgram (View.MediaPlayer.viewPhone model)
+            in
+                viewHelper Window.MediaPlayerMainWindow viewWin
+        fileExplorerInWindow =
+            let
+                fileExplorerProgram =
+                    Windows.get Window.FileExplorerMainWindow model.windows 
+                viewWin =
+                    View.Windoze.makeWindow fileExplorerProgram (View.FileExplorer.fileExplorer model)
+            in
+                viewHelper Window.FileExplorerMainWindow viewWin
+        contactMeInWindow =
+            let
+                poorMansOutlookProgram =
+                    Windows.get Window.PoorMansOutlookMainWindow model.windows 
+                viewWin =
+                    View.Windoze.makeWindow poorMansOutlookProgram (View.PoorMansOutlook.poorMansOutlook model)
+            in
+                viewHelper Window.PoorMansOutlookMainWindow viewWin
 
     in
         E.column
             [ E.alignLeft
-            , E.inFront
-                <| viewHelper
-                    Window.FileExplorerMainWindow
-                    View.FileExplorer.fileExplorer
-            , E.inFront
-                <| viewHelper
-                    Window.PoorMansOutlookMainWindow
-                    View.PoorMansOutlook.poorMansOutlook
-            , E.inFront 
-                <| viewHelper
-                    Window.MediaPlayerMainWindow
-                    View.MediaPlayer.mediaPlayer
+            , E.inFront mediaPlayerInWindow
+            , E.inFront fileExplorerInWindow
+            , E.inFront contactMeInWindow
             ]
             [ item1
             , item2
             ]
+
 heightBlock height =
     E.el
         [ E.height <| E.px height

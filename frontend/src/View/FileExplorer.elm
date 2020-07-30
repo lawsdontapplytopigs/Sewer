@@ -43,7 +43,8 @@ fileExplorer model =
 
         wholeContent =
             E.el
-                [ E.width <| E.px ((imageSize * 4) + 200)
+                -- [ E.width <| E.px ((imageSize * 4) + 200)
+                [ E.width E.fill
                 , E.height <| E.px ((imageSize * 3) + 100)
                 , E.centerX
                 ]
@@ -70,62 +71,21 @@ fileExplorer model =
                             <| List.map makeAlbumSized model.albums1
                         ]
 
-
-        toolBar = Windoze.makeToolBar
-            [ Windoze.makeToolItem "File" 
-            , Windoze.makeToolItem "Edit"
-            , Windoze.makeToolItem "Help"
-            ]
-        titleBar = Windoze.makeTitleBar 
-            -- { mouseDownMsg = Msg.FileExplorerMouseDownOnTitleBar
-            -- , mouseUpMsg = Msg.FileExplorerMouseUpOnTitleBar
-            -- }
-            [ E.row
-                [ E.width <| E.px 48
-                -- , EBackground.color <| E.rgb255 80 80 80
-                , E.spacing 7
-                ]
-                [ Windoze.minimizeButton (E.rgb255 0 0 0) (Just (Msg.MinimizeWindow Window.FileExplorerMainWindow))
-                , Windoze.maximizeButton (E.rgb255 0 0 0) (Just Msg.NoOp)
-                ]
-            , Windoze.xButton (E.rgb255 0 0 0) (Just (Msg.CloseWindow Window.FileExplorerMainWindow))
-            ]
-            Window.FileExplorerMainWindow
-            windowGeometry.title
-            windowGeometry.isFocused
-            windowGeometry.iconSmall
     in
-        E.el
-            [ E.htmlAttribute <| Html.Attributes.style "transform" ("translate(" ++ String.fromInt windowGeometry.x ++ "px" ++ ", " ++ String.fromInt windowGeometry.y ++ "px )")
-            -- [ E.htmlAttribute <| Html.Attributes.style "transform" "translate( 2.1px
-            -- , E.htmlAttribute <| Html.Attributes.style "left" ((String.fromInt windowGeometry.x) ++ "px")
-            -- , E.htmlAttribute <| Html.Attributes.style "top" ((String.fromInt windowGeometry.y) ++ "px")
-            , E.htmlAttribute <| Html.Attributes.style "z-index" (String.fromInt windowGeometry.zIndex)
-            , EEvents.onMouseDown <| Msg.WindowClicked Window.FileExplorerMainWindow
+        E.column
+            [ E.width E.fill
+            , E.height E.fill
             ]
-            <| Windoze.type1Level2RaisedBorder
-                <| Windoze.type1Level1RaisedBorder
-                    <| Windoze.makeMainBorder 
-                        <| E.column
-                            [
-                            ]
-                            [ titleBar
-                            , E.el 
-                                [ E.width E.fill
-                                , E.height E.fill 
-                                , EBackground.color Palette.color0
-                                ]
-                                <| toolBar
-                            , Windoze.type1Level1DepressedBorder 
-                                <| Windoze.type1Level2DepressedBorder wholeContent
-                            , E.el
-                                [ E.width E.fill
-                                , EBackground.color Palette.color0
-                                , EBorder.widthEach { top = 2, right = 0, bottom = 0, left = 0 }
-                                , EBorder.color <| Palette.color0
-                                ]
-                                <| Windoze.makeInfoBar "8 objects" "99999999999999999999kb"
-                            ]
+            [ Windoze.type1Level1DepressedBorder 
+                <| Windoze.type1Level2DepressedBorder wholeContent
+            , E.el
+                [ E.width E.fill
+                , EBackground.color Palette.color0
+                , EBorder.widthEach { top = 2, right = 0, bottom = 0, left = 0 }
+                , EBorder.color <| Palette.color0
+                ]
+                <| Windoze.makeInfoBar "8 objects" "99999999999999999999kb"
+            ]
 
 makeAlbum : 
     Int 

@@ -9,6 +9,7 @@ import Programs.MediaPlayer
 type Msg
     = Tick Time.Posix
     | AdjustTimeZone Time.Zone
+    | GotViewportData { viewportWidth : Int , viewportHeight : Int }
 
     -- Window Related
     | OpenWindow Window.WindowType
@@ -35,10 +36,13 @@ type Msg
     -- Audio Related
     | GotSongData Programs.MediaPlayer.SongData
     | GotAlbumData Programs.MediaPlayer.AlbumData
+    | GotTimeData Programs.MediaPlayer.TimeData
 
     | PressedPlayOrPause
     | PressedNextSong
     | PressedPrevSong
+    | PressedToggleShuffle
+    | PressedToggleRepeat
     | SongLoaded
     | MediaPlayerTrackSliderMoved Float
     | SongEnded

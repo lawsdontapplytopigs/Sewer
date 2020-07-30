@@ -11,6 +11,8 @@ if [[ ! -d ./built/icons ]]; then
 fi
 #IMAGES
 cp ./prebuilt/no_signal_bars.jpg ./built/
+cp ./prebuilt/shuffle.png ./built/
+cp ./prebuilt/repeat.png ./built/
 cp -r ./prebuilt/albums ./built/
 
 #ICONS
