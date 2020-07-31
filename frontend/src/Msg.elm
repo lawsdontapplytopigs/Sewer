@@ -43,6 +43,7 @@ type Msg
     | PressedPrevSong
     | PressedToggleShuffle
     | PressedToggleRepeat
+    | PlaySongAt Int
     | SongLoaded
     | MediaPlayerTrackSliderMoved Float
     | SongEnded

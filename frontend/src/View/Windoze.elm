@@ -364,6 +364,146 @@ hSeparator =
             <| E.none
         ]
 
+xIcon =
+    let
+        color = E.rgb255 0 0 0
+        p = 1
+
+        buttonWidth = (12 * p)
+        buttonHeight = (10 * p)
+
+        px col =
+            E.el
+                [ E.width <| E.px p
+                , E.height <| E.px p
+                , EBackground.color col
+                ]
+                <| E.none
+
+        fillWidth w = 
+            E.el
+                [ E.width <| E.px (p * w)
+                , E.height <| E.px p
+                ]
+                <| E.none
+
+        row1 =
+            E.row
+                [ 
+                ]
+                [ fillWidth buttonWidth
+                ]
+        row2 =
+            E.row
+                [
+                ]
+                [ fillWidth 2
+                , px color
+                , px color
+                , fillWidth 4
+                , px color
+                , px color
+                , fillWidth 2
+                ]
+        row3 =
+            E.row
+                [
+                ]
+                [ fillWidth 3
+                , px color
+                , px color
+                , fillWidth 2
+                , px color
+                , px color
+                , fillWidth 3
+                ]
+        row4 =
+            E.row
+                [
+                ]
+                [ fillWidth 4
+                , px color
+                , px color
+                , px color
+                , px color
+                , fillWidth 4
+                ]
+        row5 =
+            E.row
+                [
+                ]
+                [ fillWidth 5
+                , px color
+                , px color
+                , fillWidth 5
+                ]
+        row6 =
+            E.row
+                [
+                ]
+                [ fillWidth 4
+                , px color
+                , px color
+                , px color
+                , px color
+                , fillWidth 4
+                ]
+        row7 =
+            E.row
+                [
+                ]
+                [ fillWidth 3
+                , px color
+                , px color
+                , fillWidth 2
+                , px color
+                , px color
+                , fillWidth 3
+                ]
+        row8 =
+            E.row
+                [
+                ]
+                [ fillWidth 2
+                , px color
+                , px color
+                , fillWidth 4
+                , px color
+                , px color
+                , fillWidth 2
+                ]
+        row9 =
+            E.row
+                [ 
+                ]
+                [ fillWidth buttonWidth
+                ]
+        row10 =
+            E.row
+                [ 
+                ]
+                [ fillWidth buttonWidth
+                ]
+
+    in
+        E.column
+            -- [ E.width <| E.px buttonWidth
+            -- , E.height <| E.px buttonHeight
+            -- ]
+            [
+            ]
+            [ row1
+            , row2
+            , row3
+            , row4
+            , row5
+            , row6
+            , row7
+            , row8
+            , row9
+            , row10
+            ]
+
 xButton color msg =
     let
 
@@ -525,7 +665,7 @@ xButton color msg =
                 , label =
                     type2Level2RaisedBorder
                         <| type2Level1RaisedBorder
-                            drawing
+                            xIcon
                             -- E.image
                             --     [ E.height <| E.px 10
                             --     , E.width <| E.px 12

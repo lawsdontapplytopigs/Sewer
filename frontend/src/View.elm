@@ -30,7 +30,11 @@ view title model =
                 [ E.width E.fill
                 , E.height E.fill
                 ]
-                <| View.MediaPlayer.viewPhone model
+                <| View.MediaPlayer.viewPhone 
+                    { viewportWidth = model.viewportWidth
+                    , viewportHeight = model.viewportHeight
+                    }
+                    model
 
         device = E.classifyDevice 
             { width = model.viewportWidth

@@ -21,12 +21,15 @@ white = E.rgb255 255 255 255
 -- color0 = E.rgb255 255 170 210
 color0 = E.rgb255 245 180 255
 color1 = E.rgb255 255 215 228
+color2 = E.rgb255 210 120 240
+
 
 padding0 = 10
 padding1 = 20
 padding2 = 40
 padding3 = 60
 padding4 = 80
+padding5 = 160
 
 ic name = "./icons/" ++ name
 

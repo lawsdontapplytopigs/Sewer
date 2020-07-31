@@ -96,19 +96,29 @@ desktop model =
             (Msg.OpenWindow Window.MediaPlayerMainWindow)
 
         viewHelper windowType viewFunc =
-            -- TODO: write a windows.isMinimized function and use it here
             case (Windows.isOpen windowType model.windows, Windows.isMinimized windowType model.windows) of
                 (True, False) ->
                     viewFunc
                 (_, _) ->
                     E.none
 
+        -- TODO: clean up this stuff...
         mediaPlayerInWindow =
             let
                 mediaPlayerProgram =
                     Windows.get Window.MediaPlayerMainWindow model.windows 
+                mediaPlayerWindowData =
+                    case mediaPlayerProgram of
+                        ( Window.Window t_ winData ) -> 
+                            winData
                 viewWin =
-                    View.Windoze.makeWindow mediaPlayerProgram (View.MediaPlayer.viewPhone model)
+                    View.Windoze.makeWindow 
+                        mediaPlayerProgram 
+                        <| View.MediaPlayer.viewPhone 
+                            { viewportWidth = mediaPlayerWindowData.width - 8 -- we account for windows 95 borders
+                            , viewportHeight = mediaPlayerWindowData.height - 8 -- we account for windows 95 borders
+                            }
+                            model
             in
                 viewHelper Window.MediaPlayerMainWindow viewWin
         fileExplorerInWindow =
@@ -127,7 +137,6 @@ desktop model =
                     View.Windoze.makeWindow poorMansOutlookProgram (View.PoorMansOutlook.poorMansOutlook model)
             in
                 viewHelper Window.PoorMansOutlookMainWindow viewWin
-
     in
         E.column
             [ E.alignLeft

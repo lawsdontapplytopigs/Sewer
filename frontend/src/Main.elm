@@ -80,8 +80,8 @@ init flags =
         model =
             { time = Time.millisToPosix 0
             , zone = Time.utc
-            , viewportWidth = flags.viewportWidth
-            , viewportHeight = flags.viewportHeight
+            , viewportWidth = Debug.log "width" flags.viewportWidth
+            , viewportHeight = Debug.log "height" flags.viewportHeight
             -- we'll use this to track how much to move the window
             -- we set these when the mouse is pressed on the window's titlebar
             , record =
@@ -383,6 +383,9 @@ update msg model =
             in
             ( model_, toggleRepeatCMD )
 
+        Msg.PlaySongAt ind ->
+            ( model, playSongAtCMD ind )
+
         Msg.GotAlbumData data ->
             let
                 model_ = 
@@ -545,9 +548,10 @@ timeDataDecoder =
         (Json.Decode.field "isPlaying" Json.Decode.bool)
 songDataDecoder : Json.Decode.Decoder  Programs.MediaPlayer.SongData
 songDataDecoder =
-    Json.Decode.map2 Programs.MediaPlayer.SongData
+    Json.Decode.map3 Programs.MediaPlayer.SongData
         (Json.Decode.field "title" Json.Decode.string)
         (Json.Decode.field "artist" Json.Decode.string)
+        (Json.Decode.field "duration" Json.Decode.int)
 
 albumDataDecoder : Json.Decode.Decoder Programs.MediaPlayer.AlbumData
 albumDataDecoder =
@@ -566,3 +570,4 @@ prevCMD = audioPortToJS (Json.Encode.string "PREV")
 togglePlayCMD = audioPortToJS (Json.Encode.string "TOGGLE_PLAY")
 toggleShuffleCMD = audioPortToJS (Json.Encode.string "TOGGLE_SHUFFLE")
 toggleRepeatCMD = audioPortToJS (Json.Encode.string "TOGGLE_REPEAT")
+playSongAtCMD index = audioPortToJS (Json.Encode.object [ ("playSongAt", Json.Encode.int index) ])

@@ -19,6 +19,7 @@ type alias TimeData =
 type alias SongData =
     { title : String
     , artist : String
+    , duration : Int -- in seconds
     }
 
 -- we don't actually use this to control anything on the js side

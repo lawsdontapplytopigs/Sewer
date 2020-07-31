@@ -48,51 +48,61 @@
                 {
                     title : "Love Is A Mighty Big Word",
                     artist : "Sewerslvt",
+                    duration : 131,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LoveIsAMightyBigWord.mp3"
                 },
                 {
                     title : "Newlove",
                     artist : "Sewerslvt",
+                    duration : 359,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Newlove.mp3"
                 },
                 {
                     title : "Yandere Complex",
                     artist : "Sewerslvt",
+                    duration: 250,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/YandereComplex.mp3"
                 },
                 {
                     title : "Ecifircas",
                     artist : "Sewerslvt",
+                    duration: 347,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Ecifircas.mp3"
                 },
                 {
                     title : "Lexapro Delirium",
                     artist : "Sewerslvt",
+                    duration: 435,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LexaproDelirium.mp3"
                 },
                 {
                     title : "This Fleeting Feeling",
                     artist : "Sewerslvt",
+                    duration: 211,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/ThisFleetingFeeling.mp3"
                 },
                 {
                     title : "Swinging In His Cell",
                     artist : "Sewerslvt",
+                    duration: 322,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/SwingingInHisCell.mp3"
                 },
                 {
                     title : "Mr. Kill Myself",
                     artist : "Sewerslvt",
+                    duration: 471,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Mr.KillMyself.mp3"
                 },
                 {
                     title : "Down The Drain",
                     artist : "Sewerslvt",
+                    duration: 488,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/DownTheDrain.mp3"
                 },
                 {
                     title : "Slowdeath",
                     artist : "Sewerslvt",
+                    duration: 492,
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Slowdeath.mp3"
                 },
             ]
@@ -283,6 +293,7 @@
                     type : 3,
                     title : song.title,
                     artist : song.artist,
+                    duration : song.duration,
                 });
             };
 
@@ -337,14 +348,16 @@
             } else if (msg === "PREV") {
                 player.prev();
             // i shouldn't be doing this, but it'll get the job done
-            } else if (msg.seek){
+            } else if (msg.seek !== undefined){
                 console.log("should seek");
                 player.seek(msg.seek);
+            } else if (msg.playSongAt !== undefined) {
+                console.log("playing song at " + msg.playSongAt);
+                player.playAt(msg.playSongAt);
             } else {
                 console.log("something didn't go as planned...")
                 console.log(msg);
             };
-            
         });
         </script>
 </body>
