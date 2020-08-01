@@ -13,7 +13,7 @@ fi
 cp ./prebuilt/no_signal_bars.jpg ./built/
 cp ./prebuilt/shuffle.png ./built/
 cp ./prebuilt/repeat.png ./built/
-cp -r ./prebuilt/albums ./built/
+# cp -r ./prebuilt/albums ./built/ #un-comment this for production
 
 #ICONS
 IC='./art/icons/additional/windows98-icons/png'

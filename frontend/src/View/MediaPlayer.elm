@@ -215,7 +215,7 @@ viewPhone { viewportWidth, viewportHeight } model =
                                 Nothing ->
                                     Nothing
                                         
-                    in -- windowsLoadingBarSlider =
+                    in
                         E.el
                             [ E.width <| E.fill
                             , E.height <| E.px sliderHeight
@@ -370,6 +370,24 @@ viewPhoneSonglistPanel { viewportWidth, viewportHeight } model =
                 --                     <| regularButton False (E.el [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(1.7)" ] Windoze.xIcon) Msg.NoOp
                 --                 ]
                 --             ]
+
+        -- viewAlbums albumsList =
+        --     E.column
+        --         [E.width E.fill
+                
+        --         ]
+                
+
+        -- phoneLandingScreen =
+        --     let
+        --     E.el
+        --         [
+        --         ]
+        --         <| Windoze.type1Level2RaisedBorder
+        --             <| Windoze.type1Level1RaisedBorder
+        --                 <| Windoze.makeMainBorder
+        --                     <| 
+
         panel =
             let
                 songsList =
@@ -482,7 +500,7 @@ viewAlbum model =
                     ]
                     <| E.text "album"
                 , E.el
-                    [ EFont.size 20
+                    [ EFont.size 19
                     ]
                     <| E.text 
                         <| case model.mediaPlayer.albumTitle of
@@ -490,14 +508,14 @@ viewAlbum model =
                                 str
                             Nothing ->
                                 "__-__--_-_____" -- TODO
+                -- , E.el
+                --     [ EFont.size 15
+                --     , EFont.color <| E.rgb255 20 20 20
+                --     ]
+                --     <| E.text "Sewerslvt"
                 , E.el
-                    [ EFont.size 15
-                    , EFont.color <| E.rgb255 20 20 20
-                    ]
-                    <| E.text "Sewerslvt"
-                , E.el
-                    [ EFont.size 13
-                    , EFont.color <| E.rgb255 40 40 40
+                    [ EFont.size 14
+                    , EFont.color <| E.rgb255 30 30 30
                     ]
                     <| E.text <| (String.fromInt numberOfTracks) ++ " tracks, " ++ (String.fromInt albumNumberOfMinutes) ++ " minutes"
                 ]
