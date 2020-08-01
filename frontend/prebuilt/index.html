@@ -13,32 +13,6 @@
     </div>
     <div id="elm-node"></div>
     <script>
-        let elm = Elm.Main.init({ 
-            node: document.getElementById("elm-node"),
-            flags: { 
-                viewportWidth : window.innerWidth,
-                viewportHeight : window.innerHeight,
-            }
-        });
-        window.onresize = () => {
-            elm.ports.audioPortFromJS.send({
-                type : 4,
-                viewportWidth : window.innerWidth,
-                viewportHeight : window.innerHeight,
-            });
-        };
-
-        // unfortunately we have to do this here, since the mdgriffith/elm-ui 
-        // library overrides our attributes if we do 
-        // "E.htmlAttribute <| Html.Attributes.style "autofill" "email"
-        // note: we do NOT want to use the mdgriffith/elm-ui function for creating
-        // an email input field, because on invalid email adresses it looks 
-        // super ugly. Not the library's fault, but the browser's.
-        let email = document.getElementById("emailBox");
-        if (email != undefined) {
-            email.autofill = "email"
-        };
-
         let albumDir = "./albums/";
 
         let album0 = {
@@ -106,6 +80,34 @@
                     src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Slowdeath.mp3"
                 },
             ]
+        };
+
+    </script>
+    <script>
+        let elm = Elm.Main.init({ 
+            node: document.getElementById("elm-node"),
+            flags: { 
+                viewportWidth : window.innerWidth,
+                viewportHeight : window.innerHeight,
+            }
+        });
+        window.onresize = () => {
+            elm.ports.audioPortFromJS.send({
+                type : 4,
+                viewportWidth : window.innerWidth,
+                viewportHeight : window.innerHeight,
+            });
+        };
+
+        // unfortunately we have to do this here, since the mdgriffith/elm-ui 
+        // library overrides our attributes if we do 
+        // "E.htmlAttribute <| Html.Attributes.style "autofill" "email"
+        // note: we do NOT want to use the mdgriffith/elm-ui function for creating
+        // an email input field, because on invalid email adresses it looks 
+        // super ugly. Not the library's fault, but the browser's.
+        let email = document.getElementById("emailBox");
+        if (email != undefined) {
+            email.autofill = "email"
         };
 
         let Player = ( elmApp, album ) => {
