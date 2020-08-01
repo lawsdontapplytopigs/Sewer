@@ -1,13 +1,16 @@
 
-let albumDir = "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/";
+let albumDir = "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@3ecc3a71926c43939f003ab89da1b9bef1c75bf1/frontend/prebuilt/albums/";
+
 let makeURI = ( album_name ) => ( song_name ) => {
-    return "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/" + album_name + "/"+ song_name + ".mp3"
+    return "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@3ecc3a71926c43939f003ab89da1b9bef1c75bf1/frontend/prebuilt/albums/" + album_name + "/"+ song_name + ".mp3"
 };
+
+console.log( albumDir + "irly-ep/cover.jpg")
 
 let irlyEPURI = makeURI("irly-ep")
 let irlyEP = {
     title : "IRLY - EP",
-    albumCoverSrc : albumDir + "IRLY-EP/cover.jpg",
+    albumCoverSrc : albumDir + "irly-ep/cover.jpg",
     songs : [
         {
             title : "Kawaii Razor Blades (feat. yandere)",
@@ -267,7 +270,7 @@ let selectedSewerWorks = {
 let starvingSlvtsAlwaysGetTheirFixURI = makeURI("starving-slvts-always-get-their-fix");
 let starvingSlvtsAlwaysGetTheirFix = {
     title : "Starving Slvts Always Get Their Fix",
-    albumCoverSrc : albumDir + "starving-slvts-always-get-their-fix/cover.jpg"
+    albumCoverSrc : albumDir + "starving-slvts-always-get-their-fix/cover.jpg",
     songs : [
         {
             title : "Starving Slvt Overture",
@@ -652,16 +655,28 @@ let dontBeAfraidOfDying = {
     ]
 };
 
-module.exports = {
-    albums : [
-        irlyEP,
-        drainingLoveStory,
-        drowningInTheSewer,
-        selectedSewerWorks,
-        starvingSlvtsAlwaysGetTheirFix,
-        sewerSlvtEP,
-        sewerIdolProject,
-        itJustGetsWorse,
-        dontBeAfraidOfDying
-    ]
-};
+window.SewerslvtAlbums = [
+    irlyEP,
+    drainingLoveStory,
+    drowningInTheSewer,
+    selectedSewerWorks,
+    starvingSlvtsAlwaysGetTheirFix,
+    sewerSlvtEP,
+    sewerIdolProject,
+    itJustGetsWorse,
+    dontBeAfraidOfDying
+];
+
+/* module.exports = { */
+/*     albums : [ */
+/*         irlyEP, */
+/*         drainingLoveStory, */
+/*         drowningInTheSewer, */
+/*         selectedSewerWorks, */
+/*         starvingSlvtsAlwaysGetTheirFix, */
+/*         sewerSlvtEP, */
+/*         sewerIdolProject, */
+/*         itJustGetsWorse, */
+/*         dontBeAfraidOfDying */
+/*     ] */
+/* }; */

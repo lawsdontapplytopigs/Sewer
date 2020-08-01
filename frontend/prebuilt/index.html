@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <script src="./elm.js" type="text/javascript"></script>
     <script src="./howler.core.min.js" type="text/javascript"></script>
+    <script src="./albums.js" type="text/javascript"></script>
     <link href="./fonts/fonts.css" rel="stylesheet">
     <link href="general.css" rel="stylesheet" type="text/plain">
 </head>
@@ -13,74 +14,75 @@
     </div>
     <div id="elm-node"></div>
     <script>
-        let albumDir = "./albums/";
+        console.log(typeof(window.SewerslvtAlbums));
+        /* let albumDir = "./albums/"; */
 
-        let album0 = {
-            title : "Draining Love Story",
-            albumCoverSrc : albumDir + "0.jpg",
-            songs : [ 
-                {
-                    title : "Love Is A Mighty Big Word",
-                    artist : "Sewerslvt",
-                    duration : 131,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LoveIsAMightyBigWord.mp3"
-                },
-                {
-                    title : "Newlove",
-                    artist : "Sewerslvt",
-                    duration : 359,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Newlove.mp3"
-                },
-                {
-                    title : "Yandere Complex",
-                    artist : "Sewerslvt",
-                    duration: 250,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/YandereComplex.mp3"
-                },
-                {
-                    title : "Ecifircas",
-                    artist : "Sewerslvt",
-                    duration: 347,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Ecifircas.mp3"
-                },
-                {
-                    title : "Lexapro Delirium",
-                    artist : "Sewerslvt",
-                    duration: 435,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LexaproDelirium.mp3"
-                },
-                {
-                    title : "This Fleeting Feeling",
-                    artist : "Sewerslvt",
-                    duration: 211,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/ThisFleetingFeeling.mp3"
-                },
-                {
-                    title : "Swinging In His Cell",
-                    artist : "Sewerslvt",
-                    duration: 322,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/SwingingInHisCell.mp3"
-                },
-                {
-                    title : "Mr. Kill Myself",
-                    artist : "Sewerslvt",
-                    duration: 471,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Mr.KillMyself.mp3"
-                },
-                {
-                    title : "Down The Drain (feat. Nurtheon)",
-                    artist : "Sewerslvt",
-                    duration: 488,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/DownTheDrain.mp3"
-                },
-                {
-                    title : "Slowdeath",
-                    artist : "Sewerslvt",
-                    duration: 492,
-                    src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Slowdeath.mp3"
-                },
-            ]
-        };
+        /* let album0 = { */
+        /*     title : "Draining Love Story", */
+        /*     albumCoverSrc : albumDir + "0.jpg", */
+        /*     songs : [ */ 
+        /*         { */
+        /*             title : "Love Is A Mighty Big Word", */
+        /*             artist : "Sewerslvt", */
+        /*             duration : 131, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LoveIsAMightyBigWord.mp3" */
+        /*         }, */
+        /*         { */
+        /*             title : "Newlove", */
+        /*             artist : "Sewerslvt", */
+        /*             duration : 359, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Newlove.mp3" */
+        /*         }, */
+        /*         { */
+        /*             title : "Yandere Complex", */
+        /*             artist : "Sewerslvt", */
+        /*             duration: 250, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/YandereComplex.mp3" */
+        /*         }, */
+        /*         { */
+        /*             title : "Ecifircas", */
+        /*             artist : "Sewerslvt", */
+        /*             duration: 347, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Ecifircas.mp3" */
+        /*         }, */
+        /*         { */
+        /*             title : "Lexapro Delirium", */
+        /*             artist : "Sewerslvt", */
+        /*             duration: 435, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/LexaproDelirium.mp3" */
+        /*         }, */
+        /*         { */
+        /*             title : "This Fleeting Feeling", */
+        /*             artist : "Sewerslvt", */
+        /*             duration: 211, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/ThisFleetingFeeling.mp3" */
+        /*         }, */
+        /*         { */
+        /*             title : "Swinging In His Cell", */
+        /*             artist : "Sewerslvt", */
+        /*             duration: 322, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/SwingingInHisCell.mp3" */
+        /*         }, */
+        /*         { */
+        /*             title : "Mr. Kill Myself", */
+        /*             artist : "Sewerslvt", */
+        /*             duration: 471, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Mr.KillMyself.mp3" */
+        /*         }, */
+        /*         { */
+        /*             title : "Down The Drain (feat. Nurtheon)", */
+        /*             artist : "Sewerslvt", */
+        /*             duration: 488, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/DownTheDrain.mp3" */
+        /*         }, */
+        /*         { */
+        /*             title : "Slowdeath", */
+        /*             artist : "Sewerslvt", */
+        /*             duration: 492, */
+        /*             src : "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@4236763f91e00d6f6fa21a2316a7aefe79de1f84/frontend/prebuilt/albums/DrainingLoveStory/Slowdeath.mp3" */
+        /*         }, */
+        /*     ] */
+        /* }; */
 
     </script>
     <script>
@@ -331,7 +333,7 @@
             return pl;
         };
 
-        let player = Player(elm, album0);
+        let player = Player(elm, window.SewerslvtAlbums[0]);
         elm.ports.audioPortToJS.subscribe((msg) => {
             console.log(msg);
             if (msg === "TOGGLE_PLAY") {

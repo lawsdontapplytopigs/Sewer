@@ -39,6 +39,7 @@ cp -r ./prebuilt/fonts ./built/
 
 # all the js
 cp ./prebuilt/howler.core.min.js ./built/
+cp ./prebuilt/albums.js ./built/
 # all the css
 cp ./prebuilt/general.css ./built/general.css
 
