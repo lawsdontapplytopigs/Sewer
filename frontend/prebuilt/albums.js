@@ -1,8 +1,7 @@
 
-let albumDir = "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@3ecc3a71926c43939f003ab89da1b9bef1c75bf1/frontend/prebuilt/albums/";
-
+let albumDir = "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@216847003787a6e09fb0c1856c6dee24d18f23cb/frontend/prebuilt/albums/";
 let makeURI = ( album_name ) => ( song_name ) => {
-    return "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@3ecc3a71926c43939f003ab89da1b9bef1c75bf1/frontend/prebuilt/albums/" + album_name + "/"+ song_name + ".mp3"
+    return "https://cdn.jsdelivr.net/gh/lawsdontapplytopigs/Sewer@216847003787a6e09fb0c1856c6dee24d18f23cb/frontend/prebuilt/albums/" + album_name + "/"+ song_name + ".mp3"
 };
 
 console.log( albumDir + "irly-ep/cover.jpg")
