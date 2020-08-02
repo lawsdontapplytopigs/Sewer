@@ -4,14 +4,10 @@ module Programs.MediaPlayer exposing
     -- )
     (..)
 
-type alias AlbumData =
-    { title : String
-    , albumCoverSrc : String
-    , songs : List SongData
-    }
+import Array
 
 type alias TimeData =
-    { elapsed : Maybe Int -- I would use a float here, but I think there's and elm compiler bug
+    { elapsed : Maybe Int -- I would use a float here, but I think there's an elm compiler or core library bug
     , duration : Float
     , isPlaying : Bool
     }
@@ -22,31 +18,49 @@ type alias SongData =
     , duration : Int -- in seconds
     }
 
+type alias Album =
+    { title : String
+    , albumCoverSrc : String
+    , songs : Array.Array SongData
+    }
+
+-- we use this because on tablets we want to show something selected by default,
+-- but on phones we want to make it look like nothing is selected
+type SelectedAlbumAndSong 
+    = Default Int Int
+    | Selected Int Int
+    
+
 -- we don't actually use this to control anything on the js side
 -- we only use this data to display stuff properly in the media player
 type alias MediaPlayerData =
-    { isPlaying : Bool
+    { discography : Array.Array Album
+    , selected : SelectedAlbumAndSong
+
     , elapsed : Maybe Int
     , currentSongDuration : Maybe Float
-    , currentSong : Maybe SongData
-    , playlist : List SongData
-    , albumCoverSrc : Maybe String
-    , albumTitle : Maybe String
+    , isPlaying : Bool
+
     , shouldShuffle : Bool
     , shouldRepeat : Bool
     }
 
 init : MediaPlayerData
 init =
-    { isPlaying = False
+    { discography = Array.empty
+    , selected = Default 0 0
+
     , elapsed = Nothing
     , currentSongDuration = Nothing
-    , currentSong = Nothing
-    , playlist = []
-    , albumCoverSrc = Nothing
-    , albumTitle = Nothing
+    , isPlaying = False
     , shouldShuffle = False
     , shouldRepeat = False
+    }
+
+updateDiscography : (Array.Array Album) -> MediaPlayerData -> MediaPlayerData
+updateDiscography albums mpd =
+    { mpd
+        | discography = albums
     }
 
 toggleShuffle : MediaPlayerData -> MediaPlayerData
@@ -61,24 +75,70 @@ toggleRepeat mpd =
         | shouldRepeat = not mpd.shouldRepeat
     }
 
-updateAlbum : AlbumData -> MediaPlayerData -> MediaPlayerData
-updateAlbum data mpd =
+updateSelected : SelectedAlbumAndSong -> MediaPlayerData -> MediaPlayerData
+updateSelected sel mpd =
     { mpd
-        | albumTitle = Just data.title
-        , albumCoverSrc = Just data.albumCoverSrc
-        , playlist = data.songs
+        | selected = sel
     }
 
 updateTimeData : TimeData -> MediaPlayerData -> MediaPlayerData
 updateTimeData data mpd =
     { mpd
         | currentSongDuration = Just data.duration
-        , elapsed = data.elapsed -- we might get null here, so fuck it. we just store it anyway
+        , elapsed = data.elapsed -- we might get Nothing here, so fuck it. we just store it anyway
         , isPlaying = data.isPlaying
     }
-updateCurrentSong : SongData -> MediaPlayerData -> MediaPlayerData
-updateCurrentSong data mpd =
-    { mpd
-        | currentSong = Just data
-    }
 
+getAlbumIndex : SelectedAlbumAndSong -> Int
+getAlbumIndex sel =
+    case sel of
+        Default albumIndex _ ->
+            albumIndex
+        Selected albumIndex _ ->
+            albumIndex
+
+getSongIndex : SelectedAlbumAndSong -> Int
+getSongIndex sel =
+    case sel of
+        Default _ songIndex ->
+            songIndex
+        Selected _ songIndex ->
+            songIndex
+
+getSelectedSong : SelectedAlbumAndSong -> MediaPlayerData -> Maybe SongData
+getSelectedSong sel mpd =
+    let
+        albumInd = getAlbumIndex sel
+        songInd = getSongIndex sel
+
+        album =
+            Array.get albumInd mpd.discography
+    in
+        case album of
+            Just alb ->
+                Array.get songInd alb.songs
+            Nothing ->
+                Nothing
+
+getSelectedAlbum : SelectedAlbumAndSong -> MediaPlayerData -> Maybe Album
+getSelectedAlbum sel mpd =
+    Array.get (getAlbumIndex sel) mpd.discography
+
+getTotalNumberOfAlbumSeconds : Album -> Int
+getTotalNumberOfAlbumSeconds album =
+    let
+        getSongDurations songs_ = Array.map .duration songs_
+    in
+        Array.foldl (+) 0 (getSongDurations album.songs)
+
+getTotalNumberOfAlbumTracks : Album -> Int
+getTotalNumberOfAlbumTracks album =
+    Array.length album.songs
+
+-- updateAlbum : AlbumData -> MediaPlayerData -> MediaPlayerData
+-- updateAlbum data mpd =
+--     { mpd
+--         | albumTitle = Just data.title
+--         , albumCoverSrc = Just data.albumCoverSrc
+--         , playlist = data.songs
+--     }

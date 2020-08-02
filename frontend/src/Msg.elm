@@ -2,6 +2,7 @@ module Msg exposing
     ( Msg(..)
     )
 
+import Array
 import Time exposing (Posix)
 import Window
 import Programs.MediaPlayer
@@ -9,7 +10,7 @@ import Programs.MediaPlayer
 type Msg
     = Tick Time.Posix
     | AdjustTimeZone Time.Zone
-    | GotViewportData { viewportWidth : Int , viewportHeight : Int }
+    | GotViewportGeometry { width : Int , height : Int }
 
     -- Window Related
     | OpenWindow Window.WindowType
@@ -34,24 +35,31 @@ type Msg
     | TryToSendEmail
 
     -- Audio Related
-    | GotSongData Programs.MediaPlayer.SongData
-    | GotAlbumData Programs.MediaPlayer.AlbumData
+    | GotDiscography (Array.Array Programs.MediaPlayer.Album)
+    | GotSelectedAlbumAndSong Programs.MediaPlayer.SelectedAlbumAndSong
     | GotTimeData Programs.MediaPlayer.TimeData
+    -- | GotSongData Programs.MediaPlayer.SongData
+    -- | GotAlbums Programs.MediaPlayer.Album
 
     | PressedPlayOrPause
     | PressedNextSong
     | PressedPrevSong
     | PressedToggleShuffle
     | PressedToggleRepeat
-    | PlaySongAt Int
-    | SongLoaded
+    | SelectedAlbum AlbumIndex
+    | SelectedSong AlbumIndex SongIndex
     | MediaPlayerTrackSliderMoved Float
+
+    | SongLoaded
     | SongEnded
     | SongPlaying
     | SongPaused
     | JsonParseError String
 
     | NoOp
+
+type alias AlbumIndex = Int
+type alias SongIndex = Int
 
 type alias Coords =
     { x : Int

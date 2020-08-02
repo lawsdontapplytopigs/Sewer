@@ -114,7 +114,7 @@ let drowningInTheSewer = {
     songs : [ 
         {
             title : "RSOD",
-            artsit : "Sewerslvt",
+            artist : "Sewerslvt",
             duration : 240,
             src : drowningInTheSewerURI("rsod"),
         },

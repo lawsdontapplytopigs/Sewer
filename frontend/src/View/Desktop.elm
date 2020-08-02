@@ -115,8 +115,8 @@ desktop model =
                     View.Windoze.makeWindow 
                         mediaPlayerProgram 
                         <| View.MediaPlayer.viewPhone 
-                            { viewportWidth = mediaPlayerWindowData.width - 8 -- we account for windows 95 borders
-                            , viewportHeight = mediaPlayerWindowData.height - 8 -- we account for windows 95 borders
+                            { width = model.viewportGeometry.width - 8 -- we account for windows 95 borders
+                            , height = model.viewportGeometry.height - 8 -- we account for windows 95 borders
                             }
                             model
             in

@@ -1,5 +1,6 @@
 port module Main exposing (..)
 
+import Array
 import Browser
 import Dict
 import Html
@@ -27,7 +28,7 @@ import Windows
 port audioPortToJS : Json.Encode.Value -> Cmd msg
 port audioPortFromJS : (Json.Decode.Value -> msg) -> Sub msg
 
-main : Program ViewportData Model Msg.Msg
+main : Program ViewportGeometry Model Msg.Msg
 main = Browser.document
     { init = init
     , view = View.view "Sewerslvt"
@@ -43,8 +44,7 @@ type alias Programs =
 type alias Model =
     { time : Time.Posix
     , zone : Time.Zone
-    , viewportWidth : Int
-    , viewportHeight : Int
+    , viewportGeometry : { width : Int, height : Int }
 
     , record :
         { absoluteX : Int
@@ -74,14 +74,13 @@ type alias AlbumData =
     , maybeAuthor : Maybe String
     }
 
-init : ViewportData -> ( Model, Cmd Msg.Msg )
+init : ViewportGeometry -> ( Model, Cmd Msg.Msg )
 init flags = 
     let
         model =
             { time = Time.millisToPosix 0
             , zone = Time.utc
-            , viewportWidth = Debug.log "width" flags.viewportWidth
-            , viewportHeight = Debug.log "height" flags.viewportHeight
+            , viewportGeometry = { width = flags.width, height = flags.height }
             -- we'll use this to track how much to move the window
             -- we set these when the mouse is pressed on the window's titlebar
             , record =
@@ -116,12 +115,11 @@ init flags =
 update : Msg.Msg -> Model -> ( Model, Cmd Msg.Msg )
 update msg model =
     case msg of
-        Msg.GotViewportData data ->
+        Msg.GotViewportGeometry data ->
             let
                 model_ =
                     { model
-                        | viewportWidth = data.viewportWidth
-                        , viewportHeight = data.viewportHeight
+                        | viewportGeometry = data
                     }
             in
                 (model_, Cmd.none)
@@ -354,6 +352,37 @@ update msg model =
             in
                 ( model_, cmd_)
 
+        Msg.GotDiscography data ->
+            let
+                model_ = 
+                    { model 
+                        | mediaPlayer = Programs.MediaPlayer.updateDiscography data model.mediaPlayer
+                    }
+                cmd_ =
+                    Cmd.none
+            in
+                ( model_, cmd_)
+        Msg.GotSelectedAlbumAndSong sel ->
+            let
+                model_ =
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.updateSelected sel model.mediaPlayer
+                    }
+                cmd_ =
+                    Cmd.none
+            in
+                (model_, cmd_)
+        Msg.GotTimeData data ->
+            let
+                model_ =
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.updateTimeData data model.mediaPlayer
+                    }
+                cmd_ =
+                    Cmd.none
+            in
+                ( model_, cmd_ )
+
         Msg.PressedPlayOrPause ->
             ( model, togglePlayCMD )
         Msg.PressedNextSong ->
@@ -383,46 +412,26 @@ update msg model =
             in
             ( model_, toggleRepeatCMD )
 
-        Msg.PlaySongAt ind ->
-            ( model, playSongAtCMD ind )
-
-        Msg.GotAlbumData data ->
-            let
-                model_ = 
-                    { model 
-                        | mediaPlayer = Programs.MediaPlayer.updateAlbum data model.mediaPlayer
-                    }
-                cmd_ =
-                    Cmd.none
-            in
-                ( model_, cmd_)
-        Msg.GotSongData data ->
-            let
-                model_ =
-                    { model
-                        | mediaPlayer = Programs.MediaPlayer.updateCurrentSong data model.mediaPlayer
-                    }
-                cmd_ =
-                    Cmd.none
-            in
-                ( model_, cmd_ )
-        Msg.GotTimeData data ->
-            let
-                model_ =
-                    { model
-                        | mediaPlayer = Programs.MediaPlayer.updateTimeData data model.mediaPlayer
-                    }
-                cmd_ =
-                    Cmd.none
-            in
-                ( model_, cmd_ )
         Msg.MediaPlayerTrackSliderMoved float ->
             let
                 model_ = model
-                cmd_ = 
-                    audioPortToJS (Json.Encode.object [ ("seek", Json.Encode.float float) ])
+                cmd_ = seekCMD float
             in
                 (model_, cmd_)
+
+        Msg.SelectedAlbum albumIndex ->
+            let
+                model_ = model
+                cmd_ = selectAlbumCMD albumIndex
+            in
+                (model_, cmd_)
+        Msg.SelectedSong albumIndex songIndex ->
+            let
+                model_ = model
+                cmd_ = selectSongCMD albumIndex songIndex
+            in
+                (model_, cmd_)
+
         Msg.SongLoaded ->
             ( model, Cmd.none )
         Msg.SongPlaying ->
@@ -502,13 +511,13 @@ audioPortFromJSDecoder =
                         )
                         eventDecoder
                 1 ->
-                    Json.Decode.map (\data -> Msg.GotAlbumData data) albumDataDecoder
+                    Json.Decode.map (\data -> Msg.GotDiscography data) discographyDecoder
                 2 ->
                     Json.Decode.map (\data -> Msg.GotTimeData data) timeDataDecoder
                 3 ->
-                    Json.Decode.map (\data -> Msg.GotSongData data) songDataDecoder
+                    Json.Decode.map (\data -> Msg.GotSelectedAlbumAndSong data) selectedDecoder
                 4 ->
-                    Json.Decode.map (\data -> Msg.GotViewportData data) viewportDataDecoder
+                    Json.Decode.map (\data -> Msg.GotViewportGeometry data) viewportDataDecoder
                 _ ->
                     Msg.JsonParseError ("bizarro type number: " ++ String.fromInt t) |> Json.Decode.succeed
     in
@@ -517,15 +526,20 @@ audioPortFromJSDecoder =
             branchType
 
 
-type alias ViewportData =
-    { viewportWidth : Int
-    , viewportHeight : Int
+type alias ViewportGeometry =
+    { width : Int
+    , height : Int
     }
-viewportDataDecoder : Json.Decode.Decoder ViewportData
+
+viewportDataDecoder : Json.Decode.Decoder ViewportGeometry
 viewportDataDecoder =
-    Json.Decode.map2 ViewportData
-        (Json.Decode.field "viewportWidth" Json.Decode.int)
-        (Json.Decode.field "viewportHeight" Json.Decode.int)
+    let
+        vpDecoder =
+            Json.Decode.map2 ViewportGeometry
+                (Json.Decode.field "width" Json.Decode.int)
+                (Json.Decode.field "height" Json.Decode.int)
+    in
+        Json.Decode.field "viewportGeometry" vpDecoder
     
 
 -- there may be a bug in either the compiler, or some core library.
@@ -553,21 +567,50 @@ songDataDecoder =
         (Json.Decode.field "artist" Json.Decode.string)
         (Json.Decode.field "duration" Json.Decode.int)
 
-albumDataDecoder : Json.Decode.Decoder Programs.MediaPlayer.AlbumData
-albumDataDecoder =
-    Json.Decode.map3 Programs.MediaPlayer.AlbumData
+-- albumDataDecoder : Json.Decode.Decoder Programs.MediaPlayer.AlbumData
+-- albumDataDecoder =
+--     Json.Decode.map3 Programs.MediaPlayer.AlbumData
+--         (Json.Decode.field "title" Json.Decode.string)
+--         (Json.Decode.field "albumCoverSrc" Json.Decode.string)
+--         (Json.Decode.field "songs" (Json.Decode.list songDataDecoder))
+
+albumDecoder : Json.Decode.Decoder Programs.MediaPlayer.Album
+albumDecoder =
+    Json.Decode.map3 Programs.MediaPlayer.Album
         (Json.Decode.field "title" Json.Decode.string)
         (Json.Decode.field "albumCoverSrc" Json.Decode.string)
-        (Json.Decode.field "songs" (Json.Decode.list songDataDecoder))
+        (Json.Decode.field "songs" (Json.Decode.array songDataDecoder))
+
+discographyDecoder : Json.Decode.Decoder (Array.Array Programs.MediaPlayer.Album)
+discographyDecoder =
+    Json.Decode.field "discography" (Json.Decode.array albumDecoder)
+
+selectedDecoder : Json.Decode.Decoder Programs.MediaPlayer.SelectedAlbumAndSong
+selectedDecoder =
+    Json.Decode.map2 Programs.MediaPlayer.Selected
+        (Json.Decode.field "selectedAlbum" Json.Decode.int)
+        (Json.Decode.field "selectedSong" Json.Decode.int)
 
 eventDecoder =
     Json.Decode.field "event" Json.Decode.string
 
-playCMD = audioPortToJS (Json.Encode.string "PLAY")
-pauseCMD = audioPortToJS (Json.Encode.string "PAUSE")
+-- playCMD = audioPortToJS (Json.Encode.string "PLAY")
+-- pauseCMD = audioPortToJS (Json.Encode.string "PAUSE")
 nextCMD = audioPortToJS (Json.Encode.string "NEXT")
 prevCMD = audioPortToJS (Json.Encode.string "PREV")
 togglePlayCMD = audioPortToJS (Json.Encode.string "TOGGLE_PLAY")
 toggleShuffleCMD = audioPortToJS (Json.Encode.string "TOGGLE_SHUFFLE")
 toggleRepeatCMD = audioPortToJS (Json.Encode.string "TOGGLE_REPEAT")
-playSongAtCMD index = audioPortToJS (Json.Encode.object [ ("playSongAt", Json.Encode.int index) ])
+selectSongCMD albumIndex songIndex = audioPortToJS 
+    <| Json.Encode.object 
+        [ ("albumIndex", Json.Encode.int albumIndex)
+        , ("songIndex", Json.Encode.int songIndex)
+        ]
+selectAlbumCMD albumIndex = audioPortToJS
+    <| Json.Encode.object
+        [ ("onlyAlbumIndex", Json.Encode.int albumIndex) ]
+
+seekCMD perc = audioPortToJS 
+    <| Json.Encode.object 
+        [("seek", Json.Encode.float perc)]
+

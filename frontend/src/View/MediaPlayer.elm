@@ -2,6 +2,7 @@ module View.MediaPlayer exposing
     ( viewPhone
     )
 
+import Array
 import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
@@ -16,6 +17,7 @@ import Icons
 import Json.Decode as JDecode
 import Msg
 import Palette
+import Programs.MediaPlayer as MediaPlayer
 import Window
 import Windows
 import View.Windoze as Windoze
@@ -38,35 +40,36 @@ import View.Windoze as Windoze
 -- or it just spills over the entire window. padding doesn't work well here.
 -- writing this knowing the width and height of the viewport will do the job well
 
-viewPhone { viewportWidth, viewportHeight } model =
+viewPhonePlayPanel viewportGeometry mpd =
     let
-        windowData =
-            case (Windows.get Window.MediaPlayerMainWindow model.windows) of
-                (Window.Window t_ geom) ->
-                    geom
 
-        elapsed = case model.mediaPlayer.elapsed of
+        currentAlbum =
+            MediaPlayer.getSelectedAlbum mpd.selected mpd
+        currentSong =
+            MediaPlayer.getSelectedSong mpd.selected mpd
+
+        
+        elapsed = case mpd.elapsed of
             Nothing ->
                 "-:--"
             Just f ->
                 format f
-        songLength = case model.mediaPlayer.currentSongDuration of
+        songLength = case mpd.currentSongDuration of
             Just duration ->
                 format <| round duration
             Nothing ->
                 "-:--"
 
-        topUserControls = 
-            let
-                albumTitle =
-                    case model.mediaPlayer.albumTitle of
-                        Just tit ->
-                            tit 
-                        Nothing ->
-                            "____________" -- TODO: Do something cool here
-            in
+        albumTitle =
+            case Maybe.map .title currentAlbum of
+                Just tit ->
+                    tit 
+                Nothing ->
+                    "____________" -- TODO: Do something cool here
+
+        topUserControls =
             E.row
-                [ E.width <| E.px (viewportWidth)
+                [ E.width <| E.px (viewportGeometry.width)
                 , E.height <| E.px 40
                 , E.centerX
                 -- , EBackground.color <| E.rgb255 80 80 80
@@ -111,7 +114,7 @@ viewPhone { viewportWidth, viewportHeight } model =
                 , EFont.size Palette.fontSize1
                 , E.centerX
                 ]
-                <| case model.mediaPlayer.currentSong of
+                <| case currentSong of
                     Nothing ->
                         E.el
                             [ E.height <| E.px 20
@@ -120,14 +123,13 @@ viewPhone { viewportWidth, viewportHeight } model =
                             <| E.html <| Icons.scribble3 -- TODO: do something cool here
                     Just song ->
                         E.text song.title
-
         artistName =
             E.el
                 [ E.centerX
                 , EFont.size Palette.fontSize0
                 ]
                 <| E.text 
-                    <| case model.mediaPlayer.currentSong of
+                    <| case currentSong of
                         Nothing ->
                             "a r  t  i  s   t " --TODO: here too
                         Just song ->
@@ -153,22 +155,21 @@ viewPhone { viewportWidth, viewportHeight } model =
                         ]
                         <| Windoze.type1Level1DepressedBorder
                             <| E.image
-                                [ E.width <| E.maximum (viewportWidth - Palette.padding2) E.fill
-                                , E.height <| E.maximum (viewportWidth - Palette.padding2) E.fill
+                                [ E.width <| E.maximum (viewportGeometry.width - Palette.padding2) E.fill
+                                , E.height <| E.maximum (viewportGeometry.width - Palette.padding2) E.fill
                                 -- [ E.height E.fill
                                 -- , E.width E.fill
                                 , E.centerX
                                 , E.centerY
                                 ]
                                 { src = 
-                                    case model.mediaPlayer.albumCoverSrc of
+                                    case Maybe.map .albumCoverSrc currentAlbum of
                                         Nothing ->
                                             "./no_signal_bars.jpg" --TODO: maybe do something cooler here
                                         Just src ->
                                             src
                                 , description = "" -- TODO
                                 }
-
         trackTitleAndArtist =
             E.el
                 [ EFont.family
@@ -205,9 +206,9 @@ viewPhone { viewportWidth, viewportHeight } model =
 
                         -- TODO: I may refactor this. also, maybe we can make it faster
                         maybePerc =
-                            case model.mediaPlayer.elapsed of
+                            case mpd.elapsed of
                                 Just elap ->
-                                    case model.mediaPlayer.currentSongDuration of
+                                    case mpd.currentSongDuration of
                                         Just dur ->
                                             Just ((toFloat (elap * 100)) / dur)
                                         Nothing ->
@@ -249,7 +250,7 @@ viewPhone { viewportWidth, viewportHeight } model =
                                                     ]
                                     ]
                                     { min = 0
-                                    , max = case model.mediaPlayer.currentSongDuration of
+                                    , max = case mpd.currentSongDuration of
                                         Just d ->
                                             d
                                             --FIXME: when there's no track loaded and we seek, 
@@ -260,7 +261,7 @@ viewPhone { viewportWidth, viewportHeight } model =
                                         Nothing ->
                                             100
                                     , onChange = (\val -> Msg.MediaPlayerTrackSliderMoved val)
-                                    , value = case model.mediaPlayer.elapsed of
+                                    , value = case mpd.elapsed of
                                         Just d ->
                                             toFloat d
                                         Nothing ->
@@ -278,7 +279,7 @@ viewPhone { viewportWidth, viewportHeight } model =
                         [ EFont.typeface Palette.font0
                         ]
                     , EFont.size Palette.fontSize0
-                    , E.width <| E.px (viewportWidth - Palette.padding1)
+                    , E.width <| E.px (viewportGeometry.width - Palette.padding1)
                     , E.height <| E.px Palette.padding3
                     , E.centerY
                     , E.centerX
@@ -306,11 +307,11 @@ viewPhone { viewportWidth, viewportHeight } model =
                     , E.centerY
                     , E.spacing 10
                     ]
-                    [ regularButton model.mediaPlayer.shouldShuffle shuffleIcon Msg.PressedToggleShuffle
+                    [ regularButton mpd.shouldShuffle shuffleIcon Msg.PressedToggleShuffle
                     , regularButton False prevIcon Msg.PressedPrevSong
                     , playButton playIcon Msg.PressedPlayOrPause
                     , regularButton False nextIcon Msg.PressedNextSong
-                    , regularButton model.mediaPlayer.shouldRepeat repeatIcon Msg.PressedToggleRepeat
+                    , regularButton mpd.shouldRepeat repeatIcon Msg.PressedToggleRepeat
                     ]
     in
         E.column
@@ -319,10 +320,8 @@ viewPhone { viewportWidth, viewportHeight } model =
             , EBackground.color Palette.color0
             , E.inFront
                 <| viewPhoneSonglistPanel 
-                    { viewportWidth = viewportWidth
-                    , viewportHeight = viewportHeight
-                    }
-                    model
+                    viewportGeometry
+                    mpd
             ]
             [ topUserControls
             , albumCover
@@ -332,61 +331,91 @@ viewPhone { viewportWidth, viewportHeight } model =
             , bottomButtons
             ]
 
+viewPhoneLandingPanel viewportGeometry mpd =
+    let
+        albumsList =
+            Array.map (viewAlbum mpd.selected) mpd.discography
+
+        actualAlbums =
+            E.column
+                [ E.width E.fill
+                , E.height E.fill
+                , EBackground.color Palette.color0
+                ]
+                <| Array.toList albumsList
+                -- <| case albumsList of
+                --     Nothing ->
+                --         [ E.text "something really went badly" ]
+                --     Just albums_ ->
+                --         [ albums_ ]
+    in
+        Windoze.type1Level2RaisedBorder
+            <| Windoze.type1Level1RaisedBorder
+                <| Windoze.makeMainBorder
+                    <| Windoze.type1Level1DepressedBorder
+                        <| Windoze.type1Level2DepressedBorder
+                            <| E.el
+                                [ E.width E.fill
+                                , E.height E.fill
+                                , E.inFront actualAlbums
+                                    -- <| viewPhoneSonglistPanel 
+                                    --     viewportGeometry
+                                    --     mpd
+                                ]
+                                <| E.none
+
+viewPhone viewportGeometry model =
+    let
+
+        mainPhonePanel =
+            case model.mediaPlayer.selected of
+                MediaPlayer.Selected _ _ ->
+                    viewPhonePlayPanel
+                        viewportGeometry
+                        model.mediaPlayer
+                        
+                        
+                MediaPlayer.Default _ _ ->
+                    viewPhoneLandingPanel viewportGeometry model.mediaPlayer
+
+    in
+        mainPhonePanel
+        -- E.el
+        --     [ E.width E.fill
+        --     , E.height E.fill
+        --     ]
+
+
 -- viewPhoneAlbumlistPanel model =
     -- let
         
     -- in
 
 topAlbumInfoHeight = Palette.padding5
-viewPhoneSonglistPanel { viewportWidth, viewportHeight } model =
+viewPhoneSonglistPanel viewportGeometry mpd =
     let
-                -- titleBar =
-                --     E.el
-                --         [ E.width E.fill
-                --         , EBackground.color Palette.color2
-                --         , E.height <| E.px 32
-                --         ]
-                --         <| E.row
-                --             [ EFont.family
-                --                 [ EFont.typeface Palette.font0
-                --                 ]
-                --             , EFont.size Palette.fontSize1
-                --             , EFont.bold
-                --             , EBackground.color <| Palette.color2
-                --             , E.centerY
-                --             , E.width E.fill
-                --             , E.height E.fill
-                --             , E.paddingEach { top = 0, right = 2, bottom = 0, left = 0 }
-                --             ]
-                --             [ E.text "Current album"
-                --             , E.row
-                --                 [ E.height E.fill
-                --                 , E.alignRight
-                --                 ]
-                --                 [ E.el 
-                --                     [ E.height <| E.px 28 
-                --                     , E.width <| E.px 32 
-                --                     ] 
-                --                     <| regularButton False (E.el [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(1.7)" ] Windoze.xIcon) Msg.NoOp
-                --                 ]
-                --             ]
+        currentAlbum =
+            MediaPlayer.getSelectedAlbum mpd.selected mpd
 
-        -- viewAlbums albumsList =
-        --     E.column
-        --         [E.width E.fill
-                
-        --         ]
-                
+        viewCurrentAlbum =
+            case Maybe.map (viewAlbum mpd.selected) currentAlbum of
+                Just v ->
+                    v
+                Nothing ->
+                    E.text "we're all going to make it brah"
+        songs : Maybe (Array.Array MediaPlayer.SongData)
+        songs =
+            Maybe.map (\v -> v.songs) currentAlbum
 
-        -- phoneLandingScreen =
-        --     let
-        --     E.el
-        --         [
-        --         ]
-        --         <| Windoze.type1Level2RaisedBorder
-        --             <| Windoze.type1Level1RaisedBorder
-        --                 <| Windoze.makeMainBorder
-        --                     <| 
+        viewSongsList =
+            let
+                maybeArraySongs = Maybe.map2 Array.indexedMap (Just (viewSong (MediaPlayer.getAlbumIndex mpd.selected))) songs
+            in
+                case maybeArraySongs of
+                    Just arr ->
+                        Array.toList arr
+                    Nothing ->
+                        [ E.none ]
 
         panel =
             let
@@ -402,7 +431,7 @@ viewPhoneSonglistPanel { viewportWidth, viewportHeight } model =
                                     <| E.column
                                         [ E.width E.fill
                                         ]
-                                        (List.indexedMap viewSong model.mediaPlayer.playlist)
+                                        <| viewSongsList
                                 ]
                                 <| E.none
                 topAlbumInfo =
@@ -411,7 +440,7 @@ viewPhoneSonglistPanel { viewportWidth, viewportHeight } model =
                         , E.width E.fill
                         , EBackground.color Palette.color0
                         ]
-                        <| viewAlbum model
+                        <| viewCurrentAlbum
             in
             E.el
                 [ E.height E.fill
@@ -449,8 +478,9 @@ viewPhoneSonglistPanel { viewportWidth, viewportHeight } model =
             , panel
             ]
 
-viewAlbum model =
+viewAlbum selected album =
     let
+
         albumCov =
             E.el
                 [ E.width <| E.px (topAlbumInfoHeight - Palette.padding3)
@@ -463,21 +493,16 @@ viewAlbum model =
                         , E.centerX
                         , E.centerY
                         ]
-                        { src =
-                            case model.mediaPlayer.albumCoverSrc of
-                                Nothing ->
-                                    "./no_signal_bars.jpg" --TODO: maybe do something cooler here
-                                Just src ->
-                                    src
+                        { src = album.albumCoverSrc
+                            -- case album.albumCoverSrc of
+                            --     Nothing ->
+                            --         "./no_signal_bars.jpg" --TODO: maybe do something cooler here
+                            --     Just src ->
+                            --         src
                         , description = "" -- TODO
                         }
-        numberOfTracks = List.length model.mediaPlayer.playlist
-        getSecs song =
-            song.duration
-        songDurations =
-            List.map getSecs model.mediaPlayer.playlist
-        albumNumberOfMinutes =
-            toMinutes (List.foldl (+) 0 songDurations)
+        numberOfTracks = MediaPlayer.getTotalNumberOfAlbumTracks album
+        albumNumberOfMinutes = toMinutes (MediaPlayer.getTotalNumberOfAlbumSeconds album)
     in
         E.row
             [ E.width E.fill
@@ -502,12 +527,12 @@ viewAlbum model =
                 , E.el
                     [ EFont.size 19
                     ]
-                    <| E.text 
-                        <| case model.mediaPlayer.albumTitle of
-                            Just str ->
-                                str
-                            Nothing ->
-                                "__-__--_-_____" -- TODO
+                    <| E.text album.title
+                        -- <| case album.title of
+                            -- Just str ->
+                            --     str
+                            -- Nothing ->
+                            --     "__-__--_-_____" -- TODO
                 -- , E.el
                 --     [ EFont.size 15
                 --     , EFont.color <| E.rgb255 20 20 20
@@ -521,22 +546,22 @@ viewAlbum model =
                 ]
             ]
 
-viewSong ind songData =
+viewSong albumInd songInd songData =
     E.row
         [ E.width E.fill
         , E.height <| E.px Palette.padding3
         , EFont.family
             [ EFont.typeface Palette.font0
             ]
-        , EEvents.onDoubleClick <| Msg.PlaySongAt ind
-        , EBackground.color <| E.rgb255 (255 - ind * 10) (ind * 10) (255 - ind * 10)
+        , EEvents.onDoubleClick <| Msg.SelectedSong albumInd songInd
+        , EBackground.color <| E.rgb255 (255 - songInd * 10) (songInd * 10) (255 - songInd * 10)
         ]
         [ E.el
             [ E.paddingXY Palette.fontSize0 0
             , EFont.size (Palette.fontSize0 - 1)
             ]
             -- should we show things 0 indexed, or 1 indexed?
-            <| E.text (String.fromInt (ind + 1)) 
+            <| E.text (String.fromInt (songInd + 1)) 
         , E.column
             [ E.spacing 3
             ]
@@ -854,4 +879,35 @@ widthFillColor p_ col wid = E.el
     ]
     <| E.none
 
+
+                -- titleBar =
+                --     E.el
+                --         [ E.width E.fill
+                --         , EBackground.color Palette.color2
+                --         , E.height <| E.px 32
+                --         ]
+                --         <| E.row
+                --             [ EFont.family
+                --                 [ EFont.typeface Palette.font0
+                --                 ]
+                --             , EFont.size Palette.fontSize1
+                --             , EFont.bold
+                --             , EBackground.color <| Palette.color2
+                --             , E.centerY
+                --             , E.width E.fill
+                --             , E.height E.fill
+                --             , E.paddingEach { top = 0, right = 2, bottom = 0, left = 0 }
+                --             ]
+                --             [ E.text "Current album"
+                --             , E.row
+                --                 [ E.height E.fill
+                --                 , E.alignRight
+                --                 ]
+                --                 [ E.el 
+                --                     [ E.height <| E.px 28 
+                --                     , E.width <| E.px 32 
+                --                     ] 
+                --                     <| regularButton False (E.el [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(1.7)" ] Windoze.xIcon) Msg.NoOp
+                --                 ]
+                --             ]
 

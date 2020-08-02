@@ -31,15 +31,13 @@ view title model =
                 , E.height E.fill
                 ]
                 <| View.MediaPlayer.viewPhone 
-                    { viewportWidth = model.viewportWidth
-                    , viewportHeight = model.viewportHeight
-                    }
+                    model.viewportGeometry
+                    -- { viewportWidth = model.viewportWidth
+                    -- , viewportHeight = model.viewportHeight
+                    -- }
                     model
 
-        device = E.classifyDevice 
-            { width = model.viewportWidth
-            , height = model.viewportHeight
-            }
+        device = E.classifyDevice model.viewportGeometry
 
         decided = 
             case device.class of
