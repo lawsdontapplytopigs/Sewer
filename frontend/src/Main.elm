@@ -9,6 +9,7 @@ import Json.Decode
 import Init.FileExplorer
 
 import Msg
+import Palette
 import Programs.FileExplorer
 import Programs.MediaPlayer
 import Programs.PoorMansOutlook
@@ -119,7 +120,7 @@ update msg model =
             let
                 model_ =
                     { model
-                        | viewportGeometry = data
+                        | viewportGeometry = Debug.log "" data
                     }
             in
                 (model_, Cmd.none)
@@ -376,6 +377,7 @@ update msg model =
             let
                 model_ =
                     { model
+                        -- | mediaPlayer = Debug.log "should UPDATE" (Programs.MediaPlayer.updateTimeData data model.mediaPlayer)
                         | mediaPlayer = Programs.MediaPlayer.updateTimeData data model.mediaPlayer
                     }
                 cmd_ =
@@ -419,9 +421,52 @@ update msg model =
             in
                 (model_, cmd_)
 
+        Msg.PressedSongsMenuButton ->
+            let
+                model_ =
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.updateSongsPanelXOffset model.viewportGeometry.width model.mediaPlayer
+                    }
+                cmd_ = Cmd.none
+            in
+                (model_, cmd_)
+
+        Msg.PressedCloseSongsMenuButton ->
+            let
+                model_ =
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.updateSongsPanelXOffset 0 model.mediaPlayer
+                    }
+                cmd_ = Cmd.none
+            in
+                (model_, cmd_)
+
+    
+        Msg.PressedToggleDownPlayMenu ->
+            let
+                model_ = 
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset Palette.padding2 model.mediaPlayer
+                    }
+                cmd_ = Cmd.none
+            in
+                (model_, cmd_)
+
+        Msg.PressedToggleUpPlayMenu ->
+            let
+                model_ = 
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset model.viewportGeometry.height model.mediaPlayer
+                    }
+                cmd_ = Cmd.none
+            in
+                (model_, cmd_)
         Msg.SelectedAlbum albumIndex ->
             let
-                model_ = model
+                model_ = 
+                    { model
+                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset model.viewportGeometry.height model.mediaPlayer
+                    }
                 cmd_ = selectAlbumCMD albumIndex
             in
                 (model_, cmd_)

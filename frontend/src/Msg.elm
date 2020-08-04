@@ -41,13 +41,18 @@ type Msg
     -- | GotSongData Programs.MediaPlayer.SongData
     -- | GotAlbums Programs.MediaPlayer.Album
 
+    | SelectedAlbum AlbumIndex
+    | SelectedSong AlbumIndex SongIndex
+
     | PressedPlayOrPause
     | PressedNextSong
     | PressedPrevSong
     | PressedToggleShuffle
     | PressedToggleRepeat
-    | SelectedAlbum AlbumIndex
-    | SelectedSong AlbumIndex SongIndex
+    | PressedSongsMenuButton
+    | PressedCloseSongsMenuButton
+    | PressedToggleDownPlayMenu
+    | PressedToggleUpPlayMenu
     | MediaPlayerTrackSliderMoved Float
 
     | SongLoaded

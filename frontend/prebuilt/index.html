@@ -31,6 +31,17 @@
             });
         };
 
+        let validateIndex = (x, maxVal) => {
+            let val = x;
+            if ( x >= maxVal) {
+                val = maxVal - 1;
+            };
+            if ( x < 0 ) {
+                val = 0;
+            };
+            return val
+        };
+
         // unfortunately we have to do this here, since the mdgriffith/elm-ui 
         // library overrides our attributes if we do 
         // "E.htmlAttribute <| Html.Attributes.style "autofill" "email"
@@ -63,45 +74,49 @@
             // clicks "play" we can start from that position
             pl.seekAmount = 0;
 
-            // TODO: instead of just inserting this into the album, make another
-            // object with the type and embed the album in there
             elmApp.ports.audioPortFromJS.send({
                 type : 1,
                 discography : discography,
             });
 
             pl.fetchSong = () => {
-                pl._aRequestHasAlreadyBeenSent = true;
+                pl.howl = undefined;
                 Howler.unload();
+                pl._aRequestHasAlreadyBeenSent = true;
                 let song = pl.discography[pl.albumInd].songs[pl.songInd];
                 pl.howl = new Howl({
                     src : [ song.src ],
                     onplay : () => {
+                        
                         elmApp.ports.audioPortFromJS.send({
                             type : 0,
                             event: "SONG_PLAYING"
                         });
-                        pl.sendTimeData();
+                        pl.sendHowlTimeData();
                         pl.sendSelectedAlbumAndSong();
                     },
                     onload : () => {
+                        console.log("LOADED")
                         elmApp.ports.audioPortFromJS.send({
                             type : 0,
                             event: "SONG_LOADED"
                         });
                         pl._aRequestHasAlreadyBeenSent = false;
                         if (pl.shouldBePlaying) {
-                            let actualSeekSeconds = ((pl.howl.duration() / 100) * perc);
+                            let actualSeekSeconds = ((pl.howl.duration() / 100) * pl.seekAmount);
                             pl.howl.seek(actualSeekSeconds);
                             pl.howl.play();
                         };
                     },
                     onend : () => {
+                        console.log("SONG ENDED");
                         elmApp.ports.audioPortFromJS.send({
                             type : 0,
                             event: "SONG_ENDED"
                         });
-                        if ((pl.shouldBePlaying) && (pl.songInd < (pl.discography[pl.albumInd].songs.length - 1))) {
+                        if (pl.shouldRepeat) {
+                            pl.selectSong(pl.albumInd, pl.songInd);
+                        } else if ((pl.shouldBePlaying) && (pl.songInd < (pl.discography[pl.albumInd].songs.length - 1))) {
                             pl.selectSong(pl.albumInd, pl.songInd + 1);
                         };
                     },
@@ -115,11 +130,13 @@
                             type : 0,
                             event: "SONG_PAUSED"
                         });
-                        pl.sendTimeData();
+                        pl.sendHowlTimeData();
                         pl.sendSelectedAlbumAndSong();
                     },
                     onseek : () => {
-                        pl.seekAmount = pl.howl.seek();
+                        if (pl.howl !== undefined) {
+                            pl.seekAmount = ((pl.howl.duration() / 100) * pl.howl.seek())
+                        };
                         pl.sendSelectedAlbumAndSong();
                         /* pl.sendTimeData(pl.howl.seek()); */
                     }
@@ -127,6 +144,15 @@
             };
 
             pl.selectAlbum = (ind) => {
+                pl.seekAmount = 0;
+                if (pl.howl !== undefined) {
+                    pl.seek(0);
+                    pl.howl = undefined;
+                    console.log("album selected. howl exists.. removing it")
+                    Howler.unload();
+                };
+                pl.sendDefaultTimeData();
+
                 if (ind >= pl.discography.length) {
                     ind = pl.discography.length - 1;
                 };
@@ -135,54 +161,47 @@
                 };
                 pl.albumInd = ind;
                 pl.songInd = 0;
-                Howler.unload();
                 pl.shouldBePlaying = false;
+                pl.sendSelectedAlbumAndSong();
             };
 
             // when a user selects a song, we always want to play it
             pl.selectSong = (albumIndex, songIndex) => {
+                pl.seekAmount = 0;
                 pl.shouldBePlaying = true;
+                pl.sendDefaultTimeData();
 
-                if (pl.albumInd === albumIndex && pl.songInd === songIndex) {
+
+                let AI = validateIndex(albumIndex, pl.discography.length);
+                let SI = validateIndex(songIndex, pl.discography[AI].songs.length);
+
+                if ((pl.albumInd === AI) && (pl.songInd === SI)) {
+                    console.log("theyre the same. starting the song over..");
                     if (pl.howl) {
-                        pl.play();
+                        pl.howl.stop();
+                        pl.howl.play();
                     } else {
                         pl.fetchSong();
                     };
                     return
                 };
+                pl.albumInd = AI;
+                pl.songInd = SI;
 
-                if (albumIndex >= pl.discography.length) {
-                    albumIndex = pl.discography.length - 1;
-                };
-                if (albumIndex < 0) {
-                    albumIndex = 0;
-                };
-                pl.albumInd = ind;
+                console.log("playing album index: " + pl.albumInd);
+                console.log("playing song index: " + pl.songInd);
 
-                if (songIndex >= pl.discography[albumIndex].length) {
-                    songIndex = pl.discography[albumIndex].length - 1;
+                if (pl.howl !== undefined) {
+                    pl.howl.stop();
+                    console.log("there's a howl. removing it to play a new song..");
+                    Howler.unload();
                 };
-                if (songIndex < 0) {
-                    songIndex = 0;
-                };
-                pl.songInd = songIndex;
-                Howler.unload();
-                pl.play();
-            };
-
-            pl.play = () => {
-                pl.shouldBePlaying = true;
-                pl.seekAmount = 0;
-                if (pl.howl) {
-                    pl.howl.play();
-                } else {
-                    pl.fetchSong();
-                };
+                pl.fetchSong();
             };
 
             pl.togglePlaying = () => {
-                if (pl.howl) {
+                console.log(pl.songInd);
+                if (pl.howl !== undefined) {
                     if (pl.howl.playing()) {
                         pl.shouldBePlaying = false;
                         pl.howl.pause();
@@ -190,24 +209,29 @@
                         pl.shouldBePlaying = true;
                         pl.howl.play();
                     };
+                    pl.sendHowlTimeData();
                 } else {
                     pl.shouldBePlaying = !pl.shouldBePlaying;
                     if (pl._aRequestHasAlreadyBeenSent) {
                         return
                     } else {
+                        console.log("no howl... fetching song")
                         pl.fetchSong();
                     };
                 };
-                pl.sendTimeData();
             };
 
             pl.seek = ( perc ) => {
+                console.log(typeof(pl.howl));
                 pl.seekAmount = perc;
-                if (pl.howl) {
-                    let actualSeekSeconds = ((pl.howl.duration() / 100) * perc);
+                if (pl.howl !== undefined) {
+                    const actualSeekSeconds = ((pl.howl.duration() / 100) * perc);
                     pl.howl.seek(actualSeekSeconds);
+                    pl.sendHowlTimeData();
+                } else {
+                    console.log("SHOULD SEND DEFAULT")
+                    pl.sendDefaultTimeData();
                 };
-                pl.sendTimeData();
             };
 
             pl.toggleShuffle = () => {
@@ -219,18 +243,29 @@
             };
 
             pl.pressedNext = () => {
+                pl.sendDefaultTimeData();
                 if (pl.shouldShuffle) {
-                    pl.selectSong(Math.floor(Math.random() * pl.discography[pl.albumInd].songs.length));
+                    pl.selectSong(pl.albumInd, (Math.floor(Math.random() * pl.discography[pl.albumInd].songs.length)));
+                } else {
+                    pl.selectSong(pl.albumInd, (pl.songInd + 1))
                 };
+                pl.sendSelectedAlbumAndSong();
             };
 
             pl.pressedPrev = () => {
                 if (pl.howl) {
-                    if (pl.howl.duration() < 3) {
+                    if (pl.howl.seek() < 3) {
                         pl.selectSong(pl.albumInd, (pl.songInd - 1));
                     } else {
                         pl.selectSong(pl.albumInd, pl.songInd);
                     };
+                    pl.sendHowlTimeData();
+                    pl.sendSelectedAlbumAndSong()
+                } else {
+                    pl.sendDefaultTimeData();
+                    pl.sendSelectedAlbumAndSong()
+                    pl.selectSong(pl.albumInd, pl.songInd);
+                    return
                 };
             };
 
@@ -239,7 +274,6 @@
             };
 
             pl.sendSelectedAlbumAndSong = () => {
-                let song = pl.songs[pl.index];
                 elmApp.ports.audioPortFromJS.send({
                     type : 3,
                     selectedAlbum : pl.albumInd,
@@ -254,8 +288,18 @@
             // seek into a song before it's even loaded
             // TODO: I just realized: we can't do it unless we send some duration 
             // and also some "isPlaying" state. so i'll have to somehow do that 
+            pl.sendDefaultTimeData = () => {
+                const songDuration = pl.discography[pl.albumInd].songs[pl.songInd].duration
+                const elapsedTime = ((songDuration / 100) * pl.seekAmount)
+                elmApp.ports.audioPortFromJS.send({
+                    type : 2,
+                    elapsed : Math.floor(elapsedTime),
+                    duration : songDuration,
+                    isPlaying : pl.shouldBePlaying,
+                });
+            };
 
-            pl.sendTimeData = () => {
+            pl.sendHowlTimeData = () => {
                 if (pl.howl) {
                     elmApp.ports.audioPortFromJS.send({
                         type : 2,
@@ -267,8 +311,8 @@
             };
             // For some reason this causes a cyclic object value type error
             setInterval(() => {
-                if (pl.howl) {
-                    pl.sendTimeData();
+                if (pl.howl !== undefined) {
+                    pl.sendHowlTimeData();
                 };
             }, 1000);
 
@@ -295,7 +339,7 @@
                 player.seek(msg.seek);
             } else if (msg.albumIndex !== undefined) {
                 player.selectSong(msg.albumIndex, msg.songIndex);
-            } else if (msg.onlyAlbumIndex) {
+            } else if (msg.onlyAlbumIndex !== undefined) {
                 player.selectAlbum(msg.onlyAlbumIndex);
             } else {
                 console.log("something didn't go as planned...")

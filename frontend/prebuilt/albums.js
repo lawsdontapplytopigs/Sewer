@@ -95,7 +95,7 @@ let drainingLoveStory = {
             title : "Down The Drain (feat. Nurtheon)",
             artist : "Sewerslvt",
             duration: 488,
-            src : drainingLoveStoryURI("down-the-drain")
+            src : drainingLoveStoryURI("down-the-drain-feat-nurtheon")
         },
         {
             title : "Slowdeath",

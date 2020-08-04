@@ -29,6 +29,15 @@ type alias Album =
 type SelectedAlbumAndSong 
     = Default Int Int
     | Selected Int Int
+
+-- type PlayPanelState 
+--     = NotShowingPlayPanel
+--     | ToggledUpPlayPanel Int
+--     | ToggledDownPlayPanel Int
+
+-- type SongsPanelState
+--     = NotShowingSongsPanel
+--     | ShowingSongsPanel Int
     
 
 -- we don't actually use this to control anything on the js side
@@ -43,6 +52,22 @@ type alias MediaPlayerData =
 
     , shouldShuffle : Bool
     , shouldRepeat : Bool
+    , playPanelYOffset : Int
+    , songsPanelXOffset : Int
+    -- , playPanelState : PlayPanelState
+    -- , songsPanelState : SongsPanelState
+    }
+
+updatePlayPanelYOffset : Int -> MediaPlayerData -> MediaPlayerData
+updatePlayPanelYOffset y mpd =
+    { mpd
+        | playPanelYOffset = y
+    }
+
+updateSongsPanelXOffset : Int -> MediaPlayerData -> MediaPlayerData
+updateSongsPanelXOffset x mpd =
+    { mpd
+        | songsPanelXOffset = x
     }
 
 init : MediaPlayerData
@@ -55,6 +80,8 @@ init =
     , isPlaying = False
     , shouldShuffle = False
     , shouldRepeat = False
+    , playPanelYOffset = 0
+    , songsPanelXOffset = 0
     }
 
 updateDiscography : (Array.Array Album) -> MediaPlayerData -> MediaPlayerData

@@ -27,8 +27,9 @@ view title model =
 
         phone_ =
             E.layout
-                [ E.width E.fill
-                , E.height E.fill
+                [ E.width <| E.px model.viewportGeometry.width
+                , E.height <| E.px model.viewportGeometry.height
+                , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
                 ]
                 <| View.MediaPlayer.viewPhone 
                     model.viewportGeometry
