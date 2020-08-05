@@ -29,7 +29,7 @@ import View.Windoze as Windoze
 
 scaleIc maxSize ic =
     let
-        fortyPerc = (((toFloat maxSize) / 100) * 34)
+        fortyPerc = (((toFloat maxSize) / 100) * 26)
         -- 12 * x = 40perc
         scalingFactor = fortyPerc / 12
     in
@@ -192,7 +192,7 @@ viewPhoneLandingPanel viewportGeometry mpd =
 
 viewAlbum viewportGeometry ind album =
     let
-        fontSize0 = round (logBase 1.3 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3))
+        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.2))
         fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.5))
         fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4))
 
@@ -269,9 +269,10 @@ viewPhonePlayPanel viewportGeometry mpd =
     let
 
         -- lord forgive me
-        fontSize0 = round (logBase 1.20 (((toFloat viewportGeometry.width) / 100) * 3.2))
-        fontSize1 = round (logBase 1.19 (((toFloat viewportGeometry.width) / 100) * 3.4))
-        fontSize2 = round (logBase 1.19 (((toFloat viewportGeometry.width) / 100) * 4))
+
+        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.2))
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.8))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.3))
 
         currentAlbum =
             MediaPlayer.getSelectedAlbum mpd.selected mpd
@@ -484,6 +485,7 @@ viewPhonePlayPanel viewportGeometry mpd =
             E.el
                 [ E.height <| E.px albumCoverAvailableHeight
                 , E.width <| E.px albumCoverAvailableWidth
+                -- , EBackground.color <| E.rgb255 20 20 120
                 ]
                 <| E.el
                     [ E.centerX
@@ -512,7 +514,6 @@ viewPhonePlayPanel viewportGeometry mpd =
                                             src
                                 , description = "" -- TODO
                                 }
-
         trackName =
             E.el
                 [ EFont.bold
@@ -540,7 +541,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                         Just song ->
                             song.artist
 
-        height1 = round (((toFloat viewportGeometry.height) / 100) * 10)
+        height1 = round (((toFloat viewportGeometry.height) / 100) * 8)
         trackTitleAndArtist =
             E.el
                 [ EFont.family
@@ -580,7 +581,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                     in
                         E.el
                             [ E.width <| E.fill
-                            , E.height <| E.px sliderHeight
+                            , E.height <| E.minimum 24 (E.px sliderHeight)
                             , E.paddingXY Palette.padding0 0 -- TODO: maybe change this
                             ]
                             <| Windoze.type1Level1DepressedBorder
@@ -647,8 +648,8 @@ viewPhonePlayPanel viewportGeometry mpd =
             else
                 minim
         height3 = round (((toFloat viewportGeometry.height) / 100) * 18)
-        buttonSize = ensureMin 38 (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 8)
-        playButtonSize = ensureMin 48 (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 10)
+        buttonSize = ensureMin 38 (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 12)
+        playButtonSize = ensureMin 48 (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 14)
         bottomButtons =
             let
                 playButton32 msg =
@@ -700,7 +701,7 @@ viewPhonePlayPanel viewportGeometry mpd =
             [ topUserControls
             , albumCover
             , trackTitleAndArtist
-            -- , Windoze.hSeparator
+            , Windoze.hSeparator
             , sliderAndTimeEl
             , bottomButtons
             ]
@@ -709,8 +710,8 @@ viewPhoneSonglistPanel viewportGeometry mpd =
     let
 
         fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.2))
-        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.5))
-        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4))
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.8))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.3))
         height0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 18
 
         currentAlbum =
@@ -745,12 +746,12 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                     [ E.width E.fill
                     , E.height <| E.px (height0 * 2)
                     , E.centerY
-                    , E.paddingXY Palette.padding1 0
+                    , E.paddingXY 30 0
                     ]
                     [ albumCov
                     , E.column
                         [ E.spacing 5
-                        , E.paddingEach { top = 0, right = 0 , bottom = 0, left = 10 }
+                        , E.paddingEach { top = 0, right = 0 , bottom = 0, left = 30 }
                         , EFont.family
                             [ EFont.typeface Palette.font0
                             ]
@@ -925,8 +926,8 @@ viewPhoneSonglistPanel viewportGeometry mpd =
 
 viewSong viewportGeometry selectedSongInd albumInd songInd songData =
     let
-        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.5))
-        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4))
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.8))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.3))
 
         width0 = viewportGeometry.width
         padding0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 5
