@@ -41,15 +41,19 @@ view title model =
         device = E.classifyDevice model.viewportGeometry
 
         decided = 
-            case device.class of
-                E.Phone ->
+            case device.orientation of
+                E.Portrait ->
                     phone_
-                E.Tablet -> -- TODO
-                    desktop_
-                E.Desktop->
-                    desktop_
-                E.BigDesktop ->
-                    desktop_
+                E.Landscape ->
+                    case device.class of
+                        E.Phone ->
+                            phone_
+                        E.Tablet -> -- TODO
+                            desktop_
+                        E.Desktop->
+                            desktop_
+                        E.BigDesktop ->
+                            desktop_
     in
         { title = title
         , body = [ decided ]
