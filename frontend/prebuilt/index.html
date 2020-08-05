@@ -151,7 +151,6 @@
                     console.log("album selected. howl exists.. removing it")
                     Howler.unload();
                 };
-                pl.sendDefaultTimeData();
 
                 if (ind >= pl.discography.length) {
                     ind = pl.discography.length - 1;
@@ -162,7 +161,9 @@
                 pl.albumInd = ind;
                 pl.songInd = 0;
                 pl.shouldBePlaying = false;
+
                 pl.sendSelectedAlbumAndSong();
+                pl.sendDefaultTimeData();
             };
 
             // when a user selects a song, we always want to play it
