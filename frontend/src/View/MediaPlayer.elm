@@ -432,11 +432,13 @@ viewPhonePlayPanel viewportGeometry mpd =
                         , EFont.family
                             [ EFont.typeface Palette.font0
                             ]
+                        , E.spacing 4
                         ]
                         [ E.el 
                             [ E.centerX
                             , E.centerY
                             , EFont.size fontSize0
+                            , EFont.color <| E.rgb255 30 30 30
                             ]
                             <| E.text "Album"
                         , E.el
@@ -444,7 +446,11 @@ viewPhonePlayPanel viewportGeometry mpd =
                             , E.centerY
                             , EFont.size fontSize1
                             ]
-                            <| E.text albumTitle
+                            <| E.paragraph 
+                                [ E.htmlAttribute <| Html.Attributes.style "text-align" "center"
+                                ]
+                                [ E.text albumTitle
+                                ]
                         ]
                     , E.el
                         [ E.width <| E.px height0
@@ -505,9 +511,6 @@ viewPhonePlayPanel viewportGeometry mpd =
                         ]
                         <| Windoze.type1Level1DepressedBorder
                             <| E.image
-                                -- [ E.width <| E.maximum (viewportGeometry.width - Palette.padding2) E.fill
-                                -- , E.height <| E.maximum (viewportGeometry.width - Palette.padding2) E.fill
-
                                 [ E.width <| E.px ((min albumCoverAvailableHeight (albumCoverAvailableWidth - Palette.padding2)) - 2)
                                 , E.height <| E.px ((min albumCoverAvailableHeight (albumCoverAvailableWidth - Palette.padding2)) - 2)
                                 , E.centerX
@@ -521,7 +524,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                                             src
                                 , description = "" -- TODO
                                 }
-        height1 = round (((toFloat viewportGeometry.height) / 100) * 12)
+        height1 = round (((toFloat viewportGeometry.height) / 100) * 10)
         trackTitleAndArtist =
             E.el
                 [ EFont.family
@@ -542,7 +545,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                     , artistName
                     ]
 
-        height2 = round (((toFloat viewportGeometry.height) / 100) * 12)
+        height2 = round (((toFloat viewportGeometry.height) / 100) * 13)
         sliderAndTimeEl =
             let
                 makeCuteTimeEl time =
@@ -554,7 +557,7 @@ viewPhonePlayPanel viewportGeometry mpd =
 
                 windowsLoadingBarSlider =
                     let
-                        sliderHeight = (viewportGeometry.height // 100) * 6
+                        sliderHeight = (viewportGeometry.height // 100) * 4
                         -- TODO: I may refactor this. also, maybe we can make it faster
                         maybePerc =
                             Maybe.map2 (\elaps dur -> ((toFloat (elaps * 100)) / dur)) mpd.elapsed mpd.currentSongDuration
@@ -622,9 +625,9 @@ viewPhonePlayPanel viewportGeometry mpd =
                     , makeCuteTimeEl songLength
                     ]
 
-        height3 = round (((toFloat viewportGeometry.height) / 100) * 12)
-        buttonSize = E.minimum 32 (E.px (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 7))
-        playButtonSize = E.minimum 42 (E.px (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 9))
+        height3 = round (((toFloat viewportGeometry.height) / 100) * 18)
+        buttonSize = E.minimum 32 (E.px (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 8))
+        playButtonSize = E.minimum 42 (E.px (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 10))
         bottomButtons =
             let
                 playButton32 msg =
@@ -676,7 +679,7 @@ viewPhonePlayPanel viewportGeometry mpd =
             [ topUserControls
             , albumCover
             , trackTitleAndArtist
-            , Windoze.hSeparator
+            -- , Windoze.hSeparator
             , sliderAndTimeEl
             , bottomButtons
             ]
@@ -741,6 +744,7 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                         , E.paragraph
                             [ EFont.size fontSize2
                             , E.width E.fill
+                            , EFont.bold
                             ]
                             [ E.text album.title
                             ]
