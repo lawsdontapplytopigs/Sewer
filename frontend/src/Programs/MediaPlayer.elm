@@ -52,22 +52,40 @@ type alias MediaPlayerData =
 
     , shouldShuffle : Bool
     , shouldRepeat : Bool
-    , playPanelYOffset : Int
-    , songsPanelXOffset : Int
+    , playPanelYPercentageOffset : Float -- 0 to 1
+    , songsPanelXPercentageOffset : Float -- 0 to 1
     -- , playPanelState : PlayPanelState
     -- , songsPanelState : SongsPanelState
     }
 
-updatePlayPanelYOffset : Int -> MediaPlayerData -> MediaPlayerData
+updatePlayPanelYOffset : Float -> MediaPlayerData -> MediaPlayerData
 updatePlayPanelYOffset y mpd =
+    let
+        flt = 
+            if y > 1 then
+                1
+            else if y < 0 then
+                0
+            else
+                y
+    in
     { mpd
-        | playPanelYOffset = y
+        | playPanelYPercentageOffset = flt
     }
 
-updateSongsPanelXOffset : Int -> MediaPlayerData -> MediaPlayerData
+updateSongsPanelXOffset : Float -> MediaPlayerData -> MediaPlayerData
 updateSongsPanelXOffset x mpd =
+    let
+        flt = 
+            if x > 1 then
+                1
+            else if x < 0 then
+                0
+            else
+                x
+    in
     { mpd
-        | songsPanelXOffset = x
+        | songsPanelXPercentageOffset = flt
     }
 
 init : MediaPlayerData
@@ -80,8 +98,8 @@ init =
     , isPlaying = False
     , shouldShuffle = False
     , shouldRepeat = False
-    , playPanelYOffset = 0
-    , songsPanelXOffset = 0
+    , playPanelYPercentageOffset = 0.0
+    , songsPanelXPercentageOffset = 0.0
     }
 
 updateDiscography : (Array.Array Album) -> MediaPlayerData -> MediaPlayerData

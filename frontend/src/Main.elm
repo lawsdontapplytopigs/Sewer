@@ -425,7 +425,7 @@ update msg model =
             let
                 model_ =
                     { model
-                        | mediaPlayer = Programs.MediaPlayer.updateSongsPanelXOffset model.viewportGeometry.width model.mediaPlayer
+                        | mediaPlayer = Programs.MediaPlayer.updateSongsPanelXOffset 1.0 model.mediaPlayer
                     }
                 cmd_ = Cmd.none
             in
@@ -435,7 +435,7 @@ update msg model =
             let
                 model_ =
                     { model
-                        | mediaPlayer = Programs.MediaPlayer.updateSongsPanelXOffset 0 model.mediaPlayer
+                        | mediaPlayer = Programs.MediaPlayer.updateSongsPanelXOffset 0.0 model.mediaPlayer
                     }
                 cmd_ = Cmd.none
             in
@@ -446,7 +446,7 @@ update msg model =
             let
                 model_ = 
                     { model
-                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset ((model.viewportGeometry.height // 100) * 12) model.mediaPlayer
+                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset 0.12 model.mediaPlayer
                     }
                 cmd_ = Cmd.none
             in
@@ -456,7 +456,7 @@ update msg model =
             let
                 model_ = 
                     { model
-                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset model.viewportGeometry.height model.mediaPlayer
+                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset 1.0 model.mediaPlayer
                     }
                 cmd_ = Cmd.none
             in
@@ -465,7 +465,7 @@ update msg model =
             let
                 model_ = 
                     { model
-                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset model.viewportGeometry.height model.mediaPlayer
+                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset 1.0 model.mediaPlayer
                     }
                 cmd_ = selectAlbumCMD albumIndex
             in

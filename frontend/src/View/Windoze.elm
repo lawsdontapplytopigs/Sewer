@@ -987,7 +987,13 @@ makeWindow (Window.Window windowType windowData) content =
                                 , EBackground.color Palette.color0
                                 ]
                                 <| toolBar
-                            , content
+                            , E.el
+                                [ E.width E.fill
+                                , E.height E.fill
+                                , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+                                ]
+                                <| content
+                            -- , content
                             ]
 
 
