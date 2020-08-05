@@ -446,7 +446,7 @@ update msg model =
             let
                 model_ = 
                     { model
-                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset Palette.padding2 model.mediaPlayer
+                        | mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset ((model.viewportGeometry.height // 100) * 12) model.mediaPlayer
                     }
                 cmd_ = Cmd.none
             in

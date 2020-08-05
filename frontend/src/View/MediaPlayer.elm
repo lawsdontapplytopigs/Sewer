@@ -44,15 +44,16 @@ topAlbumInfoHeight = Palette.padding5
 viewPhone viewportGeometry model =
     let
         yPos = 0
+        playPanelHeightWhenAtTheBottom = viewportGeometry.height // 100 * 12
 
         -- playPanelYOffset = model.mediaPlayer.playPanelYOffset
         -- songsPanelXOffset = model.mediaPlayer.songsPanelXOffset
 
-        panelWid =
-            if viewportGeometry.width < 300 then
-                viewportGeometry.width
-            else
-                viewportGeometry.width - (viewportGeometry.width // 5) -- 80%
+        -- panelWid =
+        --     if viewportGeometry.width < 300 then
+        --         viewportGeometry.width
+        --     else
+        --         viewportGeometry.width - (viewportGeometry.width // 5) -- 80%
     in
     E.el
         [ E.width <| E.px viewportGeometry.width
@@ -60,7 +61,11 @@ viewPhone viewportGeometry model =
 
         , E.behindContent <|
             E.el
-                [ E.height <| E.px viewportGeometry.height
+                [ E.height <| E.px <|
+                    if model.mediaPlayer.playPanelYOffset == playPanelHeightWhenAtTheBottom then
+                        viewportGeometry.height - playPanelHeightWhenAtTheBottom
+                    else
+                        viewportGeometry.height
                 , E.width <| E.px viewportGeometry.width
                 ]
                 <| viewPhoneLandingPanel viewportGeometry model.mediaPlayer
@@ -82,14 +87,17 @@ viewPhone viewportGeometry model =
                     [ E.width <| E.px viewportGeometry.width
                     , E.height <| E.px viewportGeometry.height
                     , EBackground.color <| E.rgba255 170 120 255 0.5
+                    , EEvents.onClick Msg.PressedCloseSongsMenuButton
+                    , E.inFront <|
+                        E.el
+                            [ E.htmlAttribute <| Html.Attributes.style "transform" <| "translateX(+" ++ (String.fromInt (viewportGeometry.width - model.mediaPlayer.songsPanelXOffset))++ "px)"
+                            , E.width <| E.px viewportGeometry.width
+                            , E.height <| E.px viewportGeometry.height
+                            , E.alignRight
+                            ]
+                            <| viewPhoneSonglistPanel viewportGeometry model.mediaPlayer
                     ]
-                    <| E.el
-                        [ E.htmlAttribute <| Html.Attributes.style "transform" <| "translateX(+" ++ (String.fromInt (viewportGeometry.width - model.mediaPlayer.songsPanelXOffset))++ "px)"
-                        , E.width <| E.px viewportGeometry.width
-                        , E.height <| E.px viewportGeometry.height
-                        , E.alignRight
-                        ]
-                        <| viewPhoneSonglistPanel viewportGeometry model.mediaPlayer
+                    <| E.none
         ]
         <| E.none
         -- , E.row
@@ -133,7 +141,7 @@ viewPhoneLandingPanel viewportGeometry mpd =
                 , E.htmlAttribute <| Html.Attributes.style "cursor" "pointer"
                 , EEvents.onClick <| Msg.SelectedAlbum ind
                 ]
-                <| viewAlbum ind album
+                <| viewAlbum viewportGeometry ind album
 
         albumsList =
             Array.indexedMap (customViewAlbum mpd.selected) mpd.discography
@@ -152,18 +160,24 @@ viewPhoneLandingPanel viewportGeometry mpd =
                     [ E.width E.fill
                     , E.height E.fill
                     , E.inFront actualAlbums
+                    , EBackground.color Palette.color1
                         -- <| viewPhoneSonglistPanel 
                         --     viewportGeometry
                         --     mpd
                     ]
                     <| E.none
 
-viewAlbum ind album =
+viewAlbum viewportGeometry ind album =
     let
+        fontSize0 = round (logBase 1.3 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3))
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.5))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4))
+
+        height0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 12
         albumCov =
             E.el
-                [ E.width <| E.px (topAlbumInfoHeight - Palette.padding3)
-                , E.height <| E.px (topAlbumInfoHeight - Palette.padding3)
+                [ E.width <| E.px height0
+                , E.height <| E.px height0
                 ]
                 <| Windoze.type1Level1DepressedBorder 
                     <| E.image
@@ -198,12 +212,12 @@ viewAlbum ind album =
                     ]
                 ]
                 [ E.el
-                    [ EFont.size 13
+                    [ EFont.size fontSize0
                     , EFont.color <| E.rgb255 40 40 40
                     ]
                     <| E.text "album"
                 , E.el
-                    [ EFont.size 19
+                    [ EFont.size fontSize2
                     ]
                     <| E.text album.title
                         -- <| case album.title of
@@ -217,7 +231,7 @@ viewAlbum ind album =
                 --     ]
                 --     <| E.text "Sewerslvt"
                 , E.el
-                    [ EFont.size 14
+                    [ EFont.size fontSize1
                     , EFont.color <| E.rgb255 30 30 30
                     ]
                     <| E.text <| (String.fromInt numberOfTracks) ++ " tracks, " ++ (String.fromInt albumNumberOfMinutes) ++ " minutes"
@@ -227,6 +241,11 @@ viewAlbum ind album =
 
 viewPhonePlayPanel viewportGeometry mpd =
     let
+
+        -- lord forgive me
+        fontSize0 = round (logBase 1.3 (((toFloat viewportGeometry.width) / 100) * 3))
+        fontSize1 = round (logBase 1.19 (((toFloat viewportGeometry.width) / 100) * 3.5))
+        fontSize2 = round (logBase 1.19 (((toFloat viewportGeometry.width) / 100) * 4))
 
         currentAlbum =
             MediaPlayer.getSelectedAlbum mpd.selected mpd
@@ -260,12 +279,12 @@ viewPhonePlayPanel viewportGeometry mpd =
                 False ->
                     playIcon
 
-        height0 = 40
+        height0 = viewportGeometry.height // 100 * 12
         topUserControls =
             let
-                littleSeekBarHeight = 5
+                littleSeekBarHeight = round (((toFloat height0) / 100) * 7)
                 restHeight = height0 - littleSeekBarHeight
-                maybePerc = 
+                maybePerc =
                     Maybe.map2 
                         (\elaps dur -> ((toFloat (elaps * 100)) / dur)) 
                         mpd.elapsed 
@@ -278,7 +297,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                     -- , E.htmlAttribute <| Html.Attributes.style "cursor" "pointer"
                     ]
                     [ E.el
-                        [ E.height <| E.px 5
+                        [ E.height <| E.px littleSeekBarHeight
                         , E.width <| E.px viewportGeometry.width
                         ]
                         <| case maybePerc of
@@ -304,11 +323,10 @@ viewPhonePlayPanel viewportGeometry mpd =
                     , E.row
                         [ E.height E.fill
                         , E.width <| E.px viewportGeometry.width
-
                         , EBackground.color Palette.color0
                         ]
                         [ E.el
-                            [ E.width <| E.px Palette.padding2
+                            [ E.width <| E.px restHeight
                             , E.height E.fill
                             , EEvents.onClick Msg.PressedToggleUpPlayMenu
                             , E.htmlAttribute <| Html.Attributes.style "cursor" "pointer"
@@ -318,7 +336,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                             ]
                             <| upIcon
                         , E.column
-                            [ E.width <| E.px (viewportGeometry.width - (Palette.padding2 + Palette.padding2 + Palette.padding2 + 10))
+                            [ E.width <| E.px (viewportGeometry.width - (restHeight + restHeight + restHeight + 10))
                             , E.centerX
                             , EEvents.onClick Msg.PressedToggleUpPlayMenu
                             , E.height E.fill
@@ -328,7 +346,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                             ]
                             [ E.el 
                                 [ E.centerY
-                                , EFont.size 12
+                                , EFont.size fontSize1
                                 ]
                                 <| E.text "Album"
                             , E.el
@@ -339,7 +357,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                             ]
 
                         , E.el
-                            [ E.width <| E.px Palette.padding2
+                            [ E.width <| E.px restHeight
                             , E.height E.fill
                             -- , EBackground.color Palette.gray1
                             , EEvents.onClick Msg.PressedPlayOrPause
@@ -351,7 +369,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                             <| playOrPauseIcon
 
                         , E.el
-                            [ E.width <| E.px Palette.padding2
+                            [ E.width <| E.px restHeight
                             , E.height E.fill
                             -- , EBackground.color Palette.gray1
                             , EEvents.onClick Msg.PressedNextSong
@@ -372,8 +390,8 @@ viewPhonePlayPanel viewportGeometry mpd =
                     ]
                     [ E.el
 
-                        [ E.width <| E.px Palette.padding2
-                        , E.height <| E.px Palette.padding2
+                        [ E.width <| E.px height0
+                        , E.height <| E.px height0
                         -- , EBackground.color Palette.gray1
                         , EEvents.onClick Msg.PressedToggleDownPlayMenu
                         , E.htmlAttribute <| Html.Attributes.style "cursor" "pointer"
@@ -392,19 +410,19 @@ viewPhonePlayPanel viewportGeometry mpd =
                         [ E.el 
                             [ E.centerX
                             , E.centerY
-                            , EFont.size 12
+                            , EFont.size fontSize0
                             ]
                             <| E.text "Album"
                         , E.el
                             [ E.centerX
                             , E.centerY
-                            , EFont.size Palette.fontSize0
+                            , EFont.size fontSize1
                             ]
                             <| E.text albumTitle
                         ]
                     , E.el
-                        [ E.width <| E.px Palette.padding2
-                        , E.height <| E.px Palette.padding2
+                        [ E.width <| E.px height0
+                        , E.height <| E.px height0
                         , EEvents.onClick Msg.PressedSongsMenuButton
                         , E.htmlAttribute <| Html.Attributes.style "cursor" "pointer"
                         , E.mouseOver
@@ -416,7 +434,7 @@ viewPhonePlayPanel viewportGeometry mpd =
         trackName =
             E.el
                 [ EFont.bold
-                , EFont.size Palette.fontSize1
+                , EFont.size fontSize2
                 , E.centerX
                 ]
                 <| case currentSong of
@@ -431,7 +449,7 @@ viewPhonePlayPanel viewportGeometry mpd =
         artistName =
             E.el
                 [ E.centerX
-                , EFont.size Palette.fontSize0
+                , EFont.size fontSize1
                 ]
                 <| E.text 
                     <| case currentSong of
@@ -477,7 +495,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                                             src
                                 , description = "" -- TODO
                                 }
-        height1 = Palette.padding3
+        height1 = (viewportGeometry.height // 100) * 12
         trackTitleAndArtist =
             E.el
                 [ EFont.family
@@ -498,7 +516,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                     , artistName
                     ]
 
-        height2 = Palette.padding3
+        height2 = (viewportGeometry.height // 100) * 12
         sliderAndTimeEl =
             let
                 makeCuteTimeEl time =
@@ -510,7 +528,7 @@ viewPhonePlayPanel viewportGeometry mpd =
 
                 windowsLoadingBarSlider =
                     let
-                        sliderHeight = 24
+                        sliderHeight = (viewportGeometry.height // 100) * 6
                         -- TODO: I may refactor this. also, maybe we can make it faster
                         maybePerc =
                             Maybe.map2 (\elaps dur -> ((toFloat (elaps * 100)) / dur)) mpd.elapsed mpd.currentSongDuration
@@ -578,19 +596,29 @@ viewPhonePlayPanel viewportGeometry mpd =
                     , makeCuteTimeEl songLength
                     ]
 
-        height3 = Palette.padding3
+        height3 = (viewportGeometry.height // 100) * 12
+        buttonSize = E.minimum 32 (E.px (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 7))
+        playButtonSize = E.minimum 42 (E.px (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 9))
         bottomButtons =
             let
+                playButton32 msg =
+                    E.el
+                        [ E.width playButtonSize
+                        , E.height playButtonSize
+                        ]
+                        <| regularButton False playOrPauseIcon msg
                 regularButton32 isPushedIn icon msg =
                     E.el
-                        [ E.width <| E.px 32
-                        , E.height <| E.px 32
+                        [ E.width buttonSize
+                        , E.height buttonSize
                         ]
                         <| regularButton isPushedIn icon msg
             in
             E.el
-                [ E.height <| E.px Palette.padding3
+                [ E.height <| E.px height3
                 , E.width E.fill
+                , E.centerY
+                -- , EBackground.color <| E.rgb255 80 80 80
                 ]
                 <| E.row
                     [ E.centerX
@@ -599,7 +627,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                     ]
                     [ regularButton32 mpd.shouldShuffle shuffleIcon Msg.PressedToggleShuffle
                     , regularButton32 False prevIcon Msg.PressedPrevSong
-                    , playButton playOrPauseIcon Msg.PressedPlayOrPause
+                    , playButton32 Msg.PressedPlayOrPause
                     , regularButton32 False nextIcon Msg.PressedNextSong
                     , regularButton32 mpd.shouldRepeat repeatIcon Msg.PressedToggleRepeat
                     ]
@@ -629,6 +657,12 @@ viewPhonePlayPanel viewportGeometry mpd =
 
 viewPhoneSonglistPanel viewportGeometry mpd =
     let
+
+        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.2))
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.5))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4))
+        height0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 18
+
         currentAlbum =
             MediaPlayer.getSelectedAlbum mpd.selected mpd
 
@@ -636,8 +670,8 @@ viewPhoneSonglistPanel viewportGeometry mpd =
             let
                 albumCov =
                     E.el
-                        [ E.width <| E.px (topAlbumInfoHeight - Palette.padding3)
-                        , E.height <| E.px (topAlbumInfoHeight - Palette.padding3)
+                        [ E.width <| E.px height0
+                        , E.height <| E.px height0
                         ]
                         <| Windoze.type1Level1DepressedBorder 
                             <| E.image
@@ -659,10 +693,9 @@ viewPhoneSonglistPanel viewportGeometry mpd =
             in
                 E.row
                     [ E.width E.fill
-                    , E.height <| E.px (topAlbumInfoHeight - Palette.padding3)
+                    , E.height <| E.px (height0 * 2)
                     , E.centerY
                     , E.paddingXY Palette.padding1 0
-                    -- , EBackground.color <| E.rgb255 80 80 80
                     ]
                     [ albumCov
                     , E.column
@@ -671,16 +704,20 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                         , EFont.family
                             [ EFont.typeface Palette.font0
                             ]
+                        -- , EBackground.color <| E.rgb255 80 80 80
+                        , E.width E.fill
                         ]
                         [ E.el
-                            [ EFont.size 13
+                            [ EFont.size fontSize0
                             , EFont.color <| E.rgb255 40 40 40
                             ]
                             <| E.text "album"
-                        , E.el
-                            [ EFont.size 19
+                        , E.paragraph
+                            [ EFont.size fontSize2
+                            , E.width E.fill
                             ]
-                            <| E.text album.title
+                            [ E.text album.title
+                            ]
                                 -- <| case album.title of
                                     -- Just str ->
                                     --     str
@@ -692,7 +729,7 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                         --     ]
                         --     <| E.text "Sewerslvt"
                         , E.el
-                            [ EFont.size 14
+                            [ EFont.size fontSize1
                             , EFont.color <| E.rgb255 30 30 30
                             ]
                             <| E.text <| (String.fromInt numberOfTracks) ++ " tracks, " ++ (String.fromInt albumNumberOfMinutes) ++ " minutes"
@@ -705,7 +742,7 @@ viewPhoneSonglistPanel viewportGeometry mpd =
 
         viewSongsList =
             let
-                maybeArraySongs = Maybe.map2 Array.indexedMap (Just (viewSong (MediaPlayer.getAlbumIndex mpd.selected))) songs
+                maybeArraySongs = Maybe.map2 Array.indexedMap (Just (viewSong viewportGeometry (MediaPlayer.getSongIndex mpd.selected) (MediaPlayer.getAlbumIndex mpd.selected))) songs
             in
                 case maybeArraySongs of
                     Just arr ->
@@ -732,7 +769,7 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                                 <| E.none
                 topAlbumInfo =
                     E.el
-                        [ E.height <| E.px topAlbumInfoHeight
+                        [ E.height <| E.px (height0 * 2)
                         , E.width E.fill
                         , EBackground.color Palette.color0
                         ]
@@ -741,6 +778,8 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                                 v
                             Nothing ->
                                 E.none
+
+                buttonSize = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 7
             in
             E.el
                 [ E.height E.fill
@@ -755,8 +794,8 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                                 , E.height E.fill
                                 , E.inFront
                                     <| E.el 
-                                        [ E.height <| E.px 28 
-                                        , E.width <| E.px 32 
+                                        [ E.height <| E.px buttonSize
+                                        , E.width <| E.px buttonSize
                                         , E.alignRight
                                         ]
                                         <| regularButton False (E.el [ E.htmlAttribute <| Html.Attributes.style "transform" "scale(1.7)" ] Windoze.xIcon) Msg.PressedCloseSongsMenuButton
@@ -779,37 +818,101 @@ viewPhoneSonglistPanel viewportGeometry mpd =
         --     , panel
         --     ]
 
-viewSong albumInd songInd songData =
+-- viewSong viewportGeometry albumInd songInd songData =
+--     let
+--         fontSize0 = round (logBase 1.3 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3))
+--         fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.5))
+--         fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4))
+
+--         width0 = viewportGeometry.width
+--         height0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 10
+--     in
+--     E.row
+--         [ E.width E.fill
+--         , E.height <| E.px height0
+--         , EFont.family
+--             [ EFont.typeface Palette.font0
+--             ]
+--         , EEvents.onDoubleClick <| Msg.SelectedSong albumInd songInd
+--         , EBackground.color <| E.rgb255 (255 - songInd * 10) (songInd * 10) (255 - songInd * 10)
+--         ]
+--         [ E.el
+--             [ E.paddingXY Palette.fontSize0 0
+--             , EFont.size fontSize0
+--             ]
+--             -- should we show things 0 indexed, or 1 indexed?
+--             <| E.text (String.fromInt (songInd + 1)) 
+--         , E.column
+--             [ E.spacing 3
+--             ]
+--             [ E.paragraph
+--                 [ EFont.size fontSize2
+--                 , EFont.bold
+--                 , E.width E.fill
+--                 ]
+--                 [ E.text songData.title
+--                 ]
+--             , E.el
+--                 [ EFont.size fontSize1
+--                 ]
+--                 <| E.text songData.artist
+--             ]
+--         , E.el
+--             [ EFont.size fontSize0
+--             , E.alignRight
+--             , E.paddingEach { top = 0, right = Palette.fontSize0, bottom = 0, left = 0 }
+--             ]
+--             <| E.text (format songData.duration)
+--         ]
+
+
+
+viewSong viewportGeometry selectedSongInd albumInd songInd songData =
+    let
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.5))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4))
+
+        width0 = viewportGeometry.width
+        padding0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 5
+    in
     E.row
         [ E.width E.fill
-        , E.height <| E.px Palette.padding3
+        , E.paddingXY 0 padding0
         , EFont.family
             [ EFont.typeface Palette.font0
             ]
-        , EEvents.onDoubleClick <| Msg.SelectedSong albumInd songInd
-        , EBackground.color <| E.rgb255 (255 - songInd * 10) (songInd * 10) (255 - songInd * 10)
+        , E.htmlAttribute <| Html.Attributes.style "cursor" "pointer"
+        , EEvents.onClick <| Msg.SelectedSong albumInd songInd
+        , EBackground.color <|
+            if selectedSongInd == songInd then
+                Palette.color2
+            else
+                Palette.color1
         ]
         [ E.el
             [ E.paddingXY Palette.fontSize0 0
-            , EFont.size (Palette.fontSize0 - 1)
+            , EFont.size fontSize1
             ]
             -- should we show things 0 indexed, or 1 indexed?
             <| E.text (String.fromInt (songInd + 1)) 
         , E.column
             [ E.spacing 3
+            , E.width E.fill
             ]
-            [ E.el
-                [ EFont.size Palette.fontSize1
+            [ E.paragraph
+                [ EFont.size fontSize2
                 , EFont.bold
+                , E.width E.fill
                 ]
-                <| E.text songData.title
+                [ E.text songData.title
+                ]
             , E.el
-                [ EFont.size (Palette.fontSize0 - 1)
+                [ EFont.size fontSize1
                 ]
                 <| E.text songData.artist
             ]
         , E.el
-            [ EFont.size (Palette.fontSize0 - 1)
+            [ EFont.size fontSize1
             , E.alignRight
             , E.paddingEach { top = 0, right = Palette.fontSize0, bottom = 0, left = 0 }
             ]
@@ -866,11 +969,7 @@ playButton ic msg =
         borderInner =
             Windoze.type2Level1RaisedBorder
     in
-    E.el
-        [ E.height <| E.px 42
-        , E.width <| E.px 42
-        ]
-        <| EInput.button
+        EInput.button
             [ EBackground.color Palette.color0
             , E.width E.fill
             , E.height E.fill
