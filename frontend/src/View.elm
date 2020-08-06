@@ -38,19 +38,36 @@ view title model =
                     -- }
                     model
 
+        tablet_ =
+            E.layout
+                [ E.width <| E.px model.viewportGeometry.width
+                , E.height <| E.px model.viewportGeometry.height
+                , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+                ]
+                <| View.MediaPlayer.viewTablet
+                    model.viewportGeometry
+                    -- { viewportWidth = model.viewportWidth
+                    -- , viewportHeight = model.viewportHeight
+                    -- }
+                    model
+
         device = E.classifyDevice model.viewportGeometry
 
         decided = 
-
             case device.class of
                 E.Phone ->
                     phone_
-                E.Tablet -> -- TODO
-                    phone_
+                E.Tablet ->
+                    tablet_
+                    -- case device.orientation of
+                    --     E.Portrait ->
+                    --         phone_
+                    --     E.Landscape ->
+                    --         tablet_
                 E.Desktop->
                     case device.orientation of
                         E.Portrait ->
-                            phone_
+                            tablet_
                         E.Landscape ->
                             desktop_
                 E.BigDesktop ->
