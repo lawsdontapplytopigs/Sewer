@@ -213,7 +213,7 @@ viewAlbum borderWidth viewportGeometry ind album =
         fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.9))
         fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.5))
 
-        height0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 12
+        height0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 18
         albumCov =
             E.el
                 [ E.height <| E.minimum 50 (E.px height0)
