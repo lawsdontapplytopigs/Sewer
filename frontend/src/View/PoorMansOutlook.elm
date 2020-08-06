@@ -48,8 +48,8 @@ poorMansOutlook model =
                                     ]
                                     { onPress = (Just Msg.TryToSendEmail)
                                     , label = 
-                                        Windoze.type2Level2RaisedBorder
-                                            <| Windoze.type2Level1RaisedBorder
+                                        Windoze.type2Level2RaisedBorder 1
+                                            <| Windoze.type2Level1RaisedBorder 1
                                                 <| E.el
                                                     [ E.width E.fill
                                                     , E.height E.fill
@@ -70,7 +70,7 @@ poorMansOutlook model =
                 , E.width E.fill
                 , E.height E.fill
                 ]
-                [ Windoze.hSeparator
+                [ Windoze.hSeparator 1
                 , E.column
                     [ E.height E.fill
                     , E.width E.fill
@@ -112,8 +112,8 @@ poorMansOutlook model =
                             -- , E.height <| E.maximum 400 E.fill
                             , EBackground.color <| Palette.color1
                             ]
-                            <| Windoze.type1Level1DepressedBorder
-                                <| Windoze.type1Level2DepressedBorder
+                            <| Windoze.type1Level1DepressedBorder 1
+                                <| Windoze.type1Level2DepressedBorder 1
                                     <| EInput.multiline
                                         [ EFont.size Palette.fontSize0
                                         , EFont.family
@@ -167,8 +167,8 @@ inputBar title bar =
             , E.height <| E.px 30
             , EBackground.color <| Palette.color1
             ]
-            <| Windoze.type1Level1DepressedBorder
-                <| Windoze.type1Level2DepressedBorder
+            <| Windoze.type1Level1DepressedBorder 1
+                <| Windoze.type1Level2DepressedBorder 1
                     bar
         ]
 

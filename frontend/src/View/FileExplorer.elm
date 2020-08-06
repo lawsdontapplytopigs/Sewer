@@ -76,8 +76,8 @@ fileExplorer model =
             [ E.width E.fill
             , E.height E.fill
             ]
-            [ Windoze.type1Level1DepressedBorder 
-                <| Windoze.type1Level2DepressedBorder wholeContent
+            [ Windoze.type1Level1DepressedBorder 1
+                <| Windoze.type1Level2DepressedBorder 1 wholeContent
             , E.el
                 [ E.width E.fill
                 , EBackground.color Palette.color0

@@ -1,7 +1,7 @@
 
-frontend/built
-frontend/elm-stuff
-frontend/inspiration
+frontend/built/
+frontend/elm-stuff/
+frontend/inspiration/
 frontend/prebuilt/audio.js
 frontend/art/winampRipoff/
 frontend/art/icons/additional/

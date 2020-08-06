@@ -27,15 +27,15 @@ makeNavbar model =
                 borderOuter =
                     case isFocused of
                         True ->
-                            Windoze.type2Level2DepressedBorder
+                            Windoze.type2Level2DepressedBorder 1
                         False ->
-                            Windoze.type2Level2RaisedBorder
+                            Windoze.type2Level2RaisedBorder 1
                 borderInner =
                     case isFocused of
                         True ->
-                            Windoze.type2Level1DepressedBorder
+                            Windoze.type2Level1DepressedBorder 1
                         False ->
-                            Windoze.type2Level1RaisedBorder
+                            Windoze.type2Level1RaisedBorder 1
             in
             E.el
                 [ E.height E.fill
@@ -121,8 +121,8 @@ makeNavbar model =
                         ]
                         { onPress = Just Msg.StartButtonPressed
                         , label = 
-                            Windoze.type2Level2RaisedBorder
-                                <| Windoze.type2Level1RaisedBorder
+                            Windoze.type2Level2RaisedBorder 1
+                                <| Windoze.type2Level1RaisedBorder 1
                                     <| E.row
                                         [ E.width <| E.fill
                                         , E.height <| E.fill
@@ -292,7 +292,7 @@ clock model =
             , EFont.size Palette.fontSize0
             , E.paddingXY 0 1
             ]
-            <| Windoze.type1Level1DepressedBorder
+            <| Windoze.type1Level1DepressedBorder 1
                 <| E.row
                     [ E.width <| E.px 96
                     , E.height E.fill

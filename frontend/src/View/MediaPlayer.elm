@@ -29,7 +29,7 @@ import View.Windoze as Windoze
 
 scaleIc maxSize ic =
     let
-        fortyPerc = (((toFloat maxSize) / 100) * 26)
+        fortyPerc = (((toFloat maxSize) / 100) * 24)
         -- 12 * x = 40perc
         scalingFactor = fortyPerc / 12
     in
@@ -65,6 +65,23 @@ viewPhone viewportGeometry model =
         songsPanelXPos = viewportGeometry.width - (round <| (toFloat viewportGeometry.width) * model.mediaPlayer.songsPanelXPercentageOffset)
         songsPanelYPos = 0
 
+
+        device = E.classifyDevice model.viewportGeometry
+        borderWidth =
+            case device.class of
+                E.Phone ->
+                    2
+                E.Tablet ->
+                    2
+                E.Desktop ->
+                    case device.orientation of
+                        E.Portrait ->
+                            2
+                        E.Landscape ->
+                            1
+                E.BigDesktop ->
+                    1
+
         -- playPanelYOffset = model.mediaPlayer.playPanelYOffset
         -- songsPanelXOffset = model.mediaPlayer.songsPanelXOffset
 
@@ -87,7 +104,7 @@ viewPhone viewportGeometry model =
                         viewportGeometry.height
                 , E.width <| E.px viewportGeometry.width
                 ]
-                <| viewPhoneLandingPanel viewportGeometry model.mediaPlayer
+                <| viewPhoneLandingPanel borderWidth viewportGeometry model.mediaPlayer
         , E.inFront <|
             if model.mediaPlayer.playPanelYPercentageOffset == 0.0 then
                 E.none
@@ -98,7 +115,7 @@ viewPhone viewportGeometry model =
                     , E.height <| E.px viewportGeometry.height
                     , E.width <| E.px viewportGeometry.width
                     ]
-                    <| viewPhonePlayPanel viewportGeometry model.mediaPlayer
+                    <| viewPhonePlayPanel borderWidth viewportGeometry model.mediaPlayer
 
         , E.inFront <|
             if model.mediaPlayer.songsPanelXPercentageOffset == 0.0 then
@@ -116,7 +133,7 @@ viewPhone viewportGeometry model =
                             , E.height <| E.px viewportGeometry.height
                             , E.alignRight
                             ]
-                            <| viewPhoneSonglistPanel viewportGeometry model.mediaPlayer
+                            <| viewPhoneSonglistPanel borderWidth viewportGeometry model.mediaPlayer
                     ]
                     <| E.none
         ]
@@ -142,7 +159,7 @@ viewPhone viewportGeometry model =
         --         <| viewPhoneSonglistPanel viewportGeometry model.mediaPlayer
         --     ]
 
-viewPhoneLandingPanel viewportGeometry mpd =
+viewPhoneLandingPanel borderWidth viewportGeometry mpd =
     let
 
         height0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 2
@@ -164,7 +181,7 @@ viewPhoneLandingPanel viewportGeometry mpd =
                 , E.htmlAttribute <| Html.Attributes.style "cursor" "pointer"
                 , EEvents.onClick <| Msg.SelectedAlbum ind
                 ]
-                <| viewAlbum viewportGeometry ind album
+                <| viewAlbum borderWidth viewportGeometry ind album
 
         albumsList =
             Array.indexedMap (customViewAlbum mpd.selected) mpd.discography
@@ -177,8 +194,8 @@ viewPhoneLandingPanel viewportGeometry mpd =
                 ]
                 <| Array.toList albumsList
     in
-        Windoze.type1Level1DepressedBorder
-            <| Windoze.type1Level2DepressedBorder
+        Windoze.type1Level1DepressedBorder borderWidth
+            <| Windoze.type1Level2DepressedBorder borderWidth
                 <| E.el
                     [ E.width E.fill
                     , E.height E.fill
@@ -190,11 +207,11 @@ viewPhoneLandingPanel viewportGeometry mpd =
                     ]
                     <| E.none
 
-viewAlbum viewportGeometry ind album =
+viewAlbum borderWidth viewportGeometry ind album =
     let
-        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.2))
-        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.5))
-        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4))
+        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.3))
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.9))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.5))
 
         height0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 12
         albumCov =
@@ -202,21 +219,22 @@ viewAlbum viewportGeometry ind album =
                 [ E.height <| E.minimum 50 (E.px height0)
                 , E.width <| E.minimum 50 (E.px height0)
                 ]
-                <| Windoze.type1Level1DepressedBorder 
-                    <| E.image
-                        [ E.height E.fill
-                        , E.width E.fill
-                        , E.centerX
-                        , E.centerY
-                        ]
-                        { src = album.albumCoverSrc
-                            -- case album.albumCoverSrc of
-                            --     Nothing ->
-                            --         "./no_signal_bars.jpg" --TODO: maybe do something cooler here
-                            --     Just src ->
-                            --         src
-                        , description = "" -- TODO
-                        }
+                <| Windoze.type1Level2RaisedBorder borderWidth
+                    <| Windoze.type1Level1RaisedBorder borderWidth
+                        <| E.image
+                            [ E.height E.fill
+                            , E.width E.fill
+                            , E.centerX
+                            , E.centerY
+                            ]
+                            { src = album.albumCoverSrc
+                                -- case album.albumCoverSrc of
+                                --     Nothing ->
+                                --         "./no_signal_bars.jpg" --TODO: maybe do something cooler here
+                                --     Just src ->
+                                --         src
+                            , description = "" -- TODO
+                            }
         numberOfTracks = MediaPlayer.getTotalNumberOfAlbumTracks album
         albumNumberOfMinutes = toMinutes (MediaPlayer.getTotalNumberOfAlbumSeconds album)
     in
@@ -265,14 +283,13 @@ viewAlbum viewportGeometry ind album =
             ]
 
 
-viewPhonePlayPanel viewportGeometry mpd =
+viewPhonePlayPanel borderWidth viewportGeometry mpd =
     let
 
         -- lord forgive me
-
-        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.2))
-        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.8))
-        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.3))
+        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.3))
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.9))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.5))
 
         currentAlbum =
             MediaPlayer.getSelectedAlbum mpd.selected mpd
@@ -499,7 +516,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                         , E.centerX
                         , E.centerY
                         ]
-                        <| Windoze.type1Level1DepressedBorder
+                        <| Windoze.type1Level1DepressedBorder borderWidth
                             <| E.image
                                 [ E.width <| E.px ((min albumCoverAvailableHeight (albumCoverAvailableWidth - Palette.padding2)) - 2)
                                 , E.height <| E.px ((min albumCoverAvailableHeight (albumCoverAvailableWidth - Palette.padding2)) - 2)
@@ -584,7 +601,7 @@ viewPhonePlayPanel viewportGeometry mpd =
                             , E.height <| E.minimum 24 (E.px sliderHeight)
                             , E.paddingXY Palette.padding0 0 -- TODO: maybe change this
                             ]
-                            <| Windoze.type1Level1DepressedBorder
+                            <| Windoze.type1Level1DepressedBorder borderWidth
                                 <| EInput.slider
                                     [ E.width E.fill
                                     , E.height E.fill
@@ -647,9 +664,9 @@ viewPhonePlayPanel viewportGeometry mpd =
                 val
             else
                 minim
-        height3 = round (((toFloat viewportGeometry.height) / 100) * 18)
-        buttonSize = ensureMin 38 (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 12)
-        playButtonSize = ensureMin 48 (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 14)
+        height3 = round (((toFloat viewportGeometry.height) / 100) * 24)
+        buttonSize = ensureMin 38 (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 14)
+        playButtonSize = ensureMin 48 (round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 17)
         bottomButtons =
             let
                 playButton32 msg =
@@ -657,13 +674,13 @@ viewPhonePlayPanel viewportGeometry mpd =
                         [ E.width <| E.px playButtonSize
                         , E.height <| E.px playButtonSize
                         ]
-                        <| regularButton False (scaleIc playButtonSize playOrPauseIcon) msg
+                        <| regularButton borderWidth False (scaleIc playButtonSize playOrPauseIcon) msg
                 regularButton32 isPushedIn icon msg =
                     E.el
                         [ E.width <| E.px buttonSize
                         , E.height <| E.px buttonSize
                         ]
-                        <| regularButton isPushedIn (scaleIc buttonSize icon) msg
+                        <| regularButton borderWidth isPushedIn (scaleIc buttonSize icon) msg
             in
             E.el
                 [ E.height <| E.px height3
@@ -701,17 +718,17 @@ viewPhonePlayPanel viewportGeometry mpd =
             [ topUserControls
             , albumCover
             , trackTitleAndArtist
-            , Windoze.hSeparator
+            , Windoze.hSeparator borderWidth
             , sliderAndTimeEl
             , bottomButtons
             ]
 
-viewPhoneSonglistPanel viewportGeometry mpd =
+viewPhoneSonglistPanel borderWidth viewportGeometry mpd =
     let
 
-        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.2))
-        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.8))
-        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.3))
+        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.3))
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.9))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.5))
         height0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 18
 
         currentAlbum =
@@ -724,7 +741,7 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                         [ E.width <| E.px height0
                         , E.height <| E.px height0
                         ]
-                        <| Windoze.type1Level1DepressedBorder 
+                        <| Windoze.type1Level1DepressedBorder borderWidth
                             <| E.image
                                 [ E.height E.fill
                                 , E.width E.fill
@@ -805,8 +822,8 @@ viewPhoneSonglistPanel viewportGeometry mpd =
         panel =
             let
                 songsList =
-                    Windoze.type1Level1DepressedBorder
-                        <| Windoze.type1Level2DepressedBorder
+                    Windoze.type1Level1DepressedBorder borderWidth
+                        <| Windoze.type1Level2DepressedBorder borderWidth
                             <| E.el
                                 [ E.height E.fill
                                 , E.width E.fill
@@ -843,9 +860,9 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                 , E.width E.fill
                 , EBackground.color Palette.color1
                 ]
-                <| Windoze.type1Level2RaisedBorder
-                    <| Windoze.type1Level1RaisedBorder
-                        <| Windoze.makeMainBorder
+                <| Windoze.type1Level2RaisedBorder borderWidth
+                    <| Windoze.type1Level1RaisedBorder borderWidth
+                        <| Windoze.makeMainBorder (borderWidth * 2)
                             <| E.column
                                 [ E.width E.fill
                                 , E.height E.fill
@@ -855,7 +872,7 @@ viewPhoneSonglistPanel viewportGeometry mpd =
                                         , E.width <| E.px buttonSize
                                         , E.alignRight
                                         ]
-                                        <| regularButton False xIc Msg.PressedCloseSongsMenuButton
+                                        <| regularButton borderWidth False xIc Msg.PressedCloseSongsMenuButton
                                 ]
                                 [ topAlbumInfo
                                 , songsList
@@ -926,8 +943,8 @@ viewPhoneSonglistPanel viewportGeometry mpd =
 
 viewSong viewportGeometry selectedSongInd albumInd songInd songData =
     let
-        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.8))
-        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.3))
+        fontSize1 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.9))
+        fontSize2 = round (logBase 1.19 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.5))
 
         width0 = viewportGeometry.width
         padding0 = round <| ((toFloat (min viewportGeometry.height viewportGeometry.width )) / 100) * 5
@@ -976,20 +993,20 @@ viewSong viewportGeometry selectedSongInd albumInd songInd songData =
             <| E.text (format songData.duration)
         ]
 
-regularButton pushedIn ic msg =
+regularButton borderWidth pushedIn ic msg =
     let
         outerBorder =
             case pushedIn of
                 True ->
-                    Windoze.type2Level2DepressedBorder
+                    Windoze.type2Level2DepressedBorder borderWidth
                 False ->
-                    Windoze.type2Level2RaisedBorder
+                    Windoze.type2Level2RaisedBorder borderWidth
         innerBorder =
             case pushedIn of
                 True ->
-                    Windoze.type2Level1DepressedBorder
+                    Windoze.type2Level1DepressedBorder borderWidth
                 False ->
-                    Windoze.type2Level1RaisedBorder
+                    Windoze.type2Level1RaisedBorder borderWidth
                 
     in
         EInput.button
@@ -1017,14 +1034,14 @@ regularButton pushedIn ic msg =
                                 <| ic
             }
 
-playButton ic msg =
+playButton borderWidth ic msg =
     let
         -- TODO: store button information so we know to show these differently 
         -- when they're pressed
         borderOuter =
-            Windoze.type2Level2RaisedBorder
+            Windoze.type2Level2RaisedBorder borderWidth
         borderInner =
-            Windoze.type2Level1RaisedBorder
+            Windoze.type2Level1RaisedBorder borderWidth
     in
         EInput.button
             [ EBackground.color Palette.color0

@@ -158,109 +158,109 @@ makeToolBar toolsList =
             ]
             toolsList
 
-lighterRaisedBorder content_ =
+lighterRaisedBorder w content_ =
     E.el
         [ E.width E.fill
         , E.height E.fill
-        , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+        , EBorder.widthEach { top = w, right = 0, bottom = 0, left = w }
         , EBorder.color Palette.gray4
         ]
         <| content_
 
-lighterDepressedBorder content_ =
+lighterDepressedBorder w content_ =
     E.el
         [ E.width E.fill
         , E.height E.fill
-        , EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.widthEach { top = 0, right = w, bottom = w, left = 0 }
         , EBorder.color Palette.gray4
         ]
         <| content_
 
-darkerRaisedBorder content_ =
+darkerRaisedBorder w content_ =
     E.el
         [ E.width E.fill
         , E.height E.fill
-        , EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.widthEach { top = 0, right = w, bottom = w, left = 0 }
         , EBorder.color Palette.gray1
         ]
         <| content_
-darkerDepressedBorder content_ =
+darkerDepressedBorder w content_ =
     E.el
         [ E.width E.fill
         , E.height E.fill
-        , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+        , EBorder.widthEach { top = w, right = 0, bottom = 0, left = w }
         , EBorder.color Palette.gray1
         ]
         <| content_
 
-lightestRaisedBorder content_ =
+lightestRaisedBorder w content_ =
     E.el
         [ E.width E.fill
         , E.height E.fill
-        , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+        , EBorder.widthEach { top = w, right = 0, bottom = 0, left = w }
         , EBorder.color Palette.white
         ]
         <| content_
-lightestDepressedBorder content_ =
+lightestDepressedBorder w content_ =
     E.el
         [ E.width E.fill
         , E.height E.fill
-        , EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.widthEach { top = 0, right = w, bottom = w, left = 0 }
         , EBorder.color Palette.white
         ]
         <| content_
 
-darkestRaisedBorder content_ =
+darkestRaisedBorder w content_ =
     E.el
         [ E.width E.fill
         , E.height E.fill
-        , EBorder.widthEach { top = 0, right = 1, bottom = 1, left = 0 }
+        , EBorder.widthEach { top = 0, right = w, bottom = w, left = 0 }
         , EBorder.color Palette.gray0
         ]
         <| content_
 
-darkestDepressedBorder content_ =
+darkestDepressedBorder w content_ =
     E.el
         [ E.width E.fill
         , E.height E.fill
-        , EBorder.widthEach { top = 1, right = 0, bottom = 0, left = 1 }
+        , EBorder.widthEach { top = w , right = 0, bottom = 0, left = w }
         , EBorder.color Palette.gray0
         ]
         <| content_
 
 
 -- lord forgive me
-type1Level1RaisedBorder content_ =
-    lightestRaisedBorder
-        <| darkerRaisedBorder content_
-type1Level1DepressedBorder content_ =
-    lightestDepressedBorder
-        <| darkerDepressedBorder content_
+type1Level1RaisedBorder wid content_ =
+    lightestRaisedBorder wid
+        <| darkerRaisedBorder wid content_
+type1Level1DepressedBorder wid content_ =
+    lightestDepressedBorder wid
+        <| darkerDepressedBorder wid content_
 
-type1Level2RaisedBorder content_ =
-    lighterRaisedBorder
-        <| darkestRaisedBorder content_
-type1Level2DepressedBorder content_ =
-    lighterDepressedBorder
-        <| darkestDepressedBorder content_
+type1Level2RaisedBorder wid content_ =
+    lighterRaisedBorder wid
+        <| darkestRaisedBorder wid content_
+type1Level2DepressedBorder wid content_ =
+    lighterDepressedBorder wid
+        <| darkestDepressedBorder wid content_
 
-type2Level1RaisedBorder content_ =
-    lighterRaisedBorder
-        <| darkerRaisedBorder content_
-type2Level1DepressedBorder content_ =
-    lighterDepressedBorder
-        <| darkerDepressedBorder content_
+type2Level1RaisedBorder wid content_ =
+    lighterRaisedBorder wid
+        <| darkerRaisedBorder wid content_
+type2Level1DepressedBorder wid content_ =
+    lighterDepressedBorder wid
+        <| darkerDepressedBorder wid content_
 
-type2Level2RaisedBorder content_ =
-    lightestRaisedBorder
-        <| darkestRaisedBorder content_
-type2Level2DepressedBorder content_ =
-    lightestDepressedBorder 
-        <| darkestDepressedBorder content_
+type2Level2RaisedBorder wid content_ =
+    lightestRaisedBorder wid
+        <| darkestRaisedBorder wid content_
+type2Level2DepressedBorder wid content_ =
+    lightestDepressedBorder wid
+        <| darkestDepressedBorder wid content_
 
-makeMainBorder content_ =
+makeMainBorder wid content_ =
     E.el
-        [ EBorder.width 2
+        [ EBorder.width wid
         , E.width E.fill
         , E.height E.fill
         , EBorder.color Palette.color0
@@ -308,8 +308,8 @@ makeButton icon msg =
         E.el
             [ EEvents.onClick msg
             ]
-            <| type1Level2RaisedBorder
-                <| type1Level1RaisedBorder
+            <| type1Level2RaisedBorder 1
+                <| type1Level1RaisedBorder 1
                     <| E.el
                         [ E.height <| E.px 22
                         , E.width <| E.px 26
@@ -322,42 +322,36 @@ makeButton icon msg =
                         --     ] 
                             <| E.html icon
 
-vSeparator =
-    let
-        p = 1
-    in
+vSeparator w =
     E.row
         [ E.height E.fill
         ]
         [ E.el
             [ E.height E.fill
-            , E.width <| E.px p
+            , E.width <| E.px w
             , EBackground.color Palette.gray1
             ]
             <| E.none
         , E.el
             [ E.height E.fill
-            , E.width <| E.px p
+            , E.width <| E.px w
             , EBackground.color Palette.white
             ]
             <| E.none
         ]
 
-hSeparator =
-    let
-        p = 1
-    in
+hSeparator w =
     E.column
         [ E.width E.fill
         ]
         [ E.el
-            [ E.height <| E.px p
+            [ E.height <| E.px w
             , E.width E.fill
             , EBackground.color Palette.gray1
             ]
             <| E.none
         , E.el
-            [ E.height <| E.px p
+            [ E.height <| E.px w
             , E.width E.fill
             , EBackground.color Palette.white
             ]
@@ -663,8 +657,8 @@ xButton color msg =
                 ]
                 { onPress = msg
                 , label =
-                    type2Level2RaisedBorder
-                        <| type2Level1RaisedBorder
+                    type2Level2RaisedBorder 1
+                        <| type2Level1RaisedBorder 1
                             xIcon
                             -- E.image
                             --     [ E.height <| E.px 10
@@ -784,8 +778,8 @@ maximizeButton color msg =
                 ]
                 { onPress = msg
                 , label =
-                    type2Level2RaisedBorder
-                        <| type2Level1RaisedBorder
+                    type2Level2RaisedBorder 1
+                        <| type2Level1RaisedBorder 1
                             drawing
                             -- E.image
                             --     [ E.height <| E.px 10
@@ -893,8 +887,8 @@ minimizeButton color msg =
                 ]
                 { onPress = msg
                 , label =
-                    type2Level2RaisedBorder
-                        <| type2Level1RaisedBorder
+                    type2Level2RaisedBorder 1
+                        <| type2Level1RaisedBorder 1
                             drawing
                             -- E.image
                             --     [ E.height <| E.px 10
@@ -920,7 +914,7 @@ makeInfoBar text1 text2 =
         [ E.el
             [ E.width (E.maximum 120 E.fill)
             ]
-            <| type1Level1DepressedBorder
+            <| type1Level1DepressedBorder 1
                 <| E.el
                     (
                     [ E.padding 4
@@ -929,7 +923,7 @@ makeInfoBar text1 text2 =
                     ++ noHighlight
                     )
                     <| E.text text1
-        , type1Level1DepressedBorder 
+        , type1Level1DepressedBorder 1
             <| E.el
                 (
                 [ E.width E.fill
@@ -973,9 +967,9 @@ makeWindow (Window.Window windowType windowData) content =
             , E.htmlAttribute <| Html.Attributes.style "z-index" (String.fromInt windowData.zIndex)
             , EEvents.onMouseDown <| Msg.WindowClicked windowType
             ]
-            <| type1Level2RaisedBorder
-                <| type1Level1RaisedBorder
-                    <| makeMainBorder
+            <| type1Level2RaisedBorder 1
+                <| type1Level1RaisedBorder 1
+                    <| makeMainBorder 2
                         <| E.column
                             [ E.width E.fill
                             , EBackground.color Palette.color0
