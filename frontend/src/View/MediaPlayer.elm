@@ -306,7 +306,11 @@ viewTablet viewportGeometry model =
                             else
                                 Palette.color1
                         , E.htmlAttribute <| Html.Attributes.style "cursor" "pointer"
-                        , E.mouseOver [ EBackground.color (E.rgba255 225 210 255 0.9) ]
+                        , E.mouseOver <|
+                            if ind == MediaPlayer.getAlbumIndex mpd.selected then
+                                []
+                            else
+                                [ EBackground.color (E.rgba255 225 210 255 0.9) ]
                         , EEvents.onClick <| Msg.SelectedAlbum ind
                         ]
                         <| viewAlbum borderWidth { viewportGeometry | width = width1 } ind album
@@ -1279,7 +1283,11 @@ viewSong viewportGeometry selectedSongInd albumInd songInd songData =
                 Palette.color2
             else
                 Palette.color1
-        , E.mouseOver [ EBackground.color (E.rgba255 225 205 255 0.7) ]
+        , E.mouseOver <|
+            if selectedSongInd == songInd then
+                []
+            else
+                [ EBackground.color (E.rgba255 225 205 255 0.7) ]
         ]
         [ E.el
             [ E.paddingXY Palette.fontSize0 0
