@@ -58,18 +58,17 @@ view title model =
                 E.Phone ->
                     phone_
                 E.Tablet ->
-                    tablet_
-                    -- case device.orientation of
-                    --     E.Portrait ->
-                    --         phone_
-                    --     E.Landscape ->
-                    --         tablet_
+                    case device.orientation of
+                        E.Portrait ->
+                            phone_
+                        E.Landscape ->
+                            tablet_
                 E.Desktop->
                     case device.orientation of
                         E.Portrait ->
                             tablet_
                         E.Landscape ->
-                            desktop_
+                            tablet_
                 E.BigDesktop ->
                     desktop_
     in
