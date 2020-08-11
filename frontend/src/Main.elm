@@ -12,7 +12,6 @@ import Msg
 import Palette
 import Programs.FileExplorer
 import Programs.MediaPlayer
-import Programs.PoorMansOutlook
 
 import Task
 import Time
@@ -21,9 +20,6 @@ import View
 
 import Window
 import Windows
--- import Browser.Events exposing (onAnimationFrameDelta, onMouseDown, onMouseMove, onMouseUp, onResize)
--- import Json.Decode as JD exposing (int)
--- import Time exposing (Posix(..), posixToMillis)
 
 port audioPortToJS : Json.Encode.Value -> Cmd msg
 port audioPortFromJS : (Json.Decode.Value -> msg) -> Sub msg
@@ -38,7 +34,7 @@ main = Browser.document
 
 type alias Programs =
     { fileExplorer : Programs.FileExplorer.FileExplorerData
-    , poorMansOutlook : Programs.PoorMansOutlook.PoorMansOutlookData
+    -- , poorMansOutlook : Programs.PoorMansOutlook.PoorMansOutlookData
     }
 
 type alias Model =
@@ -95,7 +91,7 @@ init flags =
             , mediaPlayer = Programs.MediaPlayer.init
             , programs = 
                 { fileExplorer = Programs.FileExplorer.init
-                , poorMansOutlook = Programs.PoorMansOutlook.init
+                -- , poorMansOutlook = Programs.PoorMansOutlook.init
                 }
             , windows = Windows.initWindows
             , currentTitleBarHeldWindow = Nothing
@@ -202,68 +198,6 @@ update msg model =
                                 | absoluteX = coords.x
                                 , absoluteY = coords.y
                             }
-                cmd_ = Cmd.none
-            in
-                ( model_, cmd_)
-        Msg.EmailInput str ->
-            let
-                newOutlookData = 
-                    Programs.PoorMansOutlook.updateEmail str model.programs.poorMansOutlook
-
-                oldPrograms = model.programs
-                newPrograms =
-                    { oldPrograms
-                        | poorMansOutlook = newOutlookData
-                    }
-
-                model_ =
-                    { model
-                        | programs = newPrograms
-                    }
-                cmd_ = Cmd.none
-            in
-                ( model_, cmd_)
-
-        Msg.SubjectInput str ->
-            let
-                newOutlookData = 
-                    Programs.PoorMansOutlook.updateSubject str model.programs.poorMansOutlook
-
-                oldPrograms = model.programs
-                newPrograms =
-                    { oldPrograms
-                        | poorMansOutlook = newOutlookData
-                    }
-
-                model_ =
-                    { model
-                        | programs = newPrograms
-                    }
-                cmd_ = Cmd.none
-            in
-                ( model_, cmd_)
-
-        Msg.EmailContentInput str ->
-            let
-                newOutlookData = 
-                    Programs.PoorMansOutlook.updateContent str model.programs.poorMansOutlook
-
-                oldPrograms = model.programs
-                newPrograms =
-                    { oldPrograms
-                        | poorMansOutlook = newOutlookData
-                    }
-
-                model_ =
-                    { model
-                        | programs = newPrograms
-                    }
-                cmd_ = Cmd.none
-            in
-                ( model_, cmd_)
-        Msg.TryToSendEmail ->
-            let
-                model_ = model
                 cmd_ = Cmd.none
             in
                 ( model_, cmd_)

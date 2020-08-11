@@ -44,7 +44,8 @@ type Window =
 type WindowType
     = FileExplorerMainWindow
     | MediaPlayerMainWindow
-    | PoorMansOutlookMainWindow
+    -- | PoorMansOutlookMainWindow
+    | ContactMeCardMainWindow
 
 -- TODO: Maybe I can work out some better data type to hold all this together..
 -- can the `type` of the window change while it's being shown?
@@ -155,6 +156,8 @@ toString window =
             "FileExplorerMainWindow"
         MediaPlayerMainWindow ->
             "MediaPlayerMainWindow"
-        PoorMansOutlookMainWindow ->
-            "PoorMansOutlookMainWindow"
+        -- PoorMansOutlookMainWindow ->
+        --     "PoorMansOutlookMainWindow"
+        ContactMeCardMainWindow ->
+            "ContactMeCardMainWindow"
 

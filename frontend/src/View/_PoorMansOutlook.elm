@@ -24,10 +24,10 @@ import View.Windoze as Windoze
 
 poorMansOutlook model =
     let
-        windowGeometry = 
-            case (Windows.get Window.PoorMansOutlookMainWindow model.windows) of
-                (Window.Window type_ geometry) ->
-                    geometry
+        -- windowGeometry = 
+        --     case (Windows.get Window.PoorMansOutlookMainWindow model.windows) of
+        --         (Window.Window type_ geometry) ->
+        --             geometry
 
         actualContent =
             let

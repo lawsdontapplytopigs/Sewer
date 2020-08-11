@@ -5,7 +5,8 @@ module Windows exposing
     , initWindows
     , initFileExplorerMainWindow
     , initMediaPlayerMainWindow
-    , initPoorMansOutlookMainWindow
+    -- , initPoorMansOutlookMainWindow
+    , initContactMeCardMainWindow
     , isOpen
     , openWindow
     , moveWindow
@@ -66,19 +67,39 @@ initMediaPlayerMainWindow =
         , zIndex = 1
         }
 
-initPoorMansOutlookMainWindow =
+-- initPoorMansOutlookMainWindow =
+--     Window.Window
+--         Window.PoorMansOutlookMainWindow
+--         { x = 300
+--         , y = 150
+--         , width = 800
+--         , height = 600
+--         , minWidth = 200
+--         , minHeight = 400
+--         , wantsToNotBeClosed = False
+--         , isMinimized = False
+--         , isMaximized = False
+--         , title = "cONTACT ME"
+--         , shouldBeDisplayedInNavbar = True
+--         , icon = Palette.iconPoorMansOutlook
+--         , iconSmall = Palette.iconPoorMansOutlookSmall
+--         , isFocused = False
+--         , zIndex = 0
+--         }
+
+initContactMeCardMainWindow =
     Window.Window
-        Window.PoorMansOutlookMainWindow
+        Window.ContactMeCardMainWindow
         { x = 300
         , y = 150
-        , width = 800
-        , height = 600
-        , minWidth = 200
-        , minHeight = 400
+        , width = 360
+        , height = 160
+        , minWidth = 300
+        , minHeight = 180
         , wantsToNotBeClosed = False
         , isMinimized = False
         , isMaximized = False
-        , title = "cONTACT ME"
+        , title = "cONCTACT ME"
         , shouldBeDisplayedInNavbar = True
         , icon = Palette.iconPoorMansOutlook
         , iconSmall = Palette.iconPoorMansOutlookSmall
@@ -96,8 +117,8 @@ initWindows =
         ,   (   "MediaPlayerMainWindow"
             ,   initMediaPlayerMainWindow
             )
-        ,   (   "PoorMansOutlookMainWindow"
-            ,   initPoorMansOutlookMainWindow
+        ,   (   "ContactMeCardMainWindow"
+            ,   initContactMeCardMainWindow
             )
         ]
 
@@ -121,8 +142,8 @@ toDefault windowType =
             initFileExplorerMainWindow
         Window.MediaPlayerMainWindow ->
             initMediaPlayerMainWindow
-        Window.PoorMansOutlookMainWindow ->
-            initPoorMansOutlookMainWindow
+        Window.ContactMeCardMainWindow ->
+            initContactMeCardMainWindow
 
 openWindow : Window.WindowType -> Windows -> Windows
 openWindow windowType windows =
@@ -133,8 +154,8 @@ openWindow windowType windows =
                     initFileExplorerMainWindow
                 Window.MediaPlayerMainWindow ->
                     initMediaPlayerMainWindow
-                Window.PoorMansOutlookMainWindow ->
-                    initPoorMansOutlookMainWindow
+                Window.ContactMeCardMainWindow ->
+                    initContactMeCardMainWindow
         windowKey = Window.toString windowType
     in
         -- TODO: test this. we really don't want to have the user type out a

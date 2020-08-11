@@ -20,7 +20,8 @@ import Programs.FileExplorer
 
 import View.FileExplorer
 import View.Navbar
-import View.PoorMansOutlook
+-- import View.PoorMansOutlook
+import View.ContactMeCard
 import View.MediaPlayer
 
 import Window
@@ -92,8 +93,12 @@ desktop model =
             (Msg.OpenWindow Window.FileExplorerMainWindow)
         item2 = makeLauncher 
             Palette.iconWebamp
-            "Webamp"
+            "shlick media player"
             (Msg.OpenWindow Window.MediaPlayerMainWindow)
+        item3 = makeLauncher 
+            Palette.iconPoorMansOutlook
+            "contact me"
+            (Msg.OpenWindow Window.ContactMeCardMainWindow)
 
         viewHelper windowType viewFunc =
             case (Windows.isOpen windowType model.windows, Windows.isMinimized windowType model.windows) of
@@ -131,12 +136,14 @@ desktop model =
                 viewHelper Window.FileExplorerMainWindow viewWin
         contactMeInWindow =
             let
-                poorMansOutlookProgram =
-                    Windows.get Window.PoorMansOutlookMainWindow model.windows 
+                contactMeProgram =
+                    Windows.get Window.ContactMeCardMainWindow model.windows 
+                -- poorMansOutlookProgram =
+                --     Windows.get Window.PoorMansOutlookMainWindow model.windows 
                 viewWin =
-                    View.Windoze.makeWindow poorMansOutlookProgram (View.PoorMansOutlook.poorMansOutlook model)
+                    View.Windoze.makeInfoCardWindow contactMeProgram (View.ContactMeCard.contactMeCard model)
             in
-                viewHelper Window.PoorMansOutlookMainWindow viewWin
+                viewHelper Window.ContactMeCardMainWindow viewWin
     in
         E.column
             [ E.alignLeft
@@ -146,6 +153,7 @@ desktop model =
             ]
             [ item1
             , item2
+            , item3
             ]
 
 heightBlock height =

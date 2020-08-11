@@ -413,7 +413,7 @@ viewTablet viewportGeometry model =
                                             [ E.el
                                                 [ E.width <| E.fillPortion (round (p * 100))
                                                 , E.height E.fill
-                                                , EBackground.color <| E.rgb255 0 0 176
+                                                , EBackground.color Palette.color3
                                                 ]
                                                 <| E.none
                                             , E.el
@@ -766,7 +766,7 @@ viewPhonePlayPanel borderWidth viewportGeometry mpd =
                                     [ E.el
                                         [ E.width <| E.fillPortion (round (p * 100))
                                         , E.height E.fill
-                                        , EBackground.color <| E.rgb255 0 0 176
+                                        , EBackground.color Palette.color3
                                         ]
                                         <| E.none
                                     , E.el
@@ -1015,7 +1015,7 @@ viewPhonePlayPanel borderWidth viewportGeometry mpd =
                                                     [ E.el
                                                         [ E.width <| E.fillPortion (round (p * 100))
                                                         , E.height E.fill
-                                                        , EBackground.color <| E.rgb255 0 0 176
+                                                        , EBackground.color Palette.color3
                                                         ]
                                                         <| E.none
                                                     , E.el

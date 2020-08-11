@@ -990,11 +990,40 @@ makeWindow (Window.Window windowType windowData) content =
                             -- , content
                             ]
 
-
-
-
-
-
-
+makeInfoCardWindow : Window.Window -> E.Element Msg.Msg -> E.Element Msg.Msg
+makeInfoCardWindow (Window.Window windowType windowData) content =
+    let
+        titleBar = makeTitleBar 
+            [ xButton (E.rgb255 0 0 0) (Just (Msg.CloseWindow windowType))
+            ]
+            windowType
+            windowData.title
+            windowData.isFocused
+            windowData.iconSmall
+    in
+        E.el
+            [ E.width <| E.px windowData.width
+            , E.height <| E.px windowData.height
+            , E.htmlAttribute <| Html.Attributes.style "transform" 
+                ("translate(" ++ String.fromInt windowData.x ++ "px" ++ ", " ++ String.fromInt windowData.y ++ "px )")
+            , E.htmlAttribute <| Html.Attributes.style "z-index" (String.fromInt windowData.zIndex)
+            , EEvents.onMouseDown <| Msg.WindowClicked windowType
+            ]
+            <| type1Level2RaisedBorder 1
+                <| type1Level1RaisedBorder 1
+                    <| makeMainBorder 2
+                        <| E.column
+                            [ E.width E.fill
+                            , EBackground.color Palette.color0
+                            , E.height E.fill
+                            ]
+                            [ titleBar
+                            , E.el
+                                [ E.width E.fill
+                                , E.height E.fill
+                                , E.htmlAttribute <| Html.Attributes.style "overflow" "hidden"
+                                ]
+                                <| content
+                            ]
 
 

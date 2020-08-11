@@ -5,6 +5,7 @@ import Element as E
 -- font0 = "Droid Sans"
 -- font0 = "MS Sans Serif"
 font0 = "W95FA"
+-- font0 = "px_sans_nouveaux"
 -- font0 = "pix M 8pt"
 font1 = "undefined"
 
@@ -22,6 +23,7 @@ white = E.rgb255 255 255 255
 color0 = E.rgb255 245 180 255
 color1 = E.rgb255 255 215 228
 color2 = E.rgb255 175 80 240
+color3 = E.rgb255 0 0 176 -- windows95 blue
 
 
 padding0 = 10

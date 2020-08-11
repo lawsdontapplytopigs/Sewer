@@ -28,12 +28,6 @@ type Msg
     -- `FocusWindow` Msg or a `MinimizeWindow` Msg
     | NavbarItemClicked Window.WindowType
 
-    -- poor man's outlook related
-    | EmailInput String
-    | SubjectInput String
-    | EmailContentInput String
-    | TryToSendEmail
-
     -- Audio Related
     | GotDiscography (Array.Array Programs.MediaPlayer.Album)
     | GotSelectedAlbumAndSong Programs.MediaPlayer.SelectedAlbumAndSong
