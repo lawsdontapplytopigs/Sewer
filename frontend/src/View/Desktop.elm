@@ -119,7 +119,7 @@ desktop model =
                 viewWin =
                     View.Windoze.makeWindow 
                         mediaPlayerProgram 
-                        <| View.MediaPlayer.viewPhone 
+                        <| View.MediaPlayer.viewTablet
                             { width = mediaPlayerWindowData.width - 8 -- we account for windows 95 borders
                             , height = mediaPlayerWindowData.height - 8 -- we account for windows 95 borders
                             }
@@ -130,8 +130,18 @@ desktop model =
             let
                 fileExplorerProgram =
                     Windows.get Window.FileExplorerMainWindow model.windows 
+                fileExplorerWindowData =
+                    case fileExplorerProgram of
+                        ( Window.Window t_ data ) ->
+                            data
                 viewWin =
-                    View.Windoze.makeWindow fileExplorerProgram (View.FileExplorer.fileExplorer model)
+                    View.Windoze.makeWindow 
+                    fileExplorerProgram 
+                    <| View.FileExplorer.fileExplorer 
+                        { width = fileExplorerWindowData.width
+                        , height = fileExplorerWindowData.height
+                        }
+                        model
             in
                 viewHelper Window.FileExplorerMainWindow viewWin
         contactMeInWindow =

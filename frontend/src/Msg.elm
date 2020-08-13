@@ -8,8 +8,7 @@ import Window
 import Programs.MediaPlayer
 
 type Msg
-    = Tick Time.Posix
-    | AdjustTimeZone Time.Zone
+    = AdjustTimeZone Time.Zone
     | GotViewportGeometry { width : Int , height : Int }
 
     -- Window Related
@@ -32,8 +31,8 @@ type Msg
     | GotDiscography (Array.Array Programs.MediaPlayer.Album)
     | GotSelectedAlbumAndSong Programs.MediaPlayer.SelectedAlbumAndSong
     | GotTimeData Programs.MediaPlayer.TimeData
-    -- | GotSongData Programs.MediaPlayer.SongData
-    -- | GotAlbums Programs.MediaPlayer.Album
+
+    | SelectedAlbumFromFileExplorer AlbumIndex
 
     | SelectedAlbum AlbumIndex
     | SelectedSong AlbumIndex SongIndex

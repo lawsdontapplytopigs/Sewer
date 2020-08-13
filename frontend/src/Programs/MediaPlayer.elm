@@ -3,13 +3,13 @@ module Programs.MediaPlayer exposing
     -- , Status(..)
     -- )
     (..)
-
 import Array
 
 type alias TimeData =
     { elapsed : Maybe Int -- I would use a float here, but I think there's an elm compiler or core library bug
     , duration : Float
     , isPlaying : Bool
+    , isLoaded : Bool -- we get a string from js, but in `update` we make a `PlayingState` from it
     }
 
 type alias SongData =
@@ -40,6 +40,17 @@ type SelectedAlbumAndSong
 --     | ShowingSongsPanel Int
     
 
+-- i would use this, but theres some weirdo elm compiler bug
+-- type PlayingState
+--     = Loading
+--     | Playing
+--     | Paused
+
+type LoadingState 
+    = Loading
+    | Loaded
+    
+
 -- we don't actually use this to control anything on the js side
 -- we only use this data to display stuff properly in the media player
 type alias MediaPlayerData =
@@ -49,6 +60,7 @@ type alias MediaPlayerData =
     , elapsed : Maybe Int
     , currentSongDuration : Maybe Float
     , isPlaying : Bool
+    , loadingState : LoadingState
 
     , shouldShuffle : Bool
     , shouldRepeat : Bool
@@ -56,6 +68,23 @@ type alias MediaPlayerData =
     , songsPanelXPercentageOffset : Float -- 0 to 1
     -- , playPanelState : PlayPanelState
     -- , songsPanelState : SongsPanelState
+    }
+
+init : MediaPlayerData
+init =
+    { discography = Array.empty
+    , selected = Default 0 0
+
+    , elapsed = Nothing
+    , currentSongDuration = Nothing
+
+    , isPlaying = False
+    , loadingState = Loaded
+
+    , shouldShuffle = False
+    , shouldRepeat = False
+    , playPanelYPercentageOffset = 0.0
+    , songsPanelXPercentageOffset = 0.0
     }
 
 updatePlayPanelYOffset : Float -> MediaPlayerData -> MediaPlayerData
@@ -88,20 +117,6 @@ updateSongsPanelXOffset x mpd =
         | songsPanelXPercentageOffset = flt
     }
 
-init : MediaPlayerData
-init =
-    { discography = Array.empty
-    , selected = Default 0 0
-
-    , elapsed = Nothing
-    , currentSongDuration = Nothing
-    , isPlaying = False
-    , shouldShuffle = False
-    , shouldRepeat = False
-    , playPanelYPercentageOffset = 0.0
-    , songsPanelXPercentageOffset = 0.0
-    }
-
 updateDiscography : (Array.Array Album) -> MediaPlayerData -> MediaPlayerData
 updateDiscography albums mpd =
     { mpd
@@ -128,10 +143,19 @@ updateSelected sel mpd =
 
 updateTimeData : TimeData -> MediaPlayerData -> MediaPlayerData
 updateTimeData data mpd =
+    let
+        actualLoadingState =
+            case data.isLoaded of
+                True ->
+                    Loaded
+                False ->
+                    Loading
+    in
     { mpd
         | currentSongDuration = Just data.duration
         , elapsed = data.elapsed -- we might get Nothing here, so fuck it. we just store it anyway
         , isPlaying = data.isPlaying
+        , loadingState = actualLoadingState
     }
 
 getAlbumIndex : SelectedAlbumAndSong -> Int

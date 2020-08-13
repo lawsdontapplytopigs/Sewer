@@ -23,7 +23,6 @@ import Window
 import Windows
 import View.Windoze as Windoze
 
-
 ensureMin minim val =
     if val > minim then
         val
@@ -36,10 +35,6 @@ getPxSize maxSize perc =
 
 logScale base val =
     round (logBase base (toFloat val))
-
--- logScalePxPercentage base maxSize perc =
---     round <| logBase base ((toFloat maxSize) * perc)
-
     
 viewTablet viewportGeometry model =
     let
@@ -47,10 +42,15 @@ viewTablet viewportGeometry model =
         mpd = model.mediaPlayer
         height0 = getPxSize (min viewportGeometry.width viewportGeometry.height) 0.16
 
-        fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.3))
-        fontSize1 = round (logBase 1.22 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.9))
-        fontSize2 = round (logBase 1.22 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.5))
-        fontSize3 = round (logBase 1.15 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 5.5))
+
+        fontSize0 = round (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 1.8)
+        fontSize1 = round (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 2.0)
+        fontSize2 = round (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 2.6)
+        fontSize3 = round (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.0)
+        -- fontSize0 = round (logBase 1.2 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.3))
+        -- fontSize1 = round (logBase 1.22 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 3.9))
+        -- fontSize2 = round (logBase 1.22 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 4.5))
+        -- fontSize3 = round (logBase 1.15 (((toFloat (min viewportGeometry.height viewportGeometry.width)) / 100) * 5.5))
 
         currentAlbum =
             MediaPlayer.getSelectedAlbum mpd.selected mpd
@@ -77,9 +77,6 @@ viewTablet viewportGeometry model =
                 Nothing ->
                     "____________" -- TODO: Do something cool here
 
-
-
-        -- height0 = 200
         buttonSize = ensureMin 38 (getPxSize height0 0.37)
         playButtonSize = ensureMin 48 (getPxSize height0 0.43)
 
@@ -107,7 +104,7 @@ viewTablet viewportGeometry model =
                     [ EFont.typeface Palette.font0
                     ]
                 ]
-                <| E.text 
+                <| E.text
                     <| case currentSong of
                         Nothing ->
                             "s  e w e r   s  l v t"--TODO: here too
@@ -115,11 +112,24 @@ viewTablet viewportGeometry model =
                             song.artist
 
         playOrPauseIcon =
-            case mpd.isPlaying of
-                True ->
-                    pauseIcon
-                False ->
-                    playIcon
+            let
+                playingOrPausedIcon =
+                    case mpd.isPlaying of
+                        True ->
+                            pauseIcon
+                        False ->
+                            playIcon
+            in
+            case mpd.loadingState of
+                MediaPlayer.Loaded ->
+                    playingOrPausedIcon
+                MediaPlayer.Loading ->
+                    loadingIcon
+                    -- case Maybe.map Zipper.current maybeZipper of
+                    --     Just src_ ->
+                    --         loadingIcon src_
+                    --     Nothing ->
+                    --         playingOrPausedIcon
 
         playButton32 msg =
             E.el
@@ -141,6 +151,111 @@ viewTablet viewportGeometry model =
                 ]
                 <| regularButton borderWidth isPushedIn (scaleIc buttonSize icon) msg
 
+        artistNameAndSongTimeData = 
+            E.row
+                [ E.width E.fill
+                , EFont.family
+                    [ EFont.typeface Palette.font0
+                    ]
+                , EFont.size fontSize1
+                ]
+                [ artistName
+                , E.el
+                    [ E.alignRight
+                    ]
+                    <| E.text (elapsed ++ "/" ++ songLength)
+                ]
+
+        bottomControlBar =
+            E.row
+                [ E.height <| E.px height0
+                , E.width E.fill
+                , EBackground.color Palette.color0
+                , E.paddingXY 20 0
+                , E.spacing 40
+                ]
+                [ E.row
+                    [ E.centerX
+                    , E.centerY
+                    , E.height E.fill
+                    , E.spacing 10
+                    ]
+                    [ regularButton32 False prevIcon Msg.PressedPrevSong
+                    , playButton32 Msg.PressedPlayOrPause
+                    , regularButton32 False nextIcon Msg.PressedNextSong
+                    ]
+                , E.column
+                    [ E.width E.fill
+                    , E.spacing 4
+                    ]
+                    [ trackName
+                    , windowsLoadingBarSlider
+                    , artistNameAndSongTimeData
+                    ]
+                , E.row
+                    [ E.centerX
+                    , E.centerY
+                    , E.height E.fill
+                    , E.spacing 10
+                    ]
+                    [ wideButton mpd.shouldShuffle shuffleIcon Msg.PressedToggleShuffle
+                    , wideButton mpd.shouldRepeat repeatIcon Msg.PressedToggleRepeat
+                    ]
+                ]
+            
+        windowsLoadingBarSlider =
+            let
+                sliderHeight = getPxSize height0 0.18
+                -- TODO: I may refactor this. also, maybe we can make it faster
+                maybePerc =
+                    Maybe.map2 (\elaps dur -> ((toFloat (elaps * 100)) / dur)) mpd.elapsed mpd.currentSongDuration
+            in
+                E.el
+                    [ E.width <| E.fill
+                    , E.height <| E.minimum 24 (E.px sliderHeight)
+                    ]
+                    <| Windoze.type1Level1DepressedBorder borderWidth
+                        <| EInput.slider
+                            [ E.width E.fill
+                            , E.height E.fill
+                            , EBackground.color Palette.color0
+                            , E.behindContent
+                                <| case maybePerc of
+                                    Nothing ->
+                                        E.none
+                                    Just p ->
+                                        E.row
+                                            [ E.height E.fill
+                                            , E.width E.fill
+                                            ]
+                                            [ E.el
+                                                [ E.width <| E.fillPortion (round (p * 100))
+                                                , E.height E.fill
+                                                , EBackground.color Palette.color3
+                                                ]
+                                                <| E.none
+                                            , E.el
+                                                [ E.width <| E.fillPortion (round ((100 - p) * 100))
+                                                , E.height E.fill
+                                                ]
+                                                <| E.none
+                                            ]
+                            ]
+                            { min = 0
+                            , max = 100
+                            , onChange = (\val -> Msg.MediaPlayerTrackSliderMoved val)
+                            , value = case maybePerc of
+                                Just d ->
+                                    d
+                                Nothing ->
+                                    0
+                            , thumb = EInput.thumb
+                                [ E.width <| E.px 0
+                                , E.height <| E.px 0
+                                ]
+                            , step = Nothing
+                            , label = EInput.labelHidden "seek in current song"
+                            }
 
         width0 = (getPxSize viewportGeometry.width 0.65) - borderWidth
         leftSidePanel =
@@ -174,8 +289,8 @@ viewTablet viewportGeometry model =
                                 borderWidth 
                                 False 
                                 Palette.color2 
-                                100
-                                30
+                                (fontSize1 * 5)
+                                (fontSize1 * 2)
                                 (buttonText "Play")
                                 (Msg.SelectedSong (MediaPlayer.getAlbumIndex mpd.selected) 0)
                         roundedBuyAlbumButton =
@@ -183,8 +298,8 @@ viewTablet viewportGeometry model =
                                 borderWidth 
                                 False 
                                 Palette.color0
-                                100
-                                30
+                                (fontSize1 * 5)
+                                (fontSize1 * 2)
                                 buyAlbumText
                                 Msg.NoOp
                         albumCov =
@@ -344,100 +459,6 @@ viewTablet viewportGeometry model =
                                 <| E.none
                 
                     
-        bottomControlBar =
-            -- let
-            --     barWidth0 = getPxSize (min viewportGeometry.width viewportGeometry.height) 0.20
-            --     barWidth1 = getPxSize (min viewportGeometry.width viewportGeometry.height) 0.20
-            -- in
-                E.row
-                    [ E.height <| E.px height0
-                    , E.width E.fill
-                    , EBackground.color Palette.color0
-                    , E.paddingXY 20 0
-                    , E.spacing 40
-                    ]
-                    [ E.row
-                        [ E.centerX
-                        , E.centerY
-                        , E.height E.fill
-                        , E.spacing 10
-                        ]
-                        [ regularButton32 False prevIcon Msg.PressedPrevSong
-                        , playButton32 Msg.PressedPlayOrPause
-                        , regularButton32 False nextIcon Msg.PressedNextSong
-                        ]
-                    , E.column
-                        [ E.width E.fill
-                        , E.spacing 4
-                        ]
-                        [ trackName
-                        , windowsLoadingBarSlider
-                        , artistName
-                        ]
-                    , E.row
-                        [ E.centerX
-                        , E.centerY
-                        , E.height E.fill
-                        , E.spacing 10
-                        ]
-                        [ wideButton mpd.shouldShuffle shuffleIcon Msg.PressedToggleShuffle
-                        , wideButton mpd.shouldRepeat repeatIcon Msg.PressedToggleRepeat
-                        ]
-                    ]
-            
-        windowsLoadingBarSlider =
-            let
-                sliderHeight = getPxSize height0 0.18
-                -- TODO: I may refactor this. also, maybe we can make it faster
-                maybePerc =
-                    Maybe.map2 (\elaps dur -> ((toFloat (elaps * 100)) / dur)) mpd.elapsed mpd.currentSongDuration
-            in
-                E.el
-                    [ E.width <| E.fill
-                    , E.height <| E.minimum 24 (E.px sliderHeight)
-                    ]
-                    <| Windoze.type1Level1DepressedBorder borderWidth
-                        <| EInput.slider
-                            [ E.width E.fill
-                            , E.height E.fill
-                            , EBackground.color Palette.color0
-                            , E.behindContent
-                                <| case maybePerc of
-                                    Nothing ->
-                                        E.none
-                                    Just p ->
-                                        E.row
-                                            [ E.height E.fill
-                                            , E.width E.fill
-                                            ]
-                                            [ E.el
-                                                [ E.width <| E.fillPortion (round (p * 100))
-                                                , E.height E.fill
-                                                , EBackground.color Palette.color3
-                                                ]
-                                                <| E.none
-                                            , E.el
-                                                [ E.width <| E.fillPortion (round ((100 - p) * 100))
-                                                , E.height E.fill
-                                                ]
-                                                <| E.none
-                                            ]
-                            ]
-                            { min = 0
-                            , max = 100
-                            , onChange = (\val -> Msg.MediaPlayerTrackSliderMoved val)
-                            , value = case maybePerc of
-                                Just d ->
-                                    d
-                                Nothing ->
-                                    0
-                            , thumb = EInput.thumb
-                                [ E.width <| E.px 0
-                                , E.height <| E.px 0
-                                ]
-                            , step = Nothing
-                            , label = EInput.labelHidden "seek in current song"
-                            }
     in
     E.column
         [ E.height <| E.px viewportGeometry.height
@@ -512,7 +533,6 @@ viewPhone viewportGeometry model =
     E.el
         [ E.width <| E.px viewportGeometry.width
         , E.height <| E.px viewportGeometry.height
-
         , E.behindContent <|
             E.el
                 [ E.height <| E.px <|
@@ -726,11 +746,19 @@ viewPhonePlayPanel borderWidth viewportGeometry mpd =
                     "sewerslvt"
 
         playOrPauseIcon =
-            case mpd.isPlaying of
-                True ->
-                    pauseIcon
-                False ->
-                    playIcon
+            let
+                playingOrPausedIcon =
+                    case mpd.isPlaying of
+                        True ->
+                            pauseIcon
+                        False ->
+                            playIcon
+            in
+            case mpd.loadingState of
+                MediaPlayer.Loaded ->
+                    playingOrPausedIcon
+                MediaPlayer.Loading ->
+                    loadingIcon
 
         -- note: save yourself headache and just work directly with floating 
         -- point numbers when you want to do this kind of thing
@@ -923,7 +951,7 @@ viewPhonePlayPanel borderWidth viewportGeometry mpd =
                                 { src = 
                                     case Maybe.map .albumCoverSrc currentAlbum of
                                         Nothing ->
-                                            "./no_signal_bars.jpg" --TODO: maybe do something cooler here
+                                            "./no_signal_bars.png" --TODO: maybe do something cooler here
                                         Just src ->
                                             src
                                 , description = "" -- TODO
@@ -1738,6 +1766,18 @@ nextIcon =
             -- , p c1
             ]
 
+loadingIcon = 
+    E.image
+        [ E.height <| E.px 16
+        , E.width <| E.px 16
+        -- , E.htmlAttribute <| Html.Attributes.style "image-rendering" "-moz-crisp-edges"
+        -- , E.htmlAttribute <| Html.Attributes.style "image-rendering" "crisp-edges"
+        , E.htmlAttribute <| Html.Attributes.style "image-rendering" "pixelated"
+        ]
+        { description = "loading..."
+        , src = "./loading.gif"
+        }
+
 shuffleIcon = 
     E.image
         [ E.height <| E.px 16
@@ -1787,4 +1827,5 @@ widthFillColor p_ col wid = E.el
     , E.height <| E.px p_
     ]
     <| E.none
+
 

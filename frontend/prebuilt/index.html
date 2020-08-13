@@ -65,6 +65,7 @@
             pl.shouldShuffle = false;
             pl.shouldBePlaying = false;
             pl.shouldRepeat = false;
+            pl.isLoaded = true;
             // we use this to not allow the user to quickly press "play" 4 times 
             // and have the same song fetched and played twice at the same time
             pl._aRequestHasAlreadyBeenSent = false;
@@ -103,10 +104,12 @@
                         });
                         pl._aRequestHasAlreadyBeenSent = false;
                         if (pl.shouldBePlaying) {
+                            pl.isLoaded = true;
                             let actualSeekSeconds = ((pl.howl.duration() / 100) * pl.seekAmount);
                             pl.howl.seek(actualSeekSeconds);
                             pl.howl.play();
                         };
+                        pl.sendDefaultTimeData();
                     },
                     onend : () => {
                         console.log("SONG ENDED");
@@ -120,11 +123,6 @@
                             pl.selectSong(pl.albumInd, pl.songInd + 1);
                         };
                     },
-                    // TODO: make this work well. sometimes there's `null`s
-                    // in the JSON
-                    /* onstop : () => { */
-                    /*     pl.shouldBePlaying = false; */
-                    /* }, */
                     onpause : () => {
                         elmApp.ports.audioPortFromJS.send({
                             type : 0,
@@ -138,7 +136,6 @@
                             pl.seekAmount = ((pl.howl.duration() / 100) * pl.howl.seek())
                         };
                         pl.sendSelectedAlbumAndSong();
-                        /* pl.sendTimeData(pl.howl.seek()); */
                     }
                 });
             };
@@ -161,6 +158,7 @@
                 pl.albumInd = ind;
                 pl.songInd = 0;
                 pl.shouldBePlaying = false;
+                pl.isLoaded = true;
 
                 pl.sendSelectedAlbumAndSong();
                 pl.sendDefaultTimeData();
@@ -170,7 +168,6 @@
             pl.selectSong = (albumIndex, songIndex) => {
                 pl.seekAmount = 0;
                 pl.shouldBePlaying = true;
-                pl.sendDefaultTimeData();
 
 
                 let AI = validateIndex(albumIndex, pl.discography.length);
@@ -179,9 +176,11 @@
                 if ((pl.albumInd === AI) && (pl.songInd === SI)) {
                     console.log("theyre the same. starting the song over..");
                     if (pl.howl) {
+                        pl.isLoaded = true;
                         pl.howl.stop();
                         pl.howl.play();
                     } else {
+                        pl.isLoaded = false;
                         pl.fetchSong();
                     };
                     return
@@ -198,6 +197,8 @@
                     console.log("there's a howl. removing it to play a new song..");
                     Howler.unload();
                 };
+                pl.isLoaded = false;
+                pl.sendDefaultTimeData();
                 pl.fetchSong();
             };
 
@@ -206,13 +207,16 @@
                 if (pl.howl !== undefined) {
                     if (pl.howl.playing()) {
                         pl.shouldBePlaying = false;
+                        pl.isLoaded = true;
                         pl.howl.pause();
                     } else {
                         pl.shouldBePlaying = true;
+                        pl.isLoaded = true;
                         pl.howl.play();
                     };
                     pl.sendHowlTimeData();
                 } else {
+                    pl.isLoaded = false;
                     pl.shouldBePlaying = !pl.shouldBePlaying;
                     if (pl._aRequestHasAlreadyBeenSent) {
                         return
@@ -220,6 +224,7 @@
                         console.log("no howl... fetching song")
                         pl.fetchSong();
                     };
+                    pl.sendDefaultTimeData();
                 };
             };
 
@@ -298,6 +303,7 @@
                     elapsed : Math.floor(elapsedTime),
                     duration : songDuration,
                     isPlaying : pl.shouldBePlaying,
+                    isLoaded : pl.isLoaded,
                 });
             };
 
@@ -308,6 +314,7 @@
                         elapsed : Math.floor(pl.howl.seek()),
                         duration : pl.howl.duration(),
                         isPlaying : pl.howl.playing(),
+                        isLoaded : pl.isLoaded,
                     });
                 };
             };

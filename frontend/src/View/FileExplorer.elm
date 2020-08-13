@@ -2,6 +2,7 @@ module View.FileExplorer exposing
     ( fileExplorer )
 
 
+import Array
 import Dict
 import Element as E
 import Element.Background as EBackground
@@ -17,67 +18,50 @@ import Icons
 import Msg
 
 import Palette
+import Programs.MediaPlayer as MediaPlayer
 import Window
 import Windows
 
 import View.Windoze as Windoze
 
-fileExplorer model =
+fileExplorer viewportGeometry model =
     let
         imageSize = 80
         widthSpacing = 40
         heightSpacing = 40
 
-        maybeWindowData = Dict.get (Window.toString Window.FileExplorerMainWindow) model.windows
-        windowGeometry =
-            case maybeWindowData of
-                Just (Window.Window type_ geometry) ->
-                    geometry
-                Nothing ->
-                    case Windows.initFileExplorerMainWindow of
-                        (Window.Window type_ geometry) ->
-                            geometry
+        albumsTitleAndCover : Array.Array { title : String, albumCoverSrc : String }
+        albumsTitleAndCover = Array.map (\a -> { title = a.title, albumCoverSrc = a.albumCoverSrc }) model.mediaPlayer.discography
 
-        makeAlbumSized =
-            makeAlbum imageSize
+        wrapRow =
+            E.wrappedRow
+                [ E.spacing 20
+                , E.centerX
+                ]
+                <| Array.toList (Array.indexedMap makeAlbum albumsTitleAndCover)
 
         wholeContent =
             E.el
-                -- [ E.width <| E.px ((imageSize * 4) + 200)
-                [ E.width E.fill
-                , E.height <| E.px ((imageSize * 3) + 100)
-                , E.centerX
+                [ E.centerX
+                , E.width E.fill
+                , E.paddingEach { top = 40, right = 20, bottom = 0, left = 20 }
                 ]
-                <| E.el
-                    [ E.width E.fill
-                    , E.height E.fill
-                    -- , EBackground.color <| E.rgb255  255 225 238
-                    , EBackground.color <| Palette.color1
-                    ]
-                    <| E.column
-                        [ E.centerX
-                        -- , EBackground.color <| E.rgb255  240 190 10
-                        -- TODO: take this out & refactor. 
-                        -- It wouldn't be needed if the code were written properly
-                        , E.paddingEach { top = 40, right = 0, bottom = 0, left = 0 }                 
-                        ]
-                        [ E.row
-                            [ E.spacing widthSpacing
-                            ]
-                            <| List.map makeAlbumSized model.albums0
-                        , E.row
-                            [ E.spacing widthSpacing
-                            ]
-                            <| List.map makeAlbumSized model.albums1
-                        ]
-
+                wrapRow
     in
         E.column
             [ E.width E.fill
             , E.height E.fill
+            , EBackground.color Palette.color1
             ]
             [ Windoze.type1Level1DepressedBorder 1
-                <| Windoze.type1Level2DepressedBorder 1 wholeContent
+                <| Windoze.type1Level2DepressedBorder 1 
+                    <| E.el
+                        [ E.height E.fill
+                        , E.width E.fill
+                        , E.inFront wholeContent
+                        , E.scrollbarY
+                        ]
+                        <| E.none
             , E.el
                 [ E.width E.fill
                 , EBackground.color Palette.color0
@@ -88,20 +72,26 @@ fileExplorer model =
             ]
 
 makeAlbum : 
-    Int 
-    -> { coverImage : String, title : String, maybeAuthor : Maybe String } 
-    -> E.Element msg
-makeAlbum imgSize { coverImage, title, maybeAuthor } =
+    Int
+    -> { albumCoverSrc : String, title : String }
+    -> E.Element Msg.Msg
+makeAlbum indx { albumCoverSrc, title } =
+    let
+        imgSize = 80
+    in
     E.column
         [ E.height <| E.px (imgSize + 60)
         , E.width <| E.px imgSize
-        -- , EBackground.color <| E.rgb255 215 15 15
+        -- TODO: make this behave better. for example, check if the music player 
+        -- is open, open it, focus it, bring it on top, etc. expected behaviour
+        -- in a windows scenario
+        , EEvents.onDoubleClick <| Msg.SelectedAlbumFromFileExplorer indx 
         ]
         [ E.html
             <| Html.div
                 [ Html.Attributes.style "width" ((String.fromInt imgSize) ++ "px")
                 , Html.Attributes.style "height" ((String.fromInt imgSize) ++ "px")
-                , Html.Attributes.style "background-image" ("url(" ++ coverImage ++ ")")
+                , Html.Attributes.style "background-image" ("url(" ++ albumCoverSrc ++ ")")
                 , Html.Attributes.style "background-size" "cover"
                 ]
                 []
@@ -119,18 +109,4 @@ makeAlbum imgSize { coverImage, title, maybeAuthor } =
             ]
             [ E.text title
             ]
-        , case maybeAuthor of
-            Just str ->
-                E.el
-                    [ EFont.size Palette.fontSize0
-                    , EFont.light
-                    , EFont.family
-                        [ EFont.typeface Palette.font0
-                        ]
-                    -- , EFont.color <| E.rgb255 230 80 170
-                    , EFont.color <| E.rgb255 32 20 26
-                    ]
-                    <| E.text str
-            Nothing ->
-                E.none
         ]

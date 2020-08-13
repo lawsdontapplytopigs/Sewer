@@ -10,7 +10,7 @@ if [[ ! -d ./built/icons ]]; then
     mkdir ./built/icons
 fi
 #IMAGES
-cp ./prebuilt/no_signal_bars.jpg ./built/
+cp ./prebuilt/no_signal_bars.png ./built/
 cp ./prebuilt/shuffle.png ./built/
 cp ./prebuilt/repeat.png ./built/
 # cp -r ./prebuilt/albums ./built/ #un-comment this for production
@@ -27,7 +27,7 @@ cp ./art/winampRipoff/SWamp.png ./built/icons/3.png #Webamp
 cp "./art/icons/w95_5.ico" ./built/icons/2.0.png # File Explorer 
 cp "./art/icons/w95_5.ico" ./built/icons/2.1.png # File Explorer
 
-#Poor man's outlook icons
+#"contact me card" icons
 cp "$IC/message_envelope_open-0.png" ./built/icons/4.0.png
 cp "$IC/message_envelope_open-1.png" ./built/icons/4.1.png
 
@@ -35,6 +35,9 @@ cp "$IC/loudspeaker_rays-0.png" ./built/icons/5.0.png
 cp "$IC/loudspeaker_rays-1.png" ./built/icons/5.1.png
 
 cp -r ./prebuilt/fonts ./built/
+
+# cp -r ./prebuilt/loadingSprites/ ./built
+cp -r ./prebuilt/loading.gif ./built/
 
 
 # all the js

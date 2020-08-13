@@ -33,7 +33,7 @@ initFileExplorerMainWindow =
         { x = 200
         , y = 70
         , width = 500
-        , height = 300
+        , height = 460
         , minWidth = 300
         , minHeight = 200
         , wantsToNotBeClosed = False
@@ -52,7 +52,7 @@ initMediaPlayerMainWindow =
         Window.MediaPlayerMainWindow
         { x = 400
         , y = 200
-        , width = 320
+        , width = 720
         , height = 500
         , minWidth = 300
         , minHeight = 200
@@ -90,7 +90,7 @@ initMediaPlayerMainWindow =
 initContactMeCardMainWindow =
     Window.Window
         Window.ContactMeCardMainWindow
-        { x = 300
+        { x = 800
         , y = 150
         , width = 360
         , height = 160
@@ -158,10 +158,6 @@ openWindow windowType windows =
                     initContactMeCardMainWindow
         windowKey = Window.toString windowType
     in
-        -- TODO: test this. we really don't want to have the user type out a
-        -- long email, try to open the email program even though it's already 
-        -- open, and throw away all the message
-        -- TODO: replace this with `isOpen`
         case Dict.member windowKey windows of 
             True ->
                 windows

@@ -267,15 +267,16 @@ update msg model =
                 cmd_ = Cmd.none
             in
                 ( model_, cmd_)
-        Msg.Tick time ->
-            let
-                model_ =
-                    { model
-                        | time = time
-                    }
-                cmd_ = Cmd.none
-            in
-                ( model_, cmd_)
+        -- Msg.TickLoadingAnimation time ->
+        --     let
+        --         model_ =
+        --             { model
+        --                 | time = time
+        --                 , mediaPlayer = Programs.MediaPlayer.stepAnimation model.mediaPlayer
+        --             }
+        --         cmd_ = Cmd.none
+        --     in
+        --         ( model_, cmd_)
         Msg.AdjustTimeZone zone ->
             let
                 model_ =
@@ -317,7 +318,6 @@ update msg model =
                     Cmd.none
             in
                 ( model_, cmd_ )
-
         Msg.PressedPlayOrPause ->
             ( model, togglePlayCMD )
         Msg.PressedNextSong ->
@@ -403,13 +403,30 @@ update msg model =
                 cmd_ = selectAlbumCMD albumIndex
             in
                 (model_, cmd_)
+        Msg.SelectedAlbumFromFileExplorer albumIndex ->
+            let
+                newZ =
+                    model.currentZIndex + 1
+                windowType = Window.MediaPlayerMainWindow
+                model_ =
+                    { model
+                        | windows =
+                            model.windows
+                                |> Windows.openWindow windowType
+                                |> Windows.focus windowType
+                                |> Windows.changeZIndex windowType newZ
+                        , currentZIndex = newZ
+                        , mediaPlayer = Programs.MediaPlayer.updatePlayPanelYOffset 1.0 model.mediaPlayer
+                    }
+                cmd_ = selectAlbumCMD albumIndex
+            in
+                ( model_, cmd_ )
         Msg.SelectedSong albumIndex songIndex ->
             let
                 model_ = model
                 cmd_ = selectSongCMD albumIndex songIndex
             in
                 (model_, cmd_)
-
         Msg.SongLoaded ->
             ( model, Cmd.none )
         Msg.SongPlaying ->
@@ -430,8 +447,7 @@ update msg model =
 subscriptions : Model -> Sub Msg.Msg
 subscriptions model =
     Sub.batch
-        [ Time.every 1000 Msg.Tick
-        , audioPortFromJS fromJSPortSub
+        [ audioPortFromJS fromJSPortSub
         ]
 
 record : Window.WindowType -> Model -> Model
@@ -534,10 +550,11 @@ viewportDataDecoder =
 -- to parse them here
 timeDataDecoder : Json.Decode.Decoder Programs.MediaPlayer.TimeData
 timeDataDecoder =
-    Json.Decode.map3 Programs.MediaPlayer.TimeData
+    Json.Decode.map4 Programs.MediaPlayer.TimeData
         (Json.Decode.field "elapsed" (Json.Decode.nullable Json.Decode.int))
         (Json.Decode.field "duration" Json.Decode.float)
         (Json.Decode.field "isPlaying" Json.Decode.bool)
+        (Json.Decode.field "isLoaded" Json.Decode.bool)
 songDataDecoder : Json.Decode.Decoder  Programs.MediaPlayer.SongData
 songDataDecoder =
     Json.Decode.map3 Programs.MediaPlayer.SongData

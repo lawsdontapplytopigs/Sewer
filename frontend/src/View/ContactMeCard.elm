@@ -2,6 +2,7 @@ module View.ContactMeCard exposing (..)
 
 import Element as E
 import Element.Background as EBackground
+import Element.Border as EBorder
 import Element.Font as EFont
 import Palette
 import Window
@@ -46,19 +47,34 @@ contactMeCard model =
             , E.centerY
             ]
             [ E.newTabLink
-                [
+                [ E.focused
+                    [ EBorder.color <| E.rgba 0 0 0 1
+                    ]
+                , EBorder.width 1
+                , EBorder.dotted
+                , EBorder.color <| E.rgba 0 0 0 0
                 ]
                 { url = "https://twitter.com/sewerslvt"
                 , label = E.text "https://twitter.com/sewerslvt"
                 }
             , E.newTabLink
-                [
+                [ E.focused
+                    [ EBorder.color <| E.rgba 0 0 0 1
+                    ]
+                , EBorder.width 1
+                , EBorder.dotted
+                , EBorder.color <| E.rgba 0 0 0 0
                 ]
                 { url = "https://sewerslvt.bandcamp.com/"
                 , label = E.text "https://sewerslvt.bandcamp.com/"
                 }
             , E.newTabLink
-                [
+                [ E.focused
+                    [ EBorder.color <| E.rgba 0 0 0 1
+                    ]
+                , EBorder.width 1
+                , EBorder.dotted
+                , EBorder.color <| E.rgba 0 0 0 0
                 ]
                 { url = "https://www.youtube.com/channel/UCnW2hq-0-3Urmz12oK2z3mQ"
                 , label = E.text "my youtube channel"
