@@ -115,7 +115,7 @@ update msg model =
             let
                 model_ =
                     { model
-                        | viewportGeometry = Debug.log "" data
+                        | viewportGeometry = data
                     }
             in
                 (model_, Cmd.none)
@@ -436,9 +436,6 @@ update msg model =
         Msg.SongEnded ->
             ( model, Cmd.none )
         Msg.JsonParseError str ->
-            let
-                _ = Debug.log "uh ohhh" str
-            in
             (model, Cmd.none)
         Msg.NoOp ->
             ( model, Cmd.none )
