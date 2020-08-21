@@ -4,6 +4,7 @@ module View.MediaPlayer exposing
     )
 
 import Array
+import Classify
 import Element as E
 import Element.Background as EBackground
 import Element.Border as EBorder
@@ -514,20 +515,20 @@ viewPhone viewportGeometry model =
         songsPanelXPos = viewportGeometry.width - (round <| (toFloat viewportGeometry.width) * model.mediaPlayer.songsPanelXPercentageOffset)
         songsPanelYPos = 0
 
-        device = E.classifyDevice model.viewportGeometry
+        device = Classify.classifyDevice model.viewportGeometry
         borderWidth =
             case device.class of
-                E.Phone ->
+                Classify.Phone ->
                     2
-                E.Tablet ->
+                Classify.Tablet ->
                     2
-                E.Desktop ->
+                Classify.Desktop ->
                     case device.orientation of
-                        E.Portrait ->
+                        Classify.Portrait ->
                             2
-                        E.Landscape ->
+                        Classify.Landscape ->
                             1
-                E.BigDesktop ->
+                Classify.BigDesktop ->
                     1
     in
     E.el

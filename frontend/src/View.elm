@@ -1,5 +1,6 @@
 module View exposing (..)
 
+import Classify
 import Element as E
 import Element.Events as EEvents
 
@@ -51,25 +52,29 @@ view title model =
                     -- }
                     model
 
-        device = E.classifyDevice model.viewportGeometry
+        device = Classify.classifyDevice model.viewportGeometry
 
         decided = 
             case device.class of
-                E.Phone ->
-                    phone_
-                E.Tablet ->
+                Classify.Phone ->
                     case device.orientation of
-                        E.Portrait ->
+                        Classify.Portrait ->
                             phone_
-                        E.Landscape ->
+                        Classify.Landscape ->
                             tablet_
-                E.Desktop->
+                Classify.Tablet ->
                     case device.orientation of
-                        E.Portrait ->
+                        Classify.Portrait ->
+                            phone_
+                        Classify.Landscape ->
                             tablet_
-                        E.Landscape ->
+                Classify.Desktop ->
+                    case device.orientation of
+                        Classify.Portrait ->
+                            phone_
+                        Classify.Landscape ->
                             tablet_
-                E.BigDesktop ->
+                Classify.BigDesktop ->
                     desktop_
     in
         { title = title
