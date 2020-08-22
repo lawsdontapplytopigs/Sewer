@@ -1,12 +1,22 @@
 
+### live preview
+https://eloquent-turing-60c6e0.netlify.app/
+
 ### Screenshots
 
 
 **Desktop**
+
 ![Sick desktop preview](screenshots/desktop.png?raw=true "Desktop Preview")
+
+
 **Tablet**
+
 ![tablet preview](screenshots/tablet.png?raw=true "Tablet Preview")
+
+
 **Phone**
+
 ![phone preview](screenshots/phone.png?raw=true "Phone Preview")
 
 
