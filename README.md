@@ -217,7 +217,9 @@ and
 I thought it sounded cool to have this look like windows95. I could've hidden a bunch of cool easter eggs in either the file explorer, the start panel, or in other places.
 But I think that at the end of the day, especially if they resize their window, a user would be too overwhelmed with what's going on.
 "It starts out as windows 95, but then now it's a music player?? How do I get contact information if I'm on mobile?"
+
 Also, even though I thought it was cool for me to practice, was listening to music on this website REALLY necessary? If someone really wanted to listen to her music, they could've just gone on her bandcamp for that.
+
 Eventually I had to be honest and ask myself: is this really a website an artist would want, or did I let it turn into "my cool code project" too much? And I think that if I'm being honest, the latter holds more weight.
 
 
