@@ -20,6 +20,15 @@ https://eloquent-turing-60c6e0.netlify.app/
 ![phone preview](screenshots/phone.png?raw=true "Phone Preview")
 
 
+
+### Technologies used
+- [elm](https://elm-lang.org/)
+- javascript
+- [howler.js](https://howlerjs.com/)
+- [elm-ui](https://github.com/mdgriffith/elm-ui)
+- git
+- CI/CD
+
 # 1. Building
 I know I should learn to use yarn or npm and build the project that way.
 But currently, the way I roll is I just run `main/make.sh` and in the 'main/built/'
@@ -170,13 +179,13 @@ This project uses [howler.js](https://howlerjs.com/) to play audio, so I had to 
 
 **Pain**
 
-## 3. Deal breakers
+# 3. Deal breakers
 So is this in production? Is it actually being used?
 Sadly, no.
 I'll ouline below reasons as to why.
 
 
-### 3.1 Song load times
+## 3.1 Song load times
 I don't serve these songs from a properly written specialized music streaming server. 
 I serve these songs from github. And the whole song has to get to the client before it starts playing.
 
@@ -204,7 +213,7 @@ and
 2. Obviously, if this were to go into production, it would have to be tested (so would I also take the role of QA AND backend dev?), and also, it would have to be hosted somewhere. I'd have probably gone with something like AWS, but if I also learned that, by that point I'd be a fullstack engineer, and I'd be doing devops. I don't have unlimited resources, so if I did that, the project would've taken much more than 3 months to complete, so I'd either start my own company, or I'd be asking money for that sort of work. Money which I knew I wasn't going to get, since this whole project was my idea, and did it primarily as a platform for me to practice getting a frontend as close to production quality as possible.
 
 
-### 3.2 The whole UI idea
+## 3.2 The whole UI idea
 I thought it sounded cool to have this look like windows95. I could've hidden a bunch of cool easter eggs in either the file explorer, the start panel, or in other places.
 But I think that at the end of the day, especially if they resize their window, a user would be too overwhelmed with what's going on.
 "It starts out as windows 95, but then now it's a music player?? How do I get contact information if I'm on mobile?"
