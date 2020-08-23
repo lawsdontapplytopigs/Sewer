@@ -31,7 +31,7 @@ https://eloquent-turing-60c6e0.netlify.app/
 
 # 1. Building
 I know I should learn to use yarn or npm and build the project that way.
-But currently, the way I roll is I just run `frontend/make.sh` and in the 'frontend/built/'
+But currently, the way I do it is I just run `frontend/make.sh` and in the 'frontend/built/'
 directory I run `python3 -m http.server --bind=127.0.0.1 8080` as a development server.
 Whenever I make a change I run `frontend/make.sh` again and thats how I get the job done.
 
