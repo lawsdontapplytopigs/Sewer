@@ -30,7 +30,7 @@ https://eloquent-turing-60c6e0.netlify.app/
 - CI/CD
 
 # 1. Building
-I know I should learn to use yarn or npm and build the project that way.
+I should learn to use yarn or npm and build the project that way.
 But currently, the way I do it is I just run `frontend/make.sh` and in the 'frontend/built/'
 directory I run `python3 -m http.server --bind=127.0.0.1 8080` as a development server.
 Whenever I make a change I run `frontend/make.sh` again and thats how I get the job done.
@@ -51,9 +51,7 @@ to the end user?"
 
 In this case, Sewerslvt's music was the product that she was trying to sell.
 Obviously, you would probably not buy someone's music if you didn't know what
-it sounded like. Do you like it? Is it to your taste?
-
-With that in mind, I concluded being able to listen to her music on her website
+it sounded like so I concluded being able to listen to her music on her website
 was a necessary feature, along with other helpful features like providing some
 contact information.
 
@@ -77,8 +75,8 @@ Sewerslvt would design herself.
 I think I only partly succeeded in this regard. I tried to design the website 
 to have this windows95 aesthetic, but still, the ui still looks too clean for 
 me to consider this a true success.
-Nonetheless, in the process I still think I stepped considerably out of my 
-comfort zone and can now better determine what is "too unorganized" or not.
+Nonetheless, in the process I still stepped considerably out of my comfort zone and 
+can now better determine what is "too unorganized" or not.
 
 ## 2.2 Programming challenges
 
@@ -180,7 +178,7 @@ This project uses [howler.js](https://howlerjs.com/) to play audio, so I had to 
 **Pain**
 
 # 3. Deal breakers
-So is this in production? Is it actually being used?
+So is this in production?
 Sadly, no.
 I'll ouline below reasons as to why.
 
@@ -210,7 +208,7 @@ I could have done this, but two things were on my mind.
 
 and
 
-2. Obviously, if this were to go into production, it would have to be tested (so would I also take the role of QA AND backend dev?), and also, it would have to be hosted somewhere. I'd have probably gone with something like AWS, but if I also learned that, by that point I'd be a fullstack engineer, and I'd be doing devops. I don't have unlimited resources, so if I did that, the project would've taken much more than 3 months to complete, so I'd either start my own company, or I'd be asking money for that sort of work. Money which I knew I wasn't going to get, since this whole project was my idea, and did it primarily as a platform for me to practice getting a frontend as close to production quality as possible.
+2. Obviously, if this were to go into production, it would have to be tested, and also, it would have to be hosted somewhere. I'd have probably gone with something like AWS, but if I also learned that, by that point I'd be a fullstack engineer, and I'd be doing devops. I don't have unlimited resources, so if I did that, the project would've taken much more than 3 months to complete, so I'd either start my own company, or I'd be asking money for that sort of work. Money which I knew I wasn't going to get, since this whole project was my idea, and did it primarily as a platform for me to practice getting a more complex frontend as close to production quality as possible.
 
 
 ## 3.2 The whole UI idea
