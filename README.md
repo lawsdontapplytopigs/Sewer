@@ -7,6 +7,7 @@ https://eloquent-turing-60c6e0.netlify.app/
 
 **Desktop**
 
+*(You need to make your browser window really big for this one)*
 ![Sick desktop preview](screenshots/desktop.png?raw=true "Desktop Preview")
 
 
